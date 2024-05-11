@@ -6,23 +6,28 @@ import { ThemedText } from '../../components/ThemedText';
 import { ThemedView } from '../../components/ThemedView';
 export default function HomeScreen() {
   return (
-    <View style={styles.container}> 
-
+    <View style={styles.container}>
       < Image source={require("../../../assets/images/massiLogo.png")} style={styles.massiLogo} />
-
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent : "center",
-    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 10,
+    overflow: 'hidden',
+    alignItems: "center",
+  },
+  masLogoBox: {
+    width: 300,
+    height: 100
   },
   massiLogo : {
-    position: "absolute",
-    height : 100,
-    width: 300,
-    justifyContent : "center"
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
+    justifyContent: "center"
   }
 });
