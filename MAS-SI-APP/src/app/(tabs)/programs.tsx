@@ -1,23 +1,44 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform, View, Text, Button } from 'react-native';
-import { Collapsible } from '../../components/Collapsible';
-import { ExternalLink } from '../../components/ExternalLink';
-import ParallaxScrollView from '../../components/ParallaxScrollView';
-import { ThemedText } from '../../components/ThemedText';
-import { ThemedView } from '../../components/ThemedView';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, Image, Platform, View, Text, Button, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SaturdayLecs from './saturdayLecs';
-const programsStack = createNativeStackNavigator();
+import WednesdayLecs from './wednesdayLecs';
+const Stack = createNativeStackNavigator();
 
-export default function Programs( {navigation} : any ) {
+function ProgramsScreen( {navigation} : any ){
   return (
     <View>
-      <Button 
-      title="Saturday Lectures" 
-      onPress={() => navigation.navigate(SaturdayLecs)}
-      />
+      <TouchableOpacity style={styles.programButtons} onPress={() => navigation.navigate("Saturday Lectures")}>
+        <Text>Saturday Lectures</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.programButtons} onPress={() => navigation.navigate("Wednesday Lectures")}>
+        <Text>Wednesday Lectures</Text>
+      </TouchableOpacity>
+
     </View>
   )
+}
+
+export default function ProgramStack() {
+  return (
+      <Stack.Navigator >
+        <Stack.Screen name="Programs" component={ProgramsScreen}/>
+        <Stack.Screen name="Saturday Lectures" component={SaturdayLecs}/>
+        <Stack.Screen name="Wednesday Lectures" component={WednesdayLecs}/>
+      </Stack.Navigator> 
+  )
 };
+
+const styles = StyleSheet.create({
+  programContainer: {
+    flex: 1,
+    padding: 20
+  },
+  programButtons: {
+    justifyContent: "center"
+  },
+  programsText: {
+    
+  }
+}
+)

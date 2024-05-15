@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function SaturdayLecs() {
+export default function WednesdayLecs() {
   return (
     <View>
-      <Text>Saturday Lecs</Text>
+      <Text>wednesdayLecs</Text>
     </View>
   )
 }
