@@ -1,20 +1,20 @@
-import { StyleSheet, Image, Platform, View, Text, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, Platform, View, Text, Button, TouchableOpacity , FlatList} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SaturdayLecs from './saturdayLecs';
 import WednesdayLecs from './wednesdayLecs';
+import ProgramsListProgram from "../../components/ProgramsListProgram"
+import programsData from '@/assets/data/programsData';
 const Stack = createNativeStackNavigator();
 
 function ProgramsScreen( {navigation} : any ){
   return (
     <View>
-      <TouchableOpacity style={styles.programButtons} onPress={() => navigation.navigate("Saturday Lectures")}>
-        <Text>Saturday Lectures</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.programButtons} onPress={() => navigation.navigate("Wednesday Lectures")}>
-        <Text>Wednesday Lectures</Text>
-      </TouchableOpacity>
-
+      { /*<ProgramsListProgram program={programsData[0]}/>
+      <ProgramsListProgram program={programsData[1]}/> */}
+      <FlatList 
+      data={programsData} 
+      renderItem={({item}) => <ProgramsListProgram program={item}/>}
+      />
     </View>
   )
 }

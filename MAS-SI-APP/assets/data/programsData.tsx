@@ -1,0 +1,44 @@
+import { Program } from "@/src/types"
+const programsData : Program[] = [
+    {
+    programId : 0,
+	programName : "Soulful Saturdays",
+	programImg: " ",
+	
+	lectures :[
+		{
+			lectureID : 0,
+			lectureName: "Soulful Saturdays with Sh. Abdelrahman Badawy: You Must Learn this Crucial Skill",
+			lectureSpeaker: "Sh. Abdelrahman Badawy",
+			lectureLink : "https://www.youtube.com/watch?v=oF3YUj2JJvo&t=26s",
+			lectureAI : "AI Text here",
+			lectureData: "May 4, 2024",
+			lectureTime: "{maghrib iqama time}"
+		}
+    ]
+    },
+    
+    {
+        programId: 1,
+        programName: "Victors Not Victims",
+        programImg: " ",
+
+        lectures: [
+            {
+                lectureID : 0,
+                lectureName: "Scared Activism: Session 1 With Rami Kawas",
+                lectureSpeaker: "Rami Kawas",
+                lectureLink : "https://www.youtube.com/watch?v=IpJNDqz8eI4",
+                lectureAI : "AI Text Here",
+                lectureData: "Mar 16, 2024",
+                lectureTime: " After 2nd Taraweeh"                
+            }
+
+
+        ]
+
+    }
+
+]
+
+export default programsData
