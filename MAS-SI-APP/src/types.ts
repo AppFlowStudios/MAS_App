@@ -1,4 +1,4 @@
-type Lectures ={
+export type Lectures ={
     lectureID: number,
     lectureName: string,
     lectureSpeaker: string,

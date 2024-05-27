@@ -11,7 +11,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     return(
         <View className={styles.programBox}>
         <Pressable>
-            <Link href={"/programLectures"}>
+            <Link href={`/program/${program.programId}`}>
                 <Text className="text-1xl font-bold">
                 {program.programName}
                 </Text>
