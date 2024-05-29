@@ -1,4 +1,4 @@
-import { StyleSheet, Image, Platform, View, Text, Button, TouchableOpacity , FlatList} from 'react-native';
+import { StyleSheet, View, FlatList} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProgramsListProgram from "../../../components/ProgramsListProgram"
 import programsData from '@/assets/data/programsData';
@@ -12,6 +12,7 @@ export default function ProgramsScreen( {navigation} : any ){
       <FlatList 
       data={programsData} 
       renderItem={({item}) => <ProgramsListProgram program={item}/>}
+      ItemSeparatorComponent={() => <View className='h-1 rounded-20'/>}
       />
     </View>
   )

@@ -18,6 +18,7 @@ export default function TabLayout() {
     <Tabs>
       <Tabs.Screen name="index" options={{ href: null }} />
 
+
       <Tabs.Screen
         name="menu"
         options={{
@@ -32,7 +33,7 @@ export default function TabLayout() {
       <Tabs.Screen 
         name="program"
         options={ {
-          title: "Programs",
+          title: "My Programs",
           headerShown:  false,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name='book' color={color} />

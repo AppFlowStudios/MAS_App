@@ -4,7 +4,7 @@ const programsData : Program[] = [
     programId : 0,
 	programName : "Soulful Saturdays",
 	programImg: " ",
-	
+	programDesc: "Youth Lecturs Every Saturday hosted by Sh. Abdelrahman Badawy",
 	lectures :[
 		{
 			lectureID : 0,
@@ -22,7 +22,7 @@ const programsData : Program[] = [
         programId: 1,
         programName: "Victors Not Victims",
         programImg: " ",
-
+        programDesc: "Ramadan Series",
         lectures: [
             {
                 lectureID : 0,
@@ -32,6 +32,15 @@ const programsData : Program[] = [
                 lectureAI : "AI Text Here",
                 lectureData: "Mar 16, 2024",
                 lectureTime: " After 2nd Taraweeh"                
+            },
+            {
+                lectureID : 1,
+                lectureName: "Victors Not Victims: Sacred Activism w/ Sh. Mohammed Elshinawy and Imam Tom Facchine",
+                lectureSpeaker: "Sh. Mohammed Elshinawy and Imam Tom Facchine",
+                lectureLink : "https://www.youtube.com/watch?v=kCmPv0BtfZ4&list=PLtTZRfy7BpLx7obAsuqx8zmZTfGsH-Zo6&index=3",
+                lectureAI : "AI Text Here",
+                lectureData: "Mar 23, 2024",
+                lectureTime: " After 2nd Taraweeh"     
             }
 
 
