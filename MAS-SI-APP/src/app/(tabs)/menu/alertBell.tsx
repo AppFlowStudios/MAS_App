@@ -9,8 +9,8 @@ export default function AlertBell() {
     <View>
       <IconButton
       icon="bell" 
-      iconColor={MD3Colors.error10}
-      size={10}
+      iconColor="black"
+      size={15}
       onPress={ () => console.log("Pressed") }
       />
     </View>

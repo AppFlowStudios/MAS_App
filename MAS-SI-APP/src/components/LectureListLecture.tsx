@@ -4,6 +4,7 @@ import { useLocalSearchParams, Stack } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import { Lectures, Program } from '@/src/types';
 import { Link } from "expo-router";
+import { defaultProgramImage } from './ProgramsListProgram';
 type LecturesListProp = {
   lecture : Lectures
 }
@@ -11,9 +12,10 @@ type LecturesListProp = {
 type ProgramDataType = {
     programData : Program
 }
-const LecturesListLecture = ( {lecture} : LecturesListProp, { programData } : ProgramDataType ) => {
+const LecturesListLecture = ( {lecture} : LecturesListProp ) => {
   return (
     <View>
+      <Stack.Screen options={{ title: "Lectures"}}/>
       <Pressable>
         <Link href={`./lectures/${lecture.lectureID}`}>
         <Text className='text-1xl font-bold'>

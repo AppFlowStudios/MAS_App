@@ -7,8 +7,6 @@ const Stack = createNativeStackNavigator();
 export default function ProgramsScreen( {navigation} : any ){
   return (
     <View>
-      { /*<ProgramsListProgram program={programsData[0]}/>
-      <ProgramsListProgram program={programsData[1]}/> */}
       <FlatList 
       data={programsData} 
       renderItem={({item}) => <ProgramsListProgram program={item}/>}

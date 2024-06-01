@@ -1,11 +1,9 @@
 import { Image, StyleSheet, View, Text, } from 'react-native';
 import { useState, useEffect } from 'react';
-import { prayerTimeData, prayerTimesType } from '@/src/types';
-import { DataTable } from 'react-native-paper';
-import AlertBell from './alertBell';
-type prayerDataProp = {
-  prayerData : prayerTimeData
-}
+import { prayerTimesType } from '@/src/types';
+import JummahTable from '@/src/components/jummahTable';
+import Table from '@/src/components/prayerTimeTable';
+
 
 
 export default function homeScreen() {
@@ -27,57 +25,25 @@ export default function homeScreen() {
       .then( (json) => setPrayerTimes(json) )
       .catch( (error) =>  console.error(error))
       .finally( () => setLoading(false))
-  })
+  }, [])
 
     if (loading) {
       return (
         <Text> Loading....</Text>
       )
     }
-    const Table = ( { prayerData } :  prayerDataProp) => {
-      return(
-      <DataTable style={ { justifyContent: "center", alignContent:"center", paddingHorizontal: 20} }>
-        <DataTable.Header style={{width: "90%", position:"relative"}}>
-          <DataTable.Title textStyle={{fontSize:20}}>Salah</DataTable.Title>
-          <DataTable.Title textStyle={{fontSize: 20, marginLeft: 10}}>Athan</DataTable.Title>
-          <DataTable.Title textStyle={{fontSize:20, marginLeft: 20}}>Iqamah</DataTable.Title>
-        </DataTable.Header>
-        <DataTable.Row style={{borderBottomWidth: 0, justifyContent: "center", alignContent:"center"}}>
-          <DataTable.Cell textStyle={{flexDirection:"row"}}><AlertBell/> Fajr</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft:13 }}>{prayerData.salah[0].fajr}</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft: 22 }}>{prayerData.iqamah[0].fajr}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row style={{borderBottomWidth: 0}}>
-          <DataTable.Cell>Dhuhr</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft:13 }}>{prayerData.salah[0].zuhr}</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft: 22 }}>{prayerData.iqamah[0].zuhr}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row style={{borderBottomWidth: 0}}>
-          <DataTable.Cell>Asr</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft:13 }}>{prayerData.salah[0].asr}</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft: 22 }}>{prayerData.iqamah[0].asr}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row style={{borderBottomWidth: 0}}>
-          <DataTable.Cell>Maghrib</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft:13 }}>{prayerData.salah[0].maghrib}</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft: 22 }}>{prayerData.iqamah[0].maghrib}</DataTable.Cell>
-        </DataTable.Row>
-        <DataTable.Row style={{borderBottomWidth: 0}}>
-          <DataTable.Cell>Isha</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft:13 }}>{prayerData.salah[0].isha}</DataTable.Cell>
-          <DataTable.Cell textStyle={{ marginLeft: 22 }}>{prayerData.iqamah[0].isha}</DataTable.Cell>
-        </DataTable.Row>
-      </DataTable>
-      )
-    }
+    console.log("Function Called")
     return (
-      <View>
-        <View style={styles.container} className='backgroundColor'>
+      <View className='bg-white h-full'>
+        <View style={styles.container}>
           < Image source={require("../../../../assets/images/massiLogo.png")} style={styles.massiLogo} />
           <Text className="mt-2">{prayerTimes.data.salah[0].date} /  {prayerTimes.data.salah[0].hijri_month} {prayerTimes.data.salah[0].hijri_date}</Text>
-          <Text className='text-2xl font-bold mb-2'>Prayer Times</Text>
+          <Text className='text-2xl font-bold'>Prayer Times</Text>
           <View className='w-50% m-auto'>
-          <Table prayerData={prayerTimes.data}/>
+            <Table prayerData={prayerTimes.data}/>
+          </View>
+          <View className=''>
+              <JummahTable jummah={prayerTimes.data}/>
           </View>
       </View>
 
@@ -108,6 +74,6 @@ const styles = StyleSheet.create({
     width: 300,
     height: 100,
     resizeMode: "contain",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
