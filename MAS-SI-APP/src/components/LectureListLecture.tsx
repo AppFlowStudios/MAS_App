@@ -14,7 +14,7 @@ type ProgramDataType = {
 }
 const LecturesListLecture = ( {lecture} : LecturesListProp ) => {
   return (
-    <View>
+    <View className='bg-white'>
       <Stack.Screen options={{ title: "Lectures"}}/>
       <Pressable>
         <Link href={`./lectures/${lecture.lectureID}`}>
