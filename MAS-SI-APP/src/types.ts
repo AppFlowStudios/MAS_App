@@ -48,3 +48,21 @@ export type prayerTimesType = {
     data: prayerTimeData,
     message: string
 }
+
+export type gettingPrayerData = {
+    date : string,
+    hijri_month: string,
+    hijri_date: string,
+    athan_fajr : string,
+    athan_zuhr : string,
+    athan_asr : string,
+    athan_maghrib : string,
+    athan_isha : string,
+    iqa_fajr : string,
+    iqa_zuhr : string,
+    iqa_asr : string,
+    iqa_maghrib : string,
+    iqa_isha : string,
+    jummah1: string,
+    jummah2: string
+}

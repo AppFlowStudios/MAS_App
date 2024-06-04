@@ -1,8 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { NavigationContainer } from '@react-navigation/native';
 import { Tabs } from "expo-router";
-import  HomeScreen  from "./menu/index";
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
@@ -16,6 +14,7 @@ const Tab = createBottomTabNavigator();
 export default function TabLayout() {
   return (
     <Tabs>
+
       <Tabs.Screen name="index" options={{ href: null }} />
 
 
@@ -27,6 +26,9 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="home" color={color} />
           ),
+          tabBarStyle: {
+            backgroundColor: " white"
+          }
         }}
       />
 
