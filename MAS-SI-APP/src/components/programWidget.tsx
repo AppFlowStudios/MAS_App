@@ -13,17 +13,18 @@ export default function ProgramWidget( {program} : ProgramsListProgramProps ) {
     const setTheProgram = () =>{
         onSetProgram(program)
     }  
-
     const { width } = useWindowDimensions();
+    // const { width } = useWindowDimensions();
     return (
-    <View style={{width}}>
-      <Pressable>
+    <>
+      <Pressable style={ {width} }>
         <Link href={`/program/${program.programId}`} onPress={setTheProgram}>
         <Image source={{ uri: program.programImg || defaultProgramImage}}
-        style ={{width: 200, height: 200, objectFit: "contain"}}
+          style={{width: 400, height: 200, objectFit: "contain"}}
+          className='border bg-black'
         />
         </Link>
       </Pressable>
-    </View>
+    </>
   )
 }

@@ -4,9 +4,9 @@ import { gettingPrayerData, prayerTimesType } from '@/src/types';
 import Table from '@/src/components/prayerTimeTable';
 import { format } from 'date-fns';
 import { ThePrayerData} from '@/src/components/getPrayerData';
-import ProgramWidgetSlider from '@/src/components/programWidgetSlider';
 import Paginator from '@/src/components/paginator';
-
+import ProgramsButton from '@/src/components/programsButton';
+import EventsButton from '@/src/components/eventsButton';
 export default function homeScreen() {
   const [prayerTimes, setPrayerTimes] = useState<prayerTimesType>(
     {"status" : "fail",
@@ -18,15 +18,14 @@ export default function homeScreen() {
      } )
     const scrollx = useRef( new Animated.Value(0) ).current;
     const tablesRef = useRef(null);
-
     const viewableItemsChanged = useRef( ({viewableItems} : any)  =>{
       setCurrentCarousalIndex(viewableItems[0].index);
     }).current;
-
     const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;
+    const [currentCarousalIndex, setCurrentCarousalIndex] = useState(0)
     
     const [loading, setLoading] = useState(true)
-    const [currentCarousalIndex, setCurrentCarousalIndex] = useState(0)
+    
     const getCurrDate = new Date();
     const getWeekDate = new Date();
     const currDate = format(getCurrDate, "yyyy-MM-dd");
@@ -53,12 +52,12 @@ export default function homeScreen() {
     const prayer : gettingPrayerData[] = ThePrayerData({prayerTimes});
 
     return (
-      <View style={styles.container}>
-        
-            <View className='w-[40%] m-auto  justify-center items-center mt-[10%] flex-0'>
-              <Image source={require("@/assets/images/massiLogo.png")} style={styles.massiLogo} />
+      <View className="bg-[#f9f9f9] h-full shrink">
+            <View className='w-[100%] m-auto  justify-center items-center mt-[10%] flex-0 '>
+              <Image source={require("@/assets/images/massiLogo2.png")} style={styles.massiLogo} />
             </View>
-            <View className=''>
+            <>
+              <Paginator data={prayer} scrollx={scrollx} />
               <FlatList 
                 data={prayer}
                 renderItem={({item}) => <Table prayerData={item} />}
@@ -74,29 +73,25 @@ export default function homeScreen() {
                 viewabilityConfig={viewConfig}
                 ref={tablesRef}
               />
-              <Paginator data={prayer} scrollx={scrollx} />
+            </>
+            <View className='flex-row'>
+                <ProgramsButton />
+                <EventsButton />
             </View>
+            
       </View>
     )
     
   }
 
-    
-
-
-
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#FAFAFA",
-    flexDirection: "column",
-  },
   masLogoBox: {
-    width: 300,
-    height: 100
+    width: 500,
+    height: 50
   },
   massiLogo : {
-    width: 300,
-    height: 100,
+    width: 500,
+    height: 75,
     resizeMode: "contain",
     justifyContent: "center",
   },

@@ -1,18 +1,27 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { IconButton, MD3Colors } from 'react-native-paper';
-
-export default function AlertBell() {
+type styles = {
+  fontWeight: string,
+  color: string | "black",
+  fontSize: number
+}
+type salahProp = {
+  salah: string,
+}
+export default function AlertBell( {salah} : salahProp ) {
     const [bellClick, setBellClick] = useState(false);
 
   return (
-    <View>
+    <>
+    <TouchableOpacity className='flex-row  items-center w-[100%]' onPress={()=>{console.log("Pressed")}}>
       <IconButton
       icon="bell" 
-      iconColor="black"
-      size={15}
-      onPress={ () => console.log("Pressed") }
+      iconColor="grey"
+      size={17.5}
       />
-    </View>
+      <Text className='font-bold text-[#0D509D] text-lg'>{salah}</Text>
+      </TouchableOpacity>
+    </>
   )
 }

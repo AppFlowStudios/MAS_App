@@ -1,4 +1,4 @@
-import { View, FlatList, Animated  } from 'react-native';
+import { View, FlatList, Animated, Text  } from 'react-native';
 import { useRef, useState } from 'react';
 import ProgramWidget from './programWidget';
 import React from 'react';
@@ -14,16 +14,26 @@ export default function ProgramWidgetSlider() {
   }).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;
-
+  const programsRef = useRef(null);
   return (
-    <View>
-      <View>
-      <FlatList 
-      data={programsData} 
-      renderItem={({item}) => <ProgramWidget program={item}/>}
-      pagingEnabled
-      />
-      </View>
-  </View>
+      <>
+        <FlatList
+        data={programsData} 
+        renderItem={({item}) => <ProgramWidget program={item}/>}
+        pagingEnabled
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        alwaysBounceVertical={false}
+        onScroll={Animated.event( [{ nativeEvent: {contentOffset : {y : scrolly } } }],{
+          useNativeDriver: false
+        } )}
+        scrollEventThrottle={32}
+        onViewableItemsChanged={viewableItemsChanged}
+        viewabilityConfig={viewConfig}
+        ref={programRef}
+        />
+    
+      </>
   )
 }

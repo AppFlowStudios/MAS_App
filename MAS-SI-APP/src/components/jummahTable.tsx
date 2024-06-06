@@ -6,18 +6,20 @@ import React from 'react';
 type JummahTimeProp = {
     jummah : gettingPrayerData
 }
-export default function JummahTable( {jummah} : JummahTimeProp ) {
+export default function JummahTable() {
   return (
-    <DataTable style={ { justifyContent: "center", alignContent:"center", backgroundColor: "white", borderRadius: 20, paddingHorizontal: 20} }>
-        <DataTable.Header style={{width: "90%"}}>
-            <DataTable.Title  textStyle={{fontSize:17, fontWeight: 700, color: "black"}}>{jummah.jummah1}</DataTable.Title>
-            <DataTable.Title textStyle={{fontSize:17, fontWeight: 700, color: "black", marginLeft:10}}>{jummah.jummah2}</DataTable.Title>
-            <DataTable.Title textStyle={{fontSize:17, fontWeight: 700, color: "black", marginLeft:10,}}>1:45PM</DataTable.Title>
+    <DataTable style={ { justifyContent: "center", alignContent:"center", backgroundColor: "white", borderRadius: 20} }>
+        <DataTable.Header style={{paddingHorizontal: 20}}>
+            <DataTable.Title  textStyle={{fontSize:17, fontWeight: 700, color: "black"}}>12:15PM</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize:17, fontWeight: 700, color: "black", marginLeft:10}}>1:00PM</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize:17, fontWeight: 700, color: "black", marginLeft:10}}>1:45PM</DataTable.Title>
+            <DataTable.Title textStyle={{fontSize:17, fontWeight: 700, color: "black", marginLeft:10,}}>3:40PM</DataTable.Title>
         </DataTable.Header>
-        <DataTable.Row>
-            <DataTable.Cell> Jummah 1</DataTable.Cell>
-            <DataTable.Cell>Jummah 2</DataTable.Cell>
-            <DataTable.Cell>Jummah 3</DataTable.Cell>
+        <DataTable.Row style={{borderBottomWidth: 0, paddingHorizontal: 20}}>
+            <DataTable.Cell textStyle={{color: "#0D509D", fontWeight:700, fontSize: 15}}>Jummah 1</DataTable.Cell>
+            <DataTable.Cell style={{marginLeft:10}} textStyle={{color: "#0D509D", fontWeight:700, fontSize: 15}}>Jummah 2</DataTable.Cell>
+            <DataTable.Cell style={{marginLeft:13}} textStyle={{color: "#0D509D", fontWeight:700, fontSize: 15}}>Jummah 3</DataTable.Cell>
+            <DataTable.Cell style={{marginLeft:17}} textStyle={{color: "#0D509D", fontWeight:700, fontSize: 15}}>Student</DataTable.Cell>
         </DataTable.Row>
     </DataTable>
   )
