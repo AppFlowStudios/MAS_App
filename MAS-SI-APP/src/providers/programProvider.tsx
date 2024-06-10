@@ -23,7 +23,8 @@ const ProgramProvider = ( {children} : PropsWithChildren ) => {
         programName: "",
         programImg: "",
         programDesc: "",
-        lectures: []})
+        lectures: []
+    })
 
     
     const onSetProgram = ( program: Program ) =>{

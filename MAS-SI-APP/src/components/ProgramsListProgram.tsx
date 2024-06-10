@@ -18,7 +18,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
         <View className={styles.programBox}>
         <Pressable>
             <View>
-            <Link href={`/program/${program.programId}`} onPress={setTheProgram}>
+            <Link href={`/menu/program/${program.programId}`} onPress={setTheProgram}>
             <View className='align-center justify-center'>
             <Image 
                 source={{ uri: program.programImg || defaultProgramImage }}

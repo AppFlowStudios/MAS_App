@@ -66,3 +66,8 @@ export type gettingPrayerData = {
     jummah1: string,
     jummah2: string
 }
+
+export type salahDisplayWidget = {
+    prayer: gettingPrayerData,
+    nextPrayer: gettingPrayerData
+}

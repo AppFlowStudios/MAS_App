@@ -17,7 +17,7 @@ const LecturesListLecture = ( {lecture} : LecturesListProp ) => {
     <View className='bg-white'>
       <Stack.Screen options={{ title: "Lectures"}}/>
       <Pressable>
-        <Link href={`./lectures/${lecture.lectureID}`}>
+        <Link href={`/menu/program/lectures/${lecture.lectureID}`}>
         <Text className='text-1xl font-bold'>
           {lecture.lectureName}
         </Text>

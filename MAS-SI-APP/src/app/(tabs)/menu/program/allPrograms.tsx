@@ -1,6 +1,6 @@
 import { StyleSheet, View, FlatList} from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProgramsListProgram from "../../../components/ProgramsListProgram"
+import { Stack } from "expo-router";
+import ProgramsListProgram from "../../../../components/ProgramsListProgram"
 import programsData from '@/assets/data/programsData';
 import { Divider } from 'react-native-paper';
 
@@ -10,11 +10,14 @@ export default function ProgramsScreen(){
     return <Divider className='w-2 color-black'/>
   }
   return (
+    <View>
+      <Stack.Screen options={{title: "All Programs"}}/>
       <FlatList 
       data={programsData} 
       renderItem={({item}) => <ProgramsListProgram program={item}/>}
-      ItemSeparatorComponent={() => <View className='h-1 rounded-20 w-[50%]'/>}
+      ItemSeparatorComponent={() => seperator()}
       />
+    </View>
   )
 }
 
@@ -27,8 +30,5 @@ const styles = StyleSheet.create({
   programButtons: {
     justifyContent: "center"
   },
-  programsText: {
-    
-  }
 }
 )

@@ -1,10 +1,12 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native'
 import React from 'react'
 import { defaultProgramImage } from './ProgramsListProgram'
+import { Link, Stack } from 'expo-router'
 
 export default function ProgramsButton() {
   return (
-    <TouchableOpacity style={styles.ButtonBox} className=''>
+    <Link href={"menu/program/allPrograms"} asChild>
+    <TouchableOpacity style={styles.ButtonBox} className='' >
         <ImageBackground 
             style={{width: 320, height: 150, borderRadius: 50}} 
             source={require("@/assets/images/programbutton4.png")}
@@ -12,8 +14,8 @@ export default function ProgramsButton() {
         >
             <Text className='text-center text-2xl font-bold bg-[#0D509D] text-white opacity-1'>PROGRAMS</Text>
         </ImageBackground>
-        
     </TouchableOpacity>
+    </Link>
   )
 }
 
