@@ -6,45 +6,21 @@ import {SharedValue, interpolate, useAnimatedStyle} from "react-native-reanimate
 import Animated from 'react-native-reanimated'
 type ProgramsCircularCarouselCardProp = {
     program : Program,
-    index : number
-    contentOffset : SharedValue<number>
 }
 
 
-export default function ProgramsCircularCarouselCard( {program, index,  contentOffset} : ProgramsCircularCarouselCardProp) {
+export default function ProgramsCircularCarouselCard( {program}: ProgramsCircularCarouselCardProp) {
     const {width : windowWidth} = useWindowDimensions();
     const listItemWidth = windowWidth/3;
-
-    const rStyle = useAnimatedStyle( () => {
-        const inputRange = [
-            (index - 1 ) * listItemWidth,
-            index * listItemWidth,
-            (index + 1) * listItemWidth
-        ]
-        const outputRange = [ 0, -listItemWidth / 2, 0 ]
-        const translateY = interpolate(
-            contentOffset.value,
-            inputRange,
-            outputRange
-        )
-
-        return{
-            transform : [
-                {translateY: translateY},
-                {translateX: listItemWidth / 2 + listItemWidth }
-            ]
-        }
-    })
-
     
   return (
-    <Animated.View style={[{width : listItemWidth, aspectRatio:1}, rStyle]}>
+    <View style={{width : windowWidth, aspectRatio:1}}>
     <TouchableOpacity style={{flex:1}} className='border'> 
         <Image 
         source={ {uri: program.programImg || defaultProgramImage} }
-        style={{flex:1, borderRadius: 20}}
+        style={{width:"100%", height:"100%" }}
         />
     </TouchableOpacity>
-    </Animated.View>
+    </View>
   )
 }

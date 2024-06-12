@@ -41,6 +41,16 @@ export default function TabLayout() {
         }}
         />
 
+      <Tabs.Screen 
+        name="prayersTable"
+        options={ {
+          title: "Salah Table",
+          headerShown: false,
+          tabBarIcon: ( {color} ) =>(
+            <TabBarIcon name="clock-o" color={color} />
+          )
+        }}
+      />
     </Tabs>
   );
 }

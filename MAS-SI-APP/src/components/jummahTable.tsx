@@ -1,42 +1,53 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { DataTable } from 'react-native-paper';
-import { gettingPrayerData, prayerTimeData } from '../types';
-import React from 'react';
-
+import { JummahBottomSheetProp, gettingPrayerData, prayerTimeData } from '../types';
+import { JummahBottomSheet } from './jummahBottomSheet';
+import React, { useRef, forwardRef } from 'react';
+import {BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet"
 type JummahTimeProp = {
     jummah : gettingPrayerData
 }
-export default function JummahTable() {
+
+type Ref = BottomSheetModal;
+export const JummahTable = forwardRef<Ref,JummahBottomSheetProp>(({jummahSpeaker, jummahSpeakerImg, jummahTopic}, ref) => {
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const { dismiss } = useBottomSheetModal();
+  const handlePresentModalPress = () => bottomSheetRef.current?.present();
+
+  const handleClosePress = () => bottomSheetRef.current?.close();
+  const handleOpenPress = () => bottomSheetRef.current?.expand();
   return (
     <View className=''>
       <View className='flex-row justify-center items-center'>
           <Text className='text-[#57BA47] font-bold text-2xl'>Friday Prayer</Text>
       </View>
-      <View className='flex-row justify-center items-center gap-x-10'>
-          <TouchableOpacity style={{height:100, width:150 }} className=' justify-center items-center rounded-lg bg-gray-500 '>
+      <View className='flex-row justify-center items-center gap-x-6'>
+          <TouchableOpacity style={{height:85, width:175 }} className=' justify-center items-center rounded-lg bg-gray-500 ' onPress={handlePresentModalPress}>
             <Text>12:15PM</Text>
             <Text>Jummah 1</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{height:100, width:150}} className='justify-center items-center rounded-lg  bg-gray-500 '>
+          <TouchableOpacity style={{height:85, width:175}} className='justify-center items-center rounded-lg  bg-gray-500 '>
             <Text>1:00PM</Text>
             <Text>Jummah 2</Text>
           </TouchableOpacity>
       </View>
       <View style={{marginTop: 5}}></View>
-      <View className='flex-row items-center justify-center gap-x-10'>
-          <TouchableOpacity style={{height:100, width:150}} className='justify-center items-center rounded-lg bg-gray-500 '>
+      <View className='flex-row items-center justify-center gap-x-6'>
+          <TouchableOpacity style={{height:85, width:175}} className='justify-center items-center rounded-lg bg-gray-500 '>
             <Text>1:45PM</Text>
             <Text>Jummah 3</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{height:100, width:150}} className='justify-center items-center rounded-lg bg-gray-500 '>
+          <TouchableOpacity style={{height:85, width:175}} className='justify-center items-center rounded-lg bg-gray-500 '>
             <Text>3:40PM</Text>
             <Text>Student Jummah</Text>
           </TouchableOpacity>
       </View>
+      <JummahBottomSheet jummahSpeaker={jummahSpeaker} jummahSpeakerImg={jummahSpeakerImg} jummahTopic={jummahTopic} ref={bottomSheetRef} />
     </View>
   )
 }
+)
 
 
 /*{<DataTable.Header style={{width: "90%", position:"relative"}}>

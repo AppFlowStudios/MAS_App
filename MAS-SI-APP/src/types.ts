@@ -71,3 +71,9 @@ export type salahDisplayWidget = {
     prayer: gettingPrayerData,
     nextPrayer: gettingPrayerData
 }
+
+export type JummahBottomSheetProp = {
+    jummahSpeaker : string,
+    jummahSpeakerImg : string,
+    jummahTopic : string
+}
