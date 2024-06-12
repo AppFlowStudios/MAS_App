@@ -17,7 +17,7 @@ type currentSalahProp = {
 }
 export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplayWidgetProp ) {
     
-    const salahArray = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
+    const salahArray = ["fajr", "zuhr", "asr", "maghrib", "isha"];
     const [liveTime, setLiveTime] = useState(new Date());
     const [salahIndex, setCurrentSalahIndex] = useState(0);
     const [currentSalah, setCurrentSalah] = useState<currentSalahProp>({
@@ -28,100 +28,84 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     const refreshLiveTime = () => {
         setLiveTime(new Date())
       }
-    const onSetCurrentSalah = () =>{
-        if (salahArray[salahIndex] == "fajr"){
-            const fajrSalah = {
-                salah: "Fajr",
-                athan: prayer.athan_fajr,
-                iqamah: prayer.iqa_fajr
-            }
-            setCurrentSalah(fajrSalah)
+    
+
+      const onSetCurrentSalah = () => {
+        const salah = salahArray[salahIndex];
+        const salahCapitalized = salah.charAt(0).toUpperCase() + salah.slice(1);
+        const salahObj = {
+            salah: salahCapitalized,
+            athan: prayer[`athan_${salah}`],
+            iqamah: prayer[`iqa_${salah}`]
         }
-        else if(salahArray[salahIndex] == "dhuhr"){
-            const dhuhrSalah = {
-                salah: "Dhuhr",
-                athan: prayer.athan_zuhr,
-                iqamah: prayer.iqa_zuhr
-            }
-            setCurrentSalah(dhuhrSalah)
-        }
-        else if(salahArray[salahIndex] == "asr"){
-            const asrSalah = {
-                salah: "Asr",
-                athan: prayer.athan_asr,
-                iqamah: prayer.iqa_asr
-            }
-            setCurrentSalah(asrSalah)
-        }
-        else if(salahArray[salahIndex] == "maghrib"){
-            const maghribSalah = {
-                salah: "Maghrib",
-                athan: prayer.athan_maghrib,
-                iqamah: prayer.iqa_maghrib
-            }
-            setCurrentSalah(maghribSalah)
-        }
-        else if(salahArray[salahIndex] == "isha"){
-            const ishaSalah = {
-                salah: "Isha",
-                athan: prayer.athan_isha,
-                iqamah: prayer.iqa_isha
-            }
-            setCurrentSalah(ishaSalah)
-        }
+        setCurrentSalah(salahObj);
     }
+
 
     const getTimeToNextPrayer = () => {
-        const time1 = moment(currentTime, "HH:mm A");
-        const time2 = moment(currentSalah.iqamah, "HH:mm A")
+        const time1 = moment(currentTime, "HH:mm:ss A");
+        const time2 = moment(currentSalah.iqamah, "HH:mm:ss A");
+        
+        console.log(time1.format("HH:mm:ss A"))
+        console.log(time2.format("HH:mm:ss A"))
 
-        const duration = moment.duration(time2.diff(time1))
+        // Check if currentSalah.iqamah is a valid time string
+        if (!time2.isValid()) {
+            return "N/A";
+        }
+    
+        const duration = moment.duration(time2.diff(time1));
         const hours = Math.floor(duration.asHours());
         const minutes = duration.minutes();
-        if (hours == 0){
-            return `${minutes} mins`
+        const seconds = duration.seconds();
+        if (hours == 0 && minutes == 0){
+            return `${seconds} secs`;
         }
-        return `${hours} hr ${minutes} mins`
+        else if (hours == 0){
+            return `${minutes} mins ${seconds} secs`;
+        }
+        return `${hours} hr ${minutes} mins ${seconds} secs`;
     }
 
-    const currentTime = liveTime.toLocaleTimeString("en-US", {hour12: true, hour: "numeric", minute:"numeric"});
+    const currentTime = liveTime.toLocaleTimeString("en-US", { hour12: true, hour: "numeric", minute: "numeric", second: "numeric" });
     const timeToNextPrayer = getTimeToNextPrayer();
-    const nextFajr = nextPrayer.iqa_fajr
-    const nextFajrTime = moment(nextFajr, "HH::mm A");
-    const nextFajrDay = nextFajrTime.add(1, "day");  
-    const midNight = moment("12:01AM" , "HH:mm A");
+    const midNight = moment("12:01AM", "HH:mm A");
     const nextDayMidnight = midNight.add(1, "days");
-    const getTimeToMidNight = () =>{
-        const time1 = moment(currentTime, "HH:mm A");
+    
+    const getTimeToMidNight = () => {
+        const time1 = moment(currentTime, "HH:mm:ss A");
         const time2 = nextDayMidnight;
-
+    
         const duration = moment.duration(time2.diff(time1));
         return duration.asMilliseconds();
     }
-    const compareTime = ( ) =>{
-        const time1 = moment(currentTime, "HH:mm A");
-        const time2 = moment(currentSalah.iqamah, "HH:mm A")
-  
-        const time2Clone = time2.clone().add(1, "hours")
-        if( time1.isBefore(midNight) && salahIndex == 4 ){
-            setTimeout(onSetCurrentSalah, getTimeToMidNight())
-        }
-       else if ( time1.isAfter(time2) && salahIndex > 4){
-            setCurrentSalahIndex(0)
-        }
-        else if ( time1.isAfter(time2) ){
-            setCurrentSalahIndex(salahIndex => salahIndex + 1)
-            onSetCurrentSalah()
-            console.log(salahIndex)
-        }
-    }
-    compareTime()
+
+
     useEffect(() => {
-        const timerId = setInterval(refreshLiveTime, 1000)        
-        return function cleanup() {
-          clearInterval(timerId)
+        const timerId = setInterval(refreshLiveTime, 1000)
+    
+        const compareTime = () => {
+            const time1 = moment(currentTime, "HH:mm:ss A");
+            const time2 = moment(currentSalah.iqamah, "HH:mm:ss A")
+    
+            if (time1.isBefore(midNight) && salahIndex == 4) {
+                setTimeout(onSetCurrentSalah, getTimeToMidNight())
+            }
+            else if (time1.isAfter(time2) && salahIndex > 4) {
+                setCurrentSalahIndex(0)
+            }
+            else if (time1.isAfter(time2)) {
+                setCurrentSalahIndex(salahIndex => salahIndex + 1)
+                onSetCurrentSalah()
+            }
         }
-    }, [])
+    
+        compareTime();
+    
+        return function cleanup() {
+            clearInterval(timerId)
+        }
+    }, [refreshLiveTime, currentTime, currentSalah, midNight, salahIndex, onSetCurrentSalah, getTimeToMidNight, setCurrentSalahIndex])
   return (
     <View>
     <ImageBackground 
