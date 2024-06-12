@@ -103,7 +103,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
         const time2 = moment(currentSalah.iqamah, "HH:mm A")
   
         const time2Clone = time2.clone().add(1, "hours")
-        if( time1.isBefore(midNight) && salahIndex == 4 ){
+        if( time1.isBefore(nextFajrDay) && salahIndex == 4 ){
+            onSetCurrentSalah()
             setTimeout(onSetCurrentSalah, getTimeToMidNight())
         }
        else if ( time1.isAfter(time2) && salahIndex > 4){
