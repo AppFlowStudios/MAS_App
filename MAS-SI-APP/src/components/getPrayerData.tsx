@@ -4,7 +4,6 @@ import { prayerTimesType } from '@/src/types';
 import { prayerTimeData } from '@/src/types';
 import { format, addDays } from 'date-fns';
 import { gettingPrayerData } from '@/src/types';
-
 type prayerDataProp={
     prayerTimes : prayerTimesType
 }

@@ -1,35 +1,35 @@
-import { View, Text, FlatList, Dimensions, Animated } from 'react-native';
+import { View, Text, FlatList, Dimensions, Animated, useWindowDimensions } from 'react-native';
 import React, {useRef, useState, useEffect}from 'react';
 import { Program } from '../types';
 import programsData from '@/assets/data/programsData';
 import ProgramsCircularCarouselCard from './programsCircularCarouselCard';
-import { useSharedValue } from 'react-native-reanimated';
-import Paginator from './paginator';
-export default function ProgramsCircularCarousel(  ) {
-  const scrollx = useRef( new Animated.Value(0) ).current;
-  const tablesRef = useRef(null);
-  const viewableItemsChanged = useRef( ({viewableItems} : any)  =>{
-    setCurrentCarousalIndex(viewableItems[0].index);
-  }).current;
-  const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;
-  const [currentCarousalIndex, setCurrentCarousalIndex] = useState(0)
 
+
+export default function ProgramsCircularCarousel(  ) {
+    const {width : windowWidth} = useWindowDimensions();
+    const SPACEING = 10;
+    const listItemWidth = windowWidth*0.72;
+    const SPACER_ITEM_SIZE = (windowWidth - listItemWidth) / 2;
+    const scrollx = useRef( new Animated.Value(0) ).current;
+    const endOfList = programsData.length
   return (
-    <View>
-              <FlatList 
+    <View className='border rounded-20'>
+              <Animated.FlatList 
                 data={programsData}
-                renderItem={({item}) => <ProgramsCircularCarouselCard program={item} />}
+                contentContainerStyle={{
+                  alignItems : "center"
+                }}
+                renderItem={({item, index}) => <ProgramsCircularCarouselCard scrollX={scrollx} listItemWidth={listItemWidth} program={item} index={index} itemSpacer={SPACER_ITEM_SIZE} lastIndex={endOfList}/>}
                 horizontal
+                snapToInterval={listItemWidth}
+                decelerationRate={0}
                 bounces={false}
                 showsHorizontalScrollIndicator={false}
-                pagingEnabled
+                
                 onScroll={Animated.event( [{ nativeEvent: {contentOffset : {x : scrollx } } }],{
-                  useNativeDriver: false
+                  useNativeDriver: true
                 } )}
-                scrollEventThrottle={32}
-                onViewableItemsChanged={viewableItemsChanged}
-                viewabilityConfig={viewConfig}
-                ref={tablesRef}
+                scrollEventThrottle={16}
               />
     </View>
   )

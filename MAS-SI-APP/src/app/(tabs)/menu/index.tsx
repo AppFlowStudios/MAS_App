@@ -44,7 +44,7 @@ export default function homeScreen() {
 
     if (loading){
       return(
-        <View>
+        <View className='justify-center items-center'>
           <Text>Loading...</Text>
         </View>
       )
@@ -64,10 +64,10 @@ export default function homeScreen() {
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
             <View className='pt-3'>
-              <JummahTable jummahSpeaker={jummahData.jummahSpeaker} jummahSpeakerImg={jummahData.jummahSpeakerImg} jummahTopic={jummahData.jummahTopic} ref={bottomSheetRef}/>
+              <ProgramsCircularCarousel />
             </View>
             <View className=''>
-              <ProgramsCircularCarousel />
+              <JummahTable jummahSpeaker={jummahData.jummahSpeaker} jummahSpeakerImg={jummahData.jummahSpeakerImg} jummahTopic={jummahData.jummahTopic} ref={bottomSheetRef}/>
             </View>
             
       </ScrollView>
