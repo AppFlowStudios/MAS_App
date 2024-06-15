@@ -1,36 +1,50 @@
-import { View, Text, FlatList, Dimensions, Animated, useWindowDimensions } from 'react-native';
+import { View, Text, FlatList, Dimensions, useWindowDimensions } from 'react-native';
+import Animated from 'react-native-reanimated';
 import React, {useRef, useState, useEffect}from 'react';
 import { Program } from '../types';
 import programsData from '@/assets/data/programsData';
 import ProgramsCircularCarouselCard from './programsCircularCarouselCard';
 
-
-export default function ProgramsCircularCarousel(  ) {
+type ProgramsCircularProp = {
+  sideCardLength : number,
+  spaceing : number,
+  cardLength : number
+  
+}
+export default function ProgramsCircularCarousel(   ) {
+    const [scrollX, setScrollX] = useState(0);
     const {width : windowWidth} = useWindowDimensions();
-    const SPACEING = 10;
-    const listItemWidth = windowWidth*0.72;
+    const SPACEING = windowWidth * 0.02;
+    const listItemWidth = windowWidth * 0.8;
     const SPACER_ITEM_SIZE = (windowWidth - listItemWidth) / 2;
-    const scrollx = useRef( new Animated.Value(0) ).current;
-    const endOfList = programsData.length
+    const endOfList = programsData.length;
+    const SIDE_CARD_LENGTH = (windowWidth * 0.18) / 2;
+
+   
   return (
-    <View className='border rounded-20'>
-              <Animated.FlatList 
+    <Animated.View className='rounded-20 justify-center items-center' style={{height: 400}}>
+      <Animated.FlatList 
                 data={programsData}
-                contentContainerStyle={{
-                  alignItems : "center"
-                }}
-                renderItem={({item, index}) => <ProgramsCircularCarouselCard scrollX={scrollx} listItemWidth={listItemWidth} program={item} index={index} itemSpacer={SPACER_ITEM_SIZE} lastIndex={endOfList}/>}
+                renderItem={({item, index}) =>  <ProgramsCircularCarouselCard scrollX={scrollX} listItemWidth={listItemWidth} program={item} index={index} itemSpacer={SIDE_CARD_LENGTH} spacing={SPACEING} lastIndex={endOfList}/>}
                 horizontal
-                snapToInterval={listItemWidth}
-                decelerationRate={0}
-                bounces={false}
-                showsHorizontalScrollIndicator={false}
-                
-                onScroll={Animated.event( [{ nativeEvent: {contentOffset : {x : scrollx } } }],{
-                  useNativeDriver: true
-                } )}
+                onScroll={(event) =>{
+                  setScrollX(event.nativeEvent.contentOffset.x)
+                }}
                 scrollEventThrottle={16}
-              />
-    </View>
+                decelerationRate={0.8}
+                snapToInterval={listItemWidth + (SPACEING * 4)}
+                disableIntervalMomentum={true}
+                disableScrollViewPanResponder={true}
+                snapToAlignment={"center"}
+       />
+    </Animated.View>
   )
 }
+
+
+
+{/*
+
+
+
+*/}

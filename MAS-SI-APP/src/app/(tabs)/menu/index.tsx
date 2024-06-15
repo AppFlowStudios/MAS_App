@@ -1,11 +1,9 @@
-import { Image, StyleSheet, View, Text, Animated, FlatList, ScrollView, Dimensions } from 'react-native';
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions } from 'react-native';
+import React, { useState, useEffect, useRef, useContext, useCallback} from 'react';
 import { gettingPrayerData, prayerTimesType } from '@/src/types';
-import svg, { Path, Svg } from "react-native-svg";
 import { format } from 'date-fns';
 import { ThePrayerData} from '@/src/components/getPrayerData';
 import { usePrayer } from '@/src/providers/prayerTimesProvider';
-import Paginator from '@/src/components/paginator';
 import SalahDisplayWidget from '@/src/components/salahDisplayWidget';
 import {JummahTable} from '@/src/components/jummahTable';
 import ProgramsCircularCarousel from '@/src/components/programsCircularCarousel';
@@ -33,7 +31,6 @@ export default function homeScreen() {
       fetch(masjidalAPIURL)
       .then( (response) => response.json() )
       .then( (json) => setPrayerTimes(json) )
-      .then( () => onSetPrayerTimesWeek(ThePrayerData({prayerTimes})))
       .catch( (error) =>  console.error(error))
       .finally( () => setLoading(false) )
       console.log("getPrayer Called")
@@ -41,7 +38,12 @@ export default function homeScreen() {
     useEffect( () => {
       getMasjidalApi();
     }, [])
+    const prayer : gettingPrayerData[] = ThePrayerData({prayerTimes});
+    useEffect( () => {
+      onSetPrayerTimesWeek(prayer)
+    }, [prayerTimes])
 
+    console.log(prayerTimes)
     if (loading){
       return(
         <View className='justify-center items-center'>
@@ -49,18 +51,22 @@ export default function homeScreen() {
         </View>
       )
     }
-    const prayer : gettingPrayerData[] = ThePrayerData({prayerTimes});
+   
     const jummahData : JummahBottomSheetProp ={
       jummahSpeaker : "AB",
-      jummahSpeakerImg : " sdas",
+      jummahSpeakerImg : "sdas",
       jummahTopic : "YARR"
   }
+
+
+
+
     return (
       <ScrollView className="bg-[#f9f9f9] h-full" indicatorStyle='black'>
             <View className='w-[100%] m-auto  justify-center items-center mt-[10%] flex-0'>
               <Image source={require("@/assets/images/massiLogo2.png")} style={styles.massiLogo} />
             </View>
-            <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderBottomStartRadius : 40, borderBottomEndRadius: 40}} className=''>
+            <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderRadius: 50}} className=''>
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
             <View className='pt-3'>
@@ -69,7 +75,6 @@ export default function homeScreen() {
             <View className=''>
               <JummahTable jummahSpeaker={jummahData.jummahSpeaker} jummahSpeakerImg={jummahData.jummahSpeakerImg} jummahTopic={jummahData.jummahTopic} ref={bottomSheetRef}/>
             </View>
-            
       </ScrollView>
     )
     

@@ -2,7 +2,6 @@ import { DataTable } from 'react-native-paper';
 import { gettingPrayerData, prayerTimeData } from '@/src/types';
 import ProgramWidgetSlider from "@/src/components/programWidgetSlider";
 import {View, Text, useWindowDimensions, StyleSheet } from "react-native";
-import JummahTable from './jummahTable';
 import AlertBell from '../app/(tabs)/menu/alertBell';
 type prayerDataProp = {
     prayerData : gettingPrayerData,
@@ -47,12 +46,6 @@ const Table = ( { prayerData } :  prayerDataProp) => {
         <DataTable.Cell textStyle={{ marginLeft:13, fontSize: 17, color:"#0D509D", fontWeight: 700}}>{prayerData.athan_isha}</DataTable.Cell>
         <DataTable.Cell textStyle={{ marginLeft: 25 , fontSize: 17, fontWeight: 700}}>{prayerData.iqa_isha}</DataTable.Cell>
       </DataTable.Row>
-      <View className='items-center'>
-        <Text className='text-2xl font-bold text-[#57BA47]'>Jummah</Text>
-      </View>
-      <View>
-        <JummahTable />
-    </View>
    </DataTable>
    </View>
    </View>

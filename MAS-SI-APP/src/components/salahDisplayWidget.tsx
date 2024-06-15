@@ -1,8 +1,9 @@
-import { View, Text, ImageBackground } from 'react-native'
+import { View, Text, ImageBackground, TouchableOpacity, Pressable } from 'react-native'
 import  React, { useState, useEffect } from 'react'
 import { gettingPrayerData } from '../types';
 import { format } from 'date-fns';
 import moment from 'moment';
+import { Link } from 'expo-router';
 type salahDisplayWidgetProp = {
     prayer : gettingPrayerData,
     nextPrayer: gettingPrayerData
@@ -17,11 +18,11 @@ type currentSalahProp = {
 }
 export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplayWidgetProp ) {
     
-    const salahArray = ["fajr", "dhuhr", "asr", "maghrib", "isha"];
+    const salahArray = ["fajr", "dhuhr", "asr", "maghrib", "isha", "nextDayFajr"];
     const [liveTime, setLiveTime] = useState(new Date());
     const [salahIndex, setCurrentSalahIndex] = useState(0);
     const [currentSalah, setCurrentSalah] = useState<currentSalahProp>({
-        salah : "fajr",
+        salah : "Fajr",
         athan : prayer.athan_fajr,
         iqamah : prayer.iqa_fajr
     });
@@ -69,12 +70,24 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
             }
             setCurrentSalah(ishaSalah)
         }
+        else if(salahArray[salahIndex] == "nextDayFajr"){
+            const nextDayFajrSalah = {
+                salah : "Fajr",
+                athan: nextPrayer.athan_fajr,
+                iqamah: nextPrayer.iqa_fajr
+            }
+        }
     }
 
     const getTimeToNextPrayer = () => {
         const time1 = moment(currentTime, "HH:mm A");
-        const time2 = moment(currentSalah.iqamah, "HH:mm A")
+        let time2 = moment(currentSalah.iqamah, "HH:mm A")
+        if (salahIndex == 5){
+            time2.add(1, "days")
+        }else{
+            time2 = moment(currentSalah.iqamah, "HH:mm A")
 
+        }
         const duration = moment.duration(time2.diff(time1))
         const hours = Math.floor(duration.asHours());
         const minutes = duration.minutes();
@@ -101,12 +114,15 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     const compareTime = ( ) =>{
         const time1 = moment(currentTime, "HH:mm A");
         const time2 = moment(currentSalah.iqamah, "HH:mm A")
-  
-        const time2Clone = time2.clone().add(1, "hours")
-        if( time1.isBefore(midNight) && salahIndex == 4 ){
-            setTimeout(onSetCurrentSalah, getTimeToMidNight())
+        if (salahIndex == 5) {
+            time2.add(1, "days")
         }
-       else if ( time1.isAfter(time2) && salahIndex > 4){
+        const time2Clone = time2.clone().add(1, "hours")
+        if( time1.isAfter(time2) && salahIndex == 4 ){
+            setCurrentSalahIndex(salahIndex => salahIndex + 1);
+            onSetCurrentSalah()
+        }
+       else if ( time1.isAfter(time2) && salahIndex > 6){
             setCurrentSalahIndex(0)
         }
         else if ( time1.isAfter(time2) ){
@@ -124,10 +140,12 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     }, [])
   return (
     <View>
+    <Link href={"/prayersTable"} asChild>  
+    <Pressable style={{paddingHorizontal: 5}}>
     <ImageBackground 
         source={require("@/assets/images/salahPictures/DJI_0049.jpg")}
         style={{height: "100%", width: "100%",}}
-        className='border'
+    
     >
       <View className='flex-row mt-4'>
         <Text className='text-white px-5 font-bold text-lg mt-2' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
@@ -135,7 +153,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
       </View>
       <View className='flex-row '>
         <Text className='text-white px-5 font-bold text-4xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >{currentSalah.salah}</Text>
-        <Text className='text-gray-100 ml-[25%] font-bold text-3xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{currentSalah.iqamah}</Text>
+        <Text className='text-gray-100 font-bold text-3xl' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }, {marginLeft : currentSalah.iqamah == "Maghrib" ? 0 : "40%" }]}>{currentSalah.iqamah}</Text>
       </View>
       <View className='flex-row'>
       <Text className='text-gray-100  px-5 font-bold text-3xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{currentSalah.athan}</Text>
@@ -147,6 +165,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
       <Text className='text-white'>Current Salah iqamah : {currentSalah.iqamah}</Text>
   <Text className='text-white'>Current Time : {currentTime} {"\n"}Time to next Prayer : {timeToNextPrayer}</Text>*/}
     </ImageBackground>
+    </Pressable>
+    </Link>      
     </View>
   )
 }

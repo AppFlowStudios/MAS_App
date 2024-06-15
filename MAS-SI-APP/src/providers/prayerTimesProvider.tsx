@@ -13,9 +13,9 @@ const PrayerTimesProvider = ( {children} : PropsWithChildren ) =>{
     const[prayerTimesWeek, setPrayerTimesWeek] = useState<gettingPrayerData[]>([]);
 
     const onSetPrayerTimesWeek = ( prayer: gettingPrayerData[] ) =>{
-        setPrayerTimesWeek([...prayer])
+        setPrayerTimesWeek(prayer)
 }
-console.log(prayerTimesWeek)
+
 return(
     <PrayersContext.Provider
         value={{prayerTimesWeek, onSetPrayerTimesWeek}}

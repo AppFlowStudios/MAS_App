@@ -28,13 +28,16 @@ export default function RootLayout() {
   }
 
   return (
+    
+    <ProgramProvider>
+    <PrayerTimesProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ProgramProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
-      </ProgramProvider>
     </ThemeProvider>
+    </PrayerTimesProvider>
+    </ProgramProvider>
   );
 }

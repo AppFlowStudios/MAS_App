@@ -3,7 +3,7 @@ const programsData : Program[] = [
     {
     programId : 0,
 	programName : "Soulful Saturdays",
-	programImg: "https://scontent-lga3-1.cdninstagram.com/v/t39.30808-6/438725074_18220253446302860_794808628058742151_n.jpg?stp=dst-jpg_e35_s750x750_sh0.08&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4yMDQ4eDIwNDguc2RyLmYzMDgwOCJ9&_nc_ht=scontent-lga3-1.cdninstagram.com&_nc_cat=108&_nc_ohc=pLBKJ4mT8b8Q7kNvgF_6_ZW&edm=ANTKIIoAAAAA&ccb=7-5&oh=00_AYBH8TadRwLpjIxN9Vg-38Yl3mliJCwAsbHoRaWLy-xX5w&oe=665D997F&_nc_sid=cf751b",
+	programImg: "",
 	programDesc: "Youth Lecturs Every Saturday hosted by Sh. Abdelrahman Badawy",
 	lectures :[
 		{
