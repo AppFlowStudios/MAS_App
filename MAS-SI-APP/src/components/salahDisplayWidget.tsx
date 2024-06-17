@@ -147,19 +147,17 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
         style={{height: "100%", width: "100%",}}
     
     >
-      <View className='flex-row mt-4'>
-        <Text className='text-white px-5 font-bold text-lg mt-2' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
-        <Text className='text-gray-100 ml-[23%] font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Iqamah</Text>
+      <View className='flex-row mt-4 items-center'>
+        <Text className='text-white px-5 font-bold text-lg' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
+        <Text className='text-gray-100 ml-[23%] font-bold text-lg ' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Athan</Text>
       </View>
-      <View className='flex-row '>
+      <View className='flex-row mt-9'>
         <Text className='text-white px-5 font-bold text-4xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >{currentSalah.salah}</Text>
-        <Text className='text-gray-100 font-bold text-3xl' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }, {marginLeft : currentSalah.iqamah == "Maghrib" ? 0 : "40%" }]}>{currentSalah.iqamah}</Text>
+        <Text className='text-gray-100 font-bold text-3xl' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }, {marginLeft : currentSalah.salah == "Maghrib" || currentSalah.salah == "Dhuhr" ? "25%" : "40%" }]}>{currentSalah.athan}</Text>
       </View>
-      <View className='flex-row'>
-      <Text className='text-gray-100  px-5 font-bold text-3xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{currentSalah.athan}</Text>
-      </View>
-      <View className='flex-row mt-5 '>
-        <Text className='text-white px-5 font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Iqamah in {timeToNextPrayer}</Text>
+      <View className='flex-row mt-12'>
+        <Text className='text-white pl-4 pr-1 font-bold text-xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Next Iqamah in</Text>
+        <Text className='text-white font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{timeToNextPrayer}</Text>
       </View>
       {/*<Text className='text-white'>Current Salah : {currentSalah.salah}</Text>
       <Text className='text-white'>Current Salah iqamah : {currentSalah.iqamah}</Text>

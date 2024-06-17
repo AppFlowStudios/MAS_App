@@ -2,7 +2,7 @@ import { DataTable } from 'react-native-paper';
 import { gettingPrayerData, prayerTimeData } from '@/src/types';
 import ProgramWidgetSlider from "@/src/components/programWidgetSlider";
 import {View, Text, useWindowDimensions, StyleSheet } from "react-native";
-import AlertBell from '../app/(tabs)/menu/alertBell';
+import AlertBell from '../app/(user)/menu/alertBell';
 type prayerDataProp = {
     prayerData : gettingPrayerData,
   }

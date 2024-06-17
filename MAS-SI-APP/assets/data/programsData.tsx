@@ -63,6 +63,40 @@ const programsData : Program[] = [
                 lectureTime: " First Jummah"                
             },   
         ] 
+    },
+    {
+        programId: 3,
+        programName: "Quranic Wisdoms",
+        programImg: "",
+        programDesc: "Quranic Wisdoms",
+        lectures: [
+            {
+                lectureID : 0,
+                lectureName: "Friday Khutbah 6/7 with Shiekh Abdelrahman Badawy",
+                lectureSpeaker: "Shiekh Abdelrahman Badawy",
+                lectureLink : "https://www.youtube.com/watch?v=1s4pF1u4GEE",
+                lectureAI : "AI Text Here",
+                lectureData: "June 7, 2024",
+                lectureTime: " First Jummah"                
+            },   
+        ] 
+    },
+    {
+        programId: 4,
+        programName: "Khutbahs",
+        programImg: "",
+        programDesc: "Friday Lecture",
+        lectures: [
+            {
+                lectureID : 0,
+                lectureName: "Friday Khutbah 6/7 with Shiekh Abdelrahman Badawy",
+                lectureSpeaker: "Shiekh Abdelrahman Badawy",
+                lectureLink : "https://www.youtube.com/watch?v=1s4pF1u4GEE",
+                lectureAI : "AI Text Here",
+                lectureData: "June 7, 2024",
+                lectureTime: " First Jummah"                
+            },   
+        ] 
     }
 
 ]

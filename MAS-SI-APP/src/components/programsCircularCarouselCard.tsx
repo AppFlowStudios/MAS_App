@@ -18,7 +18,7 @@ type ProgramsCircularCarouselCardProp = {
 
 export default function ProgramsCircularCarouselCard( {program, index, listItemWidth, scrollX, itemSpacer, spacing, lastIndex}: ProgramsCircularCarouselCardProp) {
     const {width : windowWidth} = useWindowDimensions();
-    const size = useSharedValue(0.8);
+    const size = useSharedValue(0.6);
 
     const inputRange = [
       (index - 1) * listItemWidth,
@@ -29,7 +29,7 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
     size.value = interpolate(
       scrollX,
       inputRange,
-      [0.8, 1, 0.8],
+      [0.6, 1, 0.6],
       Extrapolation.CLAMP
     )
 
@@ -42,35 +42,42 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
   if ( index == 0 ){
     return (
     <Animated.View style={[{width: listItemWidth, marginLeft: itemSpacer, marginRight: spacing}, cardStyle]} className=''>
-      <Pressable>
+      <Link href={"../menu/program"} asChild>
+      <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
         <Image 
-        source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
-        style={{width: "100%", height: "90%"}} />
+        source={{uri : program.programImg || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnBoYwr8T3VA5KoqPVyY1P1egA1d4BDpi-PA&s"}}
+        style={{width: "85%", height: "80%", resizeMode: "cover", borderRadius : 15}} />
         <Text className='text-center'>{program.programDesc}</Text>
       </Pressable>
+      </Link>
     </Animated.View>
     )
   }
-  if (index == lastIndex - 1){
+  if ( index == lastIndex - 1 ){
     return(
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: itemSpacer}, cardStyle]} className=''>
-        <Pressable>
+        <Link href={"../menu/program"} asChild>
+        <Pressable style={{backgroundColor : "#0D509D", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
           <Image 
           source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
-          style={{width: "100%", height: "90%"}} />
-          <Text className='text-center'>{program.programDesc}</Text>
+          style={{width: "85%", height: "80%", resizeMode: "cover", borderRadius: 15}} 
+          />
+          <Text className='text-white'>{program.programDesc}</Text>
         </Pressable>
+        </Link>
       </Animated.View>
     )
   }
   return (
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: spacing}, cardStyle]} className=''>
-      <Pressable>
+      <Link href={"../menu/program"} asChild>
+      <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
         <Image 
         source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
-        style={{width: "100%", height: "90%"}} />
+        style={{width: "90%", height: "90%", resizeMode: "contain"}} />
         <Text className='text-center'>{program.programDesc}</Text>
       </Pressable>
+      </Link>
     </Animated.View>
   )
 }

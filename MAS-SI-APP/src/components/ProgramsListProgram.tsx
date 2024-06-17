@@ -4,7 +4,7 @@ import {Program} from "../types"
 import React from 'react'
 import { Link } from 'expo-router';
 import { useProgram } from '../providers/programProvider';
-export const defaultProgramImage = "https://scontent-lga3-1.xx.fbcdn.net/v/t39.30808-6/342522083_1599415967228635_7274132664010740189_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=5f2048&_nc_ohc=xqv1UTMseJEQ7kNvgG000u7&_nc_ht=scontent-lga3-1.xx&oh=00_AYB213DgyZXD2LApnhHyvbqRWw49Z27R68zj7R0uxCsKDw&oe=665FFFA7"
+export const defaultProgramImage = "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"
 
 type ProgramsListProgramProps = {
     program : Program,
@@ -16,13 +16,14 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     }
     return(
         <View className={styles.programBox}>
-        <Pressable>
-            <View>
-            <Link href={`/menu/program/${program.programId}`} onPress={setTheProgram}>
-            <View className='align-center justify-center'>
+        <Link href={`/menu/program/${program.programId}`} onPress={setTheProgram} asChild>
+        <Pressable className='border'>
+            
+            <View className='align-center justify-center ' style={{width: 200, height: 200}}>
             <Image 
                 source={{ uri: program.programImg || defaultProgramImage }}
-                style={{width: 100, height: 100, objectFit: "contain"}}
+                style={{width: "100%", height: "100%", objectFit: "contain"}}
+                className='border'
             />
             </View>
             <View className='align-center justify-center'> 
@@ -35,15 +36,14 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
                 </Text>
             </Text>
             </View>
-            </Link>
-            </View>
         </Pressable>
+        </Link>
         </View>
     )
 }
 
 const styles = {
-    programBox: "bg-white flex-row h-100 flex-1 align-center justify-center",
+    programBox: "bg-white flex-row h-100 w-[100%] border",
   }
 
 

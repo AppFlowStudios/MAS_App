@@ -62,12 +62,15 @@ export default function homeScreen() {
 
 
     return (
-      <ScrollView className="bg-[#f9f9f9] h-full" indicatorStyle='black'>
+      <ScrollView className="bg-[#f2f3f4] h-full" indicatorStyle='black'>
             <View className='w-[100%] m-auto  justify-center items-center mt-[10%] flex-0'>
               <Image source={require("@/assets/images/massiLogo2.png")} style={styles.massiLogo} />
             </View>
             <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderRadius: 50}} className=''>
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
+            </View>
+            <View className='pt-7'>
+              <Text className='font-bold text-2xl text-[#0D509D] pl-3' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >Weekly Programs</Text>
             </View>
             <View className='pt-3'>
               <ProgramsCircularCarousel />

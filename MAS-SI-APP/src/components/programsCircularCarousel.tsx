@@ -15,14 +15,15 @@ export default function ProgramsCircularCarousel(   ) {
     const [scrollX, setScrollX] = useState(0);
     const {width : windowWidth} = useWindowDimensions();
     const SPACEING = windowWidth * 0.02;
-    const listItemWidth = windowWidth * 0.8;
+    const listItemWidth = windowWidth * 0.6;
     const SPACER_ITEM_SIZE = (windowWidth - listItemWidth) / 2;
     const endOfList = programsData.length;
     const SIDE_CARD_LENGTH = (windowWidth * 0.18) / 2;
 
    
   return (
-    <Animated.View className='rounded-20 justify-center items-center' style={{height: 400}}>
+    <View style={{ borderRadius: 15 }} className=''>
+    <Animated.View className='rounded-20' style={{height: 300}}>
       <Animated.FlatList 
                 data={programsData}
                 renderItem={({item, index}) =>  <ProgramsCircularCarouselCard scrollX={scrollX} listItemWidth={listItemWidth} program={item} index={index} itemSpacer={SIDE_CARD_LENGTH} spacing={SPACEING} lastIndex={endOfList}/>}
@@ -31,13 +32,15 @@ export default function ProgramsCircularCarousel(   ) {
                   setScrollX(event.nativeEvent.contentOffset.x)
                 }}
                 scrollEventThrottle={16}
-                decelerationRate={0.8}
-                snapToInterval={listItemWidth + (SPACEING * 4)}
+                decelerationRate={0.6}
+                snapToInterval={listItemWidth + (SPACEING * 3.3)}
                 disableIntervalMomentum={true}
                 disableScrollViewPanResponder={true}
                 snapToAlignment={"center"}
+                showsHorizontalScrollIndicator={false}
        />
     </Animated.View>
+    </View>
   )
 }
 
