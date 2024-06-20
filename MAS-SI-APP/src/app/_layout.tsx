@@ -7,7 +7,9 @@ import 'react-native-reanimated';
 import PrayerTimesProvider from '../providers/prayerTimesProvider';
 import { useColorScheme } from '../../hooks/useColorScheme';
 import ProgramProvider from '../providers/programProvider';
+import AddProgramProvider from '../providers/addingProgramProvider';
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -28,16 +30,19 @@ export default function RootLayout() {
   }
 
   return (
-    
-    <ProgramProvider>
-    <PrayerTimesProvider>
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(user)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-    </ThemeProvider>
-    </PrayerTimesProvider>
-    </ProgramProvider>
+    <GestureHandlerRootView>
+      <AddProgramProvider>
+        <ProgramProvider>
+          <PrayerTimesProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <Stack>
+                  <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+            </ThemeProvider>
+          </PrayerTimesProvider>
+        </ProgramProvider>
+      </AddProgramProvider>
+    </GestureHandlerRootView>
   );
 }

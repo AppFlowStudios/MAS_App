@@ -12,6 +12,7 @@ export type Program = {
     programName: string,
     programImg: string | null,
     programDesc: string | null,
+    programSpeaker: string | null,
     lectures: Lectures[]
 }
 

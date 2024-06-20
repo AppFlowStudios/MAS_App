@@ -11,6 +11,7 @@ export const ProgramContext = createContext<ProgramContextType>({
         programName: "",
         programImg: "",
         programDesc: "",
+        programSpeaker: "",
         lectures: []
     },
     onSetProgram: () => {}
@@ -23,6 +24,7 @@ const ProgramProvider = ( {children} : PropsWithChildren ) => {
         programName: "",
         programImg: "",
         programDesc: "",
+        programSpeaker: "",
         lectures: []
     })
 

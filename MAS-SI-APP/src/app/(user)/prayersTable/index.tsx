@@ -16,7 +16,6 @@ export default function index() {
   }).current;
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;
   const [currentCarousalIndex, setCurrentCarousalIndex] = useState(0)
-  console.log(prayerTimesWeek)
 
   return (
     <View className='justify-center items-center  mt-[10%]' style={{height: 500}}>

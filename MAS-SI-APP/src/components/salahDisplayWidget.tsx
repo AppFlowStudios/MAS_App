@@ -76,6 +76,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 athan: nextPrayer.athan_fajr,
                 iqamah: nextPrayer.iqa_fajr
             }
+            setCurrentSalah(nextDayFajrSalah)
         }
     }
 
@@ -83,11 +84,11 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
         const time1 = moment(currentTime, "HH:mm A");
         let time2 = moment(currentSalah.iqamah, "HH:mm A")
         if (salahIndex == 5){
-            time2.add(1, "days")
+            time2.add(1, "day")
         }else{
             time2 = moment(currentSalah.iqamah, "HH:mm A")
-
         }
+
         const duration = moment.duration(time2.diff(time1))
         const hours = Math.floor(duration.asHours());
         const minutes = duration.minutes();
@@ -116,8 +117,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
         const time2 = moment(currentSalah.iqamah, "HH:mm A")
         if (salahIndex == 5) {
             time2.add(1, "days")
+            
         }
-        const time2Clone = time2.clone().add(1, "hours")
         if( time1.isAfter(time2) && salahIndex == 4 ){
             setCurrentSalahIndex(salahIndex => salahIndex + 1);
             onSetCurrentSalah()

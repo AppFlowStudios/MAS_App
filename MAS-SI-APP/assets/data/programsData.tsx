@@ -5,6 +5,7 @@ const programsData : Program[] = [
 	programName : "Soulful Saturdays",
 	programImg: "",
 	programDesc: "Youth Lecturs Every Saturday hosted by Sh. Abdelrahman Badawy",
+    programSpeaker: "Shiekh Abdelrahman Badawy",
 	lectures :[
 		{
 			lectureID : 0,
@@ -23,6 +24,7 @@ const programsData : Program[] = [
         programName: "Victors Not Victims",
         programImg: "",
         programDesc: "Ramadan Series",
+        programSpeaker: "MAS",
         lectures: [
             {
                 lectureID : 0,
@@ -52,6 +54,7 @@ const programsData : Program[] = [
         programName: "Khutbahs",
         programImg: "",
         programDesc: "Friday Lecture",
+        programSpeaker: "MAS",
         lectures: [
             {
                 lectureID : 0,
@@ -69,6 +72,7 @@ const programsData : Program[] = [
         programName: "Quranic Wisdoms",
         programImg: "",
         programDesc: "Quranic Wisdoms",
+        programSpeaker: "Shiekh Abdelrahman Badawy",
         lectures: [
             {
                 lectureID : 0,
@@ -86,6 +90,7 @@ const programsData : Program[] = [
         programName: "Khutbahs",
         programImg: "",
         programDesc: "Friday Lecture",
+        programSpeaker: "Shiekh Abdelrahman Badawy",
         lectures: [
             {
                 lectureID : 0,

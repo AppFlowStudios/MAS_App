@@ -7,7 +7,11 @@ import { Divider } from 'react-native-paper';
 
 export default function ProgramsScreen(){
   const seperator = () =>{
-    return <Divider className='w-2 color-black'/>
+    return (
+    <View style={{ alignItems: "center", marginVertical: 8}}>
+      <Divider style={{height: 1, width: "50%",}}/>
+    </View>
+  )
   }
   return (
     <View>

@@ -35,9 +35,11 @@ export default function homeScreen() {
       .finally( () => setLoading(false) )
       console.log("getPrayer Called")
     }
+    
     useEffect( () => {
       getMasjidalApi();
     }, [])
+
     const prayer : gettingPrayerData[] = ThePrayerData({prayerTimes});
     useEffect( () => {
       onSetPrayerTimesWeek(prayer)
