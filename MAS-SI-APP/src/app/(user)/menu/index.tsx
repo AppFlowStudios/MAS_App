@@ -54,11 +54,30 @@ export default function homeScreen() {
       )
     }
    
-    const jummahData : JummahBottomSheetProp ={
-      jummahSpeaker : "AB",
-      jummahSpeakerImg : "sdas",
-      jummahTopic : "YARR"
-  }
+    const jummahData : JummahBottomSheetProp[] = [
+      {
+        jummahSpeaker : "AB",
+        jummahSpeakerImg : "sdas",
+        jummahTopic : "YARR"
+      },
+      {
+        jummahSpeaker : "T",
+        jummahSpeakerImg : "T",
+        jummahTopic : "T" 
+      },
+      {
+        jummahSpeaker : "3",
+        jummahSpeakerImg : "3",
+        jummahTopic : "3"
+      },
+      {
+        jummahSpeaker : "4",
+        jummahSpeakerImg : "4",
+        jummahTopic : "4"
+      }
+  ]
+     
+  
 
 
 
@@ -82,7 +101,7 @@ export default function homeScreen() {
               </View>
             
             <View className='bg-[#0D509D] pt-5' style={{borderTopStartRadius: 30, borderTopEndRadius: 30}}>
-              <JummahTable jummahSpeaker={jummahData.jummahSpeaker} jummahSpeakerImg={jummahData.jummahSpeakerImg} jummahTopic={jummahData.jummahTopic} ref={bottomSheetRef}/>
+              <JummahTable jummahData={jummahData} ref={bottomSheetRef}/>
             </View>
 
       </ScrollView>

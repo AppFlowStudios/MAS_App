@@ -2,21 +2,25 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { JummahBottomSheetProp, gettingPrayerData, prayerTimeData } from '../types';
 import { JummahBottomSheet } from './jummahBottomSheet';
-import React, { useRef, forwardRef } from 'react';
+import React, { useRef, forwardRef, useState } from 'react';
 import {BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet"
 type JummahTimeProp = {
     jummah : gettingPrayerData
 }
 
+type jummahTableProp = {
+  jummahData : JummahBottomSheetProp[]
+}
+
 type Ref = BottomSheetModal;
-export const JummahTable = forwardRef<Ref,JummahBottomSheetProp>(({jummahSpeaker, jummahSpeakerImg, jummahTopic}, ref) => {
+export const JummahTable = forwardRef<Ref,jummahTableProp>(({jummahData}, ref) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
-  
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
 
   const handleClosePress = () => bottomSheetRef.current?.close();
   const handleOpenPress = () => bottomSheetRef.current?.expand();
+  let clickedState = 2
   return (
     <>
       <View className='flex-row justify-center items-center pt-8'>
@@ -42,7 +46,7 @@ export const JummahTable = forwardRef<Ref,JummahBottomSheetProp>(({jummahSpeaker
             <Text>Student Jummah</Text>
           </TouchableOpacity>
       </View>
-      <JummahBottomSheet jummahSpeaker={jummahSpeaker} jummahSpeakerImg={jummahSpeakerImg} jummahTopic={jummahTopic} ref={bottomSheetRef} />
+      <JummahBottomSheet jummahSpeaker={jummahData[clickedState].jummahSpeaker} jummahSpeakerImg={jummahData[clickedState].jummahSpeakerImg} jummahTopic={jummahData[clickedState].jummahTopic} ref={bottomSheetRef} />
       </>
   )
 }
