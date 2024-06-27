@@ -51,7 +51,7 @@ export default function ProgramsCircularCarousel(   ) {
 const handleScroll = (event : any) =>{
   const scrollPositon = event.nativeEvent.contentOffset.x;
   const index = scrollPositon / listItemWidth;
-  setActiveIndex(index)
+  setActive(index)
 }
 
     const SPACEING = windowWidth * 0.02;

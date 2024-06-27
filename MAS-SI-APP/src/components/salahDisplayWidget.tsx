@@ -83,7 +83,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     const getTimeToNextPrayer = () => {
         const time1 = moment(currentTime, "HH:mm A");
         let time2 = moment(currentSalah.iqamah, "HH:mm A")
-        if (salahIndex == 5){
+        if (salahIndex == 6){
             time2.add(1, "day")
         }else{
             time2 = moment(currentSalah.iqamah, "HH:mm A")
@@ -115,15 +115,12 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     const compareTime = ( ) =>{
         const time1 = moment(currentTime, "HH:mm A");
         const time2 = moment(currentSalah.iqamah, "HH:mm A")
-        if (salahIndex == 5) {
+        if (salahIndex == 6) {
             time2.add(1, "days")
             
         }
-        if( time1.isAfter(time2) && salahIndex == 4 ){
-            setCurrentSalahIndex(salahIndex => salahIndex + 1);
-            onSetCurrentSalah()
-        }
-       else if ( time1.isAfter(time2) && salahIndex > 6){
+        
+        if ( time1.isAfter(time2) && salahIndex > 6){
             setCurrentSalahIndex(0)
         }
         else if ( time1.isAfter(time2) ){
@@ -142,7 +139,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
   return (
     <View>
     <Link href={"/prayersTable"} asChild>  
-    <Pressable style={{paddingHorizontal: 5}}>
+    <Pressable>
     <ImageBackground 
         source={require("@/assets/images/salahPictures/DJI_0049.jpg")}
         style={{height: "100%", width: "100%",}}
