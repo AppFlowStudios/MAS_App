@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions, ImageBackground } from 'react-native';
 import React, { useState, useEffect, useRef, useContext, useCallback} from 'react';
 import { gettingPrayerData, prayerTimesType } from '@/src/types';
 import { format } from 'date-fns';
@@ -92,18 +92,18 @@ export default function homeScreen() {
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
             
-              <View className='pt-7'>
-                <Text className='font-bold text-2xl text-[#0D509D] pl-3' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >Weekly Programs</Text>
+              <View className='pt-7 items-center justify-center'>
+                <Text className='font-bold text-2xl text-[#0D509D] pl-3 ' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >Weekly Programs</Text>
               </View>
 
               <View className='pt-3'>
                 <ProgramsCircularCarousel />
               </View>
             
-            <View className='bg-[#0D509D] pt-5' style={{borderTopStartRadius: 30, borderTopEndRadius: 30}}>
+            <ImageBackground className='pt-5 mt-6 ' style={{borderTopStartRadius: 30, borderTopEndRadius: 30, width:"100%", height: 500}} source={require("@/assets/images/jummahSheetBackImg.png")} resizeMode='stretch' imageStyle={{ borderTopLeftRadius : 30, borderTopRightRadius: 30,}}>
               <JummahTable jummahData={jummahData} ref={bottomSheetRef}/>
-            </View>
-
+            </ImageBackground>
+            <View style={{position: "absolute", bottom: -600, left: 0, right: 0, backgroundColor: '#194568', height: 600}}/>
       </ScrollView>
     )
     

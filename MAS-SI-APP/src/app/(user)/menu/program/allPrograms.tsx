@@ -1,11 +1,28 @@
-import { StyleSheet, View, FlatList} from 'react-native';
+import { StyleSheet, View, FlatList, Button} from 'react-native';
 import { Stack } from "expo-router";
 import ProgramsListProgram from "../../../../components/ProgramsListProgram"
 import programsData from '@/assets/data/programsData';
 import { Divider } from 'react-native-paper';
-
+import { useState } from 'react';
+import { Program } from "@/src/types"
+import { Input, Text, Icon } from "@ui-kitten/components"
+import {EvaIconsPack} from '@ui-kitten/eva-icons';
 
 export default function ProgramsScreen(){
+  const [ shownData, setShownData ] = useState<Program[]>(programsData)
+  const [ searchBarInput, setSearchBarInput ] = useState('')
+  const filterTest = programsData.filter((program) => {
+    return program.programName.includes("Vic")
+  })
+
+
+  const filterTestFunc = (searchParam : string) => {
+    const filterTest = programsData.filter((program) => {
+      return program.programName.includes(searchParam)
+    })
+    setShownData(filterTest)
+  }
+
   const seperator = () =>{
     return (
     <View style={{ alignItems: "center", marginVertical: 3}}>
@@ -13,16 +30,19 @@ export default function ProgramsScreen(){
     </View>
   )
   }
+  const searchIcon = () => {
+    return (<Icon name='search' style={{width: 20, height: 20}} />
+    )
+  };
+
   return (
-    <View className='bg-[#0D509D] w-[100vw] h-[100vh] pt-40'>
-      <View className=' bg-white rounded-50 h-[100vh] ' >
-        <FlatList 
-        data={programsData} 
+   <View className=' bg-white rounded-50 h-[100vh] ' >
+      <Input placeholder='Search...' value={searchBarInput} onChangeText={next => {setSearchBarInput(next); filterTestFunc(next)} } accessoryRight={searchIcon}/>
+      <FlatList 
+        data={shownData} 
         renderItem={({item}) => <ProgramsListProgram program={item}/>}
         ItemSeparatorComponent={() => seperator()}
-        
-        />
-      </View>
+      />
     </View>
   )
 }

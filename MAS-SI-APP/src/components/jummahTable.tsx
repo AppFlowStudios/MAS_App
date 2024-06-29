@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { DataTable } from 'react-native-paper';
 import { JummahBottomSheetProp, gettingPrayerData, prayerTimeData } from '../types';
 import { JummahBottomSheet } from './jummahBottomSheet';
@@ -14,37 +14,41 @@ type jummahTableProp = {
 
 type Ref = BottomSheetModal;
 export const JummahTable = forwardRef<Ref,jummahTableProp>(({jummahData}, ref) => {
+  const [ clickedState, setClickedState ] = useState(0)
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
 
   const handleClosePress = () => bottomSheetRef.current?.close();
   const handleOpenPress = () => bottomSheetRef.current?.expand();
-  let clickedState = 2
+
+  
   return (
     <>
-      <View className='flex-row justify-center items-center pt-8'>
-          <Text className='text-white font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Friday Prayer</Text>
+      <View className='flex-row justify-center items-center pt-5'>
+          <Text className='text-white font-bold text-2xl mb-4' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Jummah Schedule</Text>
       </View>
-      <View className='flex-col justify-center items-center gap-y-3 pt-2'>
-          <TouchableOpacity style={{height:85, width:350 }} className=' justify-center items-center rounded-lg bg-gray-500 ' onPress={handlePresentModalPress}>
-            <Text>12:15PM</Text>
-            <Text>Jummah 1</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{height:85, width:350}} className='justify-center items-center rounded-lg  bg-gray-500 ' onPress={handlePresentModalPress}>
-            <Text>1:00PM</Text>
-            <Text>Jummah 2</Text>
-          </TouchableOpacity>
+      <View className="ml-14 mr-14"style={{height: 375, borderTopWidth: 5, borderRightWidth: 5, borderLeftWidth: 5, borderBottomWidth: 5 ,borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, borderColor: "white"}}>
+        <ScrollView className='flex-col pt-3'  contentContainerStyle={{justifyContent: "center",  alignItems : "center"}} >
+            <TouchableOpacity style={{height:75, width:250 }} className=' justify-center items-center rounded-lg bg-[#cdcdcd]' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(0)}} >
+              <Text>12:15PM</Text>
+              <Text>Jummah 1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{height:75, width:250}} className='justify-center items-center rounded-lg  bg-[#cdcdcd] mt-3' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(1)}}>
+              <Text>1:00PM</Text>
+              <Text>Jummah 2</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={{height:85, width:350}} className='justify-center items-center rounded-lg bg-gray-500 ' onPress={handlePresentModalPress}>
-            <Text>1:45PM</Text>
-            <Text>Jummah 3</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={{height:75, width:250}} className='justify-center items-center rounded-lg bg-[#cdcdcd] mt-3' onPress={handlePresentModalPress}  onPressIn={() => {setClickedState(2)}}>
+              <Text>1:45PM</Text>
+              <Text>Jummah 3</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={{height:85, width:350}} className='justify-center items-center rounded-lg bg-gray-500 ' onPress={handlePresentModalPress}>
-            <Text>3:40PM</Text>
-            <Text>Student Jummah</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={{height:75, width:250}} className='justify-center items-center rounded-lg bg-[#cdcdcd] mt-3' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(3)}}>
+              <Text>3:40PM</Text>
+              <Text>Student Jummah</Text>
+            </TouchableOpacity>
+        </ScrollView>
       </View>
       <JummahBottomSheet jummahSpeaker={jummahData[clickedState].jummahSpeaker} jummahSpeakerImg={jummahData[clickedState].jummahSpeakerImg} jummahTopic={jummahData[clickedState].jummahTopic} ref={bottomSheetRef} />
       </>

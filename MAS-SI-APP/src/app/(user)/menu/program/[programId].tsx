@@ -4,17 +4,6 @@ import { useLocalSearchParams, Stack } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import LecturesListLecture from '@/src/components/LectureListLecture';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
-import { useNavigation } from 'expo-router';
-
-const BackButton = () => {
-  const navigate = useNavigation();
-
-  return (
-    <TouchableOpacity  onPress={() => navigate.goBack()}>
-      <Text>Back</Text>
-    </TouchableOpacity>
-  );
-};
 
 const programLectures = () => {
   const { programId } = useLocalSearchParams();
@@ -30,7 +19,6 @@ const programLectures = () => {
   return (
     <View>
       <Stack.Screen options={ { title: "Lectures", } } />
-      <BackButton />
       <View className='w-50% m-auto contain'>
       <Image 
         source={ { uri: program.programImg || defaultProgramImage }}

@@ -42,7 +42,7 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
   if ( index == 0 ){
     return (
     <Animated.View style={[{width: listItemWidth, marginLeft: itemSpacer, marginRight: spacing}, cardStyle]} className=''>
-      <Link href={"../menu/programsAndEventsScreen/"} asChild>
+      <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
       <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
         <Image 
         source={{uri : program.programImg || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnBoYwr8T3VA5KoqPVyY1P1egA1d4BDpi-PA&s"}}
@@ -56,7 +56,7 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
   if ( index == lastIndex - 1 ){
     return(
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: itemSpacer}, cardStyle]} className=''>
-        <Link href={"../menu/program"} asChild>
+        <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
         <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
           <Image 
           source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
@@ -70,7 +70,7 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
   }
   return (
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: spacing}, cardStyle]} className=''>
-      <Link href={"../menu/program"} asChild>
+      <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
       <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
         <Image 
         source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
