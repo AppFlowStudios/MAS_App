@@ -1,7 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from "expo-router";
 import * as Animatable from 'react-native-animatable';
-import { TouchableOpacity, View } from "react-native"
+import { AccessibilityInfo, TouchableOpacity, View, Text } from "react-native"
+import { useEffect, useRef } from "react"
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
   color: string;
@@ -9,14 +10,43 @@ function TabBarIcon(props: {
   return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />;
 }
 
+const animate1 = {0 : {scale: .5, translateY : 8}, 1: {scale: 1.5, translateY: -14}}
+const animate2 = {0 : {scale: 1.5, translateY: -14}, 1: {scale: 1, translateY: 8}}
+
 const TabButton = (props : any) => {
-  const { item, onPress } = props;
+  const { item, onPress, accessibilityState } = props;
+  const focused = accessibilityState.selected
+  const viewRef = useRef<any>(null)
+  const textRef = useRef<any>(null)
+
+  useEffect(() => {
+    if(focused) {
+      viewRef.current?.animate(animate1)
+      textRef.current.transitionTo({scale: 1})
+    }else{
+      viewRef.current?.animate(animate2)
+      textRef.current.transitionTo({scale: 0})
+
+    }
+
+  }
+  , [focused])
   return(
-    <TouchableOpacity>
-      <TabBarIcon name="ellipsis-h" color="grey"/>
+    <TouchableOpacity
+    onPress={onPress}
+    style={{ alignItems: "center"}}
+    >
+    <Animatable.View ref={viewRef} className='justify-center items-center' style={{width : 30, height: 30, borderRadius: 25, borderWidth: 4, backgroundColor: "white", borderColor: "white", justifyContent: "center", alignItems: "center"}} animation="zoomIn" duration={1000}>
+      <TabBarIcon name="ellipsis-h" color={focused ? "blue" : "grey"}/>
+    </Animatable.View>
+    <Animatable.Text ref={textRef} style={{fontSize: 10, color: "grey", textAlign: "center"}}>
+      <Text>More</Text>
+    </Animatable.Text>
     </TouchableOpacity>
   )
 }
+
+
 export default function TabLayout() {
   return (
     <Tabs screenOptions={{
