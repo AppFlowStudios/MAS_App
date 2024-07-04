@@ -1,3 +1,5 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+
 export type Lectures ={
     lectureID: number,
     lectureName: string,
@@ -76,5 +78,19 @@ export type salahDisplayWidget = {
 export type JummahBottomSheetProp = {
     jummahSpeaker : string,
     jummahSpeakerImg : string,
-    jummahTopic : string
+    jummahTopic : string,
+    jummahNum: string,
+    jummahDesc: string
+}
+
+export type TabArrayType = {
+    name: string, 
+    title : string,
+    icon : string
+}
+
+export type SheikDataType = {
+    name: string,
+    creds : string[],
+    image : string
 }

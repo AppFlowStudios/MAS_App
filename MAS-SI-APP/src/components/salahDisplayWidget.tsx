@@ -143,7 +143,6 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     <ImageBackground 
         source={require("@/assets/images/salahPictures/DJI_0049.jpg")}
         style={{height: "100%", width: "100%",}}
-    
     >
       <View className='flex-row mt-4 items-center'>
         <Text className='text-white px-5 font-bold text-lg' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>

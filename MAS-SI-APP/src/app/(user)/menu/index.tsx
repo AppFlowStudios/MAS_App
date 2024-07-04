@@ -9,6 +9,8 @@ import {JummahTable} from '@/src/components/jummahTable';
 import ProgramsCircularCarousel from '@/src/components/programsCircularCarousel';
 import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { JummahBottomSheetProp } from '@/src/types';
+import LinkToVolunteersModal from '@/src/components/linkToVolunteersModal';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 export default function homeScreen() {
   const { onSetPrayerTimesWeek } = usePrayer();
   const [prayerTimes, setPrayerTimes] = useState<prayerTimesType>(
@@ -20,6 +22,7 @@ export default function homeScreen() {
     "message" : ""
      } )
     const [loading, setLoading] = useState(true)
+    const tabBarHeight = useBottomTabBarHeight();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const getCurrDate = new Date();
     const getWeekDate = new Date();
@@ -45,7 +48,6 @@ export default function homeScreen() {
       onSetPrayerTimesWeek(prayer)
     }, [prayerTimes])
 
-    console.log(prayerTimes)
     if (loading){
       return(
         <View className='justify-center items-center'>
@@ -56,24 +58,32 @@ export default function homeScreen() {
    
     const jummahData : JummahBottomSheetProp[] = [
       {
-        jummahSpeaker : "AB",
-        jummahSpeakerImg : "sdas",
-        jummahTopic : "YARR"
+        jummahSpeaker : "Sh Abdelrahman Badewy",
+        jummahSpeakerImg : "",
+        jummahTopic : "United Hope",
+        jummahNum: "12:15 PM",
+        jummahDesc: "How to increase your iman and stand for Palestine"
       },
       {
         jummahSpeaker : "T",
         jummahSpeakerImg : "T",
-        jummahTopic : "T" 
+        jummahTopic : "T",
+        jummahNum: "1:00 PM",
+        jummahDesc: "How to increase your iman and stand for Palestine"
       },
       {
         jummahSpeaker : "3",
         jummahSpeakerImg : "3",
-        jummahTopic : "3"
+        jummahTopic : "3",
+        jummahNum: "1:45 PM",
+        jummahDesc: "How to increase your iman and stand for Palestine"
       },
       {
         jummahSpeaker : "4",
         jummahSpeakerImg : "4",
-        jummahTopic : "4"
+        jummahTopic : "4",
+        jummahNum: "3:40PM",
+        jummahDesc: "How to increase your iman and stand for Palestine"
       }
   ]
      
@@ -83,7 +93,7 @@ export default function homeScreen() {
 
 
     return (
-      <ScrollView className="bg-[#f2f3f4] h-[100vh]" contentContainerStyle={{flexGrow: 1}} >
+      <ScrollView className="bg-white h-full flex-1">
 
             <View className='w-[100%] m-auto  justify-center items-center mt-[10%] flex-0'>
               <Image source={require("@/assets/images/massiLogo2.png")} style={styles.massiLogo} />
@@ -92,18 +102,28 @@ export default function homeScreen() {
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
             
-              <View className='pt-7 items-center justify-center'>
-                <Text className='font-bold text-2xl text-[#0D509D] pl-3 ' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >Weekly Programs</Text>
+              <View className='pt-7 justify-center'>
+                <Text className='font-bold text-2xl text-[#0D509D] pl-3 ' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>
               </View>
 
-              <View className='pt-3'>
+              <View className='pt-3' style={{height: 250}}>
                 <ProgramsCircularCarousel />
               </View>
-            
-            <ImageBackground className='pt-5 mt-6 ' style={{borderTopStartRadius: 30, borderTopEndRadius: 30, width:"100%", height: 500}} source={require("@/assets/images/jummahSheetBackImg.png")} resizeMode='stretch' imageStyle={{ borderTopLeftRadius : 30, borderTopRightRadius: 30,}}>
-              <JummahTable jummahData={jummahData} ref={bottomSheetRef}/>
-            </ImageBackground>
-            <View style={{position: "absolute", bottom: -600, left: 0, right: 0, backgroundColor: '#194568', height: 600}}/>
+            <View className='flex-row pl-3 pt-10'>
+              <Text className='text-[#0D509D] font-bold text-2xl' style={{textShadowColor: "#light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Volunteers</Text>
+            </View>
+            <View className='pt-2'>
+              <LinkToVolunteersModal />
+            </View>
+            <View className='flex-row pl-3 pt-6'>
+              <Text className='text-[#0D509D] font-bold text-2xl' style={{textShadowColor: "#light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Jummah Schedule</Text>
+            </View>
+            <View className='justify-center items-center w-[95%] m-auto pt-2' style={{shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6}}>
+              <ImageBackground style={{width:"100%", height: 450, justifyContent: "center"}} source={require("@/assets/images/jummahSheetBackImg.png")} resizeMode='stretch' imageStyle={{ borderRadius: 20 }}>
+                <JummahTable jummahData={jummahData} ref={bottomSheetRef}/>
+              </ImageBackground>
+            </View>
+            <View style={[{paddingBottom : tabBarHeight}]}></View>
       </ScrollView>
     )
     

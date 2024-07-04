@@ -13,6 +13,8 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { PaperProvider } from 'react-native-paper';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -38,14 +40,12 @@ export default function RootLayout() {
         <ProgramProvider>
           <PrayerTimesProvider>
             <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <IconRegistry icons={EvaIconsPack} />
-                <ApplicationProvider {...eva} theme={eva.light}>
+              <PaperProvider>
                     <Stack>
                       <Stack.Screen name="(user)" options={{ headerShown: false }} />
                       <Stack.Screen name="+not-found" />
                     </Stack>
-                    
-                  </ApplicationProvider>
+              </PaperProvider>
             </ThemeProvider>
           </PrayerTimesProvider>
         </ProgramProvider>

@@ -2,21 +2,16 @@ import { StyleSheet, View, FlatList, Button} from 'react-native';
 import { Stack } from "expo-router";
 import ProgramsListProgram from "../../../../components/ProgramsListProgram"
 import programsData from '@/assets/data/programsData';
-import { Divider } from 'react-native-paper';
+import { Divider, Searchbar } from 'react-native-paper';
 import { useState } from 'react';
 import { Program } from "@/src/types"
-import { Input, Text, Icon } from "@ui-kitten/components"
-import {EvaIconsPack} from '@ui-kitten/eva-icons';
-
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 export default function ProgramsScreen(){
   const [ shownData, setShownData ] = useState<Program[]>(programsData)
   const [ searchBarInput, setSearchBarInput ] = useState('')
-  const filterTest = programsData.filter((program) => {
-    return program.programName.includes("Vic")
-  })
-
-
+  const tabBarHeight = useBottomTabBarHeight() + 30;
   const filterTestFunc = (searchParam : string) => {
+    setSearchBarInput(searchParam)
     const filterTest = programsData.filter((program) => {
       return program.programName.includes(searchParam)
     })
@@ -30,31 +25,17 @@ export default function ProgramsScreen(){
     </View>
   )
   }
-  const searchIcon = () => {
-    return (<Icon name='search' style={{width: 20, height: 20}} />
-    )
-  };
+
 
   return (
-   <View className=' bg-white rounded-50 h-[100vh] ' >
-      <Input placeholder='Search...' value={searchBarInput} onChangeText={next => {setSearchBarInput(next); filterTestFunc(next)} } accessoryRight={searchIcon}/>
+   <View className=' bg-white rounded-50 flex-1' >
+      <Searchbar placeholder='Search...' onChangeText={filterTestFunc} value={searchBarInput} className='mt-2 w-[95%] mb-2' style={{alignSelf : "center", justifyContent: "center"}} elevation={1}/>
       <FlatList 
         data={shownData} 
         renderItem={({item}) => <ProgramsListProgram program={item}/>}
         ItemSeparatorComponent={() => seperator()}
       />
+      <View style={[{paddingBottom : tabBarHeight}]}></View>
     </View>
   )
 }
-
-
-const styles = StyleSheet.create({
-  programContainer: {
-    flex: 1,
-    padding: 20
-  },
-  programButtons: {
-    justifyContent: "center"
-  },
-}
-)

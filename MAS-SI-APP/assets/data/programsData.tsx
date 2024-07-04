@@ -70,7 +70,7 @@ const programsData : Program[] = [
     {
         programId: 3,
         programName: "Quranic Wisdoms",
-        programImg: "",
+        programImg: "@/assests/images/masSummerProgam.png",
         programDesc: "Quranic Wisdoms",
         programSpeaker: "Shiekh Abdelrahman Badawy",
         lectures: [
@@ -102,8 +102,45 @@ const programsData : Program[] = [
                 lectureTime: " First Jummah"                
             },   
         ] 
+    },
+    {
+        programId: 5,
+        programName: "Test",
+        programImg: "",
+        programDesc: "Test",
+        programSpeaker: "Shiekh Abdelrahman Badawy",
+        lectures: [
+            {
+                lectureID : 0,
+                lectureName: "Friday Khutbah 6/7 with Shiekh Abdelrahman Badawy",
+                lectureSpeaker: "Shiekh Abdelrahman Badawy",
+                lectureLink : "https://www.youtube.com/watch?v=1s4pF1u4GEE",
+                lectureAI : "AI Text Here",
+                lectureData: "June 7, 2024",
+                lectureTime: " First Jummah"                
+            },   
+        ] 
+    },
+    {
+        
+            programId: 6,
+            programName: "Test2",
+            programImg: "",
+            programDesc: "Test2",
+            programSpeaker: "Shiekh Abdelrahman Badawy",
+            lectures: [
+                {
+                    lectureID : 0,
+                    lectureName: "Friday Khutbah 6/7 with Shiekh Abdelrahman Badawy",
+                    lectureSpeaker: "Shiekh Abdelrahman Badawy",
+                    lectureLink : "https://www.youtube.com/watch?v=1s4pF1u4GEE",
+                    lectureAI : "AI Text Here",
+                    lectureData: "June 7, 2024",
+                    lectureTime: " First Jummah"                
+                },   
+            ] 
+        
     }
-
 ]
 
 export default programsData

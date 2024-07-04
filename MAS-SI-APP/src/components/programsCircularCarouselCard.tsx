@@ -43,12 +43,16 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
     return (
     <Animated.View style={[{width: listItemWidth, marginLeft: itemSpacer, marginRight: spacing}, cardStyle]} className=''>
       <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-      <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
-        <Image 
-        source={{uri : program.programImg || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnBoYwr8T3VA5KoqPVyY1P1egA1d4BDpi-PA&s"}}
-        style={{width: "85%", height: "80%", resizeMode: "cover", borderRadius : 15}} />
-        <Text className='text-center'>{program.programDesc}</Text>
-      </Pressable>
+        <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
+        <View style={{width: 200 , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
+          <Image 
+          source={require("@/assets/images/masSummerProgram.png")}
+          style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
+          borderBottomLeftRadius={20}
+          />
+        </View>
+          <Text className='text-center mt-3 font-bold'>{program.programDesc}</Text>
+        </Pressable>
       </Link>
     </Animated.View>
     )
@@ -56,26 +60,33 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
   if ( index == lastIndex - 1 ){
     return(
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: itemSpacer}, cardStyle]} className=''>
-        <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-        <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
-          <Image 
-          source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
-          style={{width: "85%", height: "80%", resizeMode: "cover", borderRadius: 15}} 
-          />
-          <Text>{program.programDesc}</Text>
-        </Pressable>
-        </Link>
+      <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
+      <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
+      <View style={{width: 200 , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
+        <Image 
+        source={require("@/assets/images/masSummerProgram.png")}
+        style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
+        borderBottomLeftRadius={20}
+        />
+      </View>
+        <Text className='text-center mt-3 font-bold'>{program.programDesc}</Text>
+      </Pressable>
+      </Link>
       </Animated.View>
     )
   }
   return (
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: spacing}, cardStyle]} className=''>
       <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-      <Pressable style={{backgroundColor : "white", justifyContent: "center" , alignItems : "center", borderRadius: 15}}>
+      <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
+      <View style={{width: 200 , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
         <Image 
-        source={{uri : program.programImg || "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"}}
-        style={{width: "90%", height: "90%", resizeMode: "contain"}} />
-        <Text className='text-center'>{program.programDesc}</Text>
+        source={require("@/assets/images/masSummerProgram.png")}
+        style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
+        borderBottomLeftRadius={20}
+        />
+      </View>
+        <Text className='text-center mt-3 font-bold'>{program.programDesc}</Text>
       </Pressable>
       </Link>
     </Animated.View>

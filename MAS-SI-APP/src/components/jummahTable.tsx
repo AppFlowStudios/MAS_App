@@ -4,6 +4,7 @@ import { JummahBottomSheetProp, gettingPrayerData, prayerTimeData } from '../typ
 import { JummahBottomSheet } from './jummahBottomSheet';
 import React, { useRef, forwardRef, useState } from 'react';
 import {BottomSheetModal, useBottomSheetModal } from "@gorhom/bottom-sheet"
+import { IconButton } from 'react-native-paper';
 type JummahTimeProp = {
     jummah : gettingPrayerData
 }
@@ -17,40 +18,67 @@ export const JummahTable = forwardRef<Ref,jummahTableProp>(({jummahData}, ref) =
   const [ clickedState, setClickedState ] = useState(0)
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const { dismiss } = useBottomSheetModal();
+  const jummahTimes = ["12:15 PM", "1:00 PM", "1:45PM", "3:40PM"]
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
 
   const handleClosePress = () => bottomSheetRef.current?.close();
   const handleOpenPress = () => bottomSheetRef.current?.expand();
 
-  
+  const InfoIcon = () => {
+    return(
+      <IconButton 
+        icon="information-outline"
+        iconColor='#57BA47'
+        size={25}
+      />
+    )
+  }  
   return (
     <>
-      <View className='flex-row justify-center items-center pt-5'>
-          <Text className='text-white font-bold text-2xl mb-4' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Jummah Schedule</Text>
-      </View>
-      <View className="ml-14 mr-14"style={{height: 375, borderTopWidth: 5, borderRightWidth: 5, borderLeftWidth: 5, borderBottomWidth: 5 ,borderTopLeftRadius: 20, borderTopRightRadius: 20, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, borderColor: "white"}}>
-        <ScrollView className='flex-col pt-3'  contentContainerStyle={{justifyContent: "center",  alignItems : "center"}} >
-            <TouchableOpacity style={{height:75, width:250 }} className=' justify-center items-center rounded-lg bg-[#cdcdcd]' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(0)}} >
-              <Text>12:15PM</Text>
-              <Text>Jummah 1</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{height:75, width:250}} className='justify-center items-center rounded-lg  bg-[#cdcdcd] mt-3' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(1)}}>
-              <Text>1:00PM</Text>
-              <Text>Jummah 2</Text>
+      <View className="ml-14 mr-14 items-center"style={{height: 350}}>
+        <ScrollView className='flex-col pt-3'  contentContainerStyle={{justifyContent: "center",  alignItems : "center", height: "100%" }} >
+            <TouchableOpacity style={{height:75, width:250, shadowColor:"black", shadowOffset: { width: 0, height: 0},shadowOpacity: 1, shadowRadius: 8 }} className='justify-center rounded-lg bg-white' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(0)}} >
+              <View className='flex-row'>
+                <InfoIcon />
+                <View className='flex-col items-center justify-center px-9'>
+                  <Text>12:15PM</Text>
+                  <Text className='font-bold'>Jummah 1</Text>
+                </View>
+              </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{height:75, width:250}} className='justify-center items-center rounded-lg bg-[#cdcdcd] mt-3' onPress={handlePresentModalPress}  onPressIn={() => {setClickedState(2)}}>
-              <Text>1:45PM</Text>
-              <Text>Jummah 3</Text>
+            <TouchableOpacity style={{height:75, width:250, shadowColor:"black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.8, shadowRadius: 5}} className='justify-center rounded-lg  bg-white mt-3' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(1)}}>
+            <View className='flex-row'>
+                <InfoIcon />
+                <View className='flex-col items-center justify-center px-9'>
+                  <Text>1:00PM</Text>
+                  <Text className='font-bold'>Jummah 2</Text>
+                </View>
+              </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={{height:75, width:250}} className='justify-center items-center rounded-lg bg-[#cdcdcd] mt-3' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(3)}}>
-              <Text>3:40PM</Text>
-              <Text>Student Jummah</Text>
+            <TouchableOpacity style={{height:75, width:250, shadowColor:"black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.8, shadowRadius: 5}} className='justify-center rounded-lg bg-white mt-3' onPress={handlePresentModalPress}  onPressIn={() => {setClickedState(2)}}>
+              <View className='flex-row'>
+                  <InfoIcon />
+                  <View className='flex-col items-center justify-center px-9'>
+                    <Text>1:45PM</Text>
+                    <Text className='font-bold'>Jummah 3</Text>
+                  </View>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={{height:75, width:250, shadowColor:"black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.8, shadowRadius: 5}} className='justify-center rounded-lg bg-white mt-3' onPress={handlePresentModalPress} onPressIn={() => {setClickedState(3)}}>
+              <View className='flex-row'>
+                  <InfoIcon />
+                  <View className='flex-col items-center justify-center px-3'>
+                    <Text>3:40PM</Text>
+                    <Text className='font-bold'>Student Jummah</Text>
+                </View>
+              </View>
             </TouchableOpacity>
         </ScrollView>
       </View>
-      <JummahBottomSheet jummahSpeaker={jummahData[clickedState].jummahSpeaker} jummahSpeakerImg={jummahData[clickedState].jummahSpeakerImg} jummahTopic={jummahData[clickedState].jummahTopic} ref={bottomSheetRef} />
+      <JummahBottomSheet jummahSpeaker={jummahData[clickedState].jummahSpeaker} jummahSpeakerImg={jummahData[clickedState].jummahSpeakerImg} jummahTopic={jummahData[clickedState].jummahTopic} jummahDesc={jummahData[clickedState].jummahDesc} jummahNum={jummahData[clickedState].jummahNum} ref={bottomSheetRef} />
       </>
   )
 }
