@@ -1,8 +1,8 @@
 import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ProgramsScreen from './allPrograms';
-import Lectures from './lectures/[lectureID]';
-import Event from './Event';
+import Event from './events/Event';
+import Pace from './pace/Pace';
 import { View } from 'react-native';
 import { withLayoutContext } from 'expo-router';
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,14 +15,15 @@ const ProgramsAndEventsScreen = () => {
   return (
         <Tabs.Navigator
           screenOptions={{
-            tabBarStyle : {paddingTop : "12%",backgroundColor: "#0D509D" },
-            tabBarIndicatorContainerStyle : {justifyContent: "center", marginLeft: 23},
-            tabBarIndicatorStyle: {backgroundColor : "white", width: 150, marginBottom: 4},
-            tabBarLabelStyle : {color: "white", backgroundColor: "#57BA47", padding: 5, fontWeight: "bold" },
+            tabBarStyle : {paddingTop : "16%",backgroundColor: "#0D509D", },
+            tabBarIndicatorContainerStyle : {justifyContent: "center", marginLeft: 15},
+            tabBarIndicatorStyle: {backgroundColor : "#57BA47", width: 100, marginBottom: 4},
+            tabBarLabelStyle : {color: "white", fontWeight: "bold", textShadowColor: "black", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 0.6},
           }}
         >
           <Tabs.Screen name="Programs/Tarbiya"  component={ProgramsScreen} />
           <Tabs.Screen name="Events" component={Event} />
+          <Tabs.Screen name="P.A.C.E" component={Pace} />
         </Tabs.Navigator>
   )
 }

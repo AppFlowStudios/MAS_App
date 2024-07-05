@@ -1,10 +1,10 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
-import { Program } from '../types'
+import { Program } from '../../types'
 import { Link } from "expo-router"
-import { useProgram } from '../providers/programProvider'
-import { defaultProgramImage } from './ProgramsListProgram'
-
+import { useProgram } from '../../providers/programProvider'
+import { defaultProgramImage } from '../ProgramsListProgram'
+import RenderMyLibraryProgramLectures from './RenderMyLibraryProgramLectures'
 type RenderProgramProp = {
     program : Program
 }
@@ -15,7 +15,7 @@ const RenderMyLibraryProgram = ({program} : RenderProgramProp) => {
 }
   return (
     <View style={{ width: "100%", height: 120, marginHorizontal: 10}} className=''>
-    <Link  href={`/menu/program/${program.programId}`} onPress={setTheProgram} asChild>
+    <Link  href={`../myPrograms/${program.programId}`} onPress={setTheProgram} asChild>
         <TouchableOpacity className=''>
             <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
 
