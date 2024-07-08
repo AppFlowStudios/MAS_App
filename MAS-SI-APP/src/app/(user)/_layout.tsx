@@ -70,6 +70,7 @@ export default function TabLayout() {
       {TabArray.map((tab, i) => {
         return(
           <Tabs.Screen 
+          key={i}
             name={tab.name}
             options={{
               title: tab.title,

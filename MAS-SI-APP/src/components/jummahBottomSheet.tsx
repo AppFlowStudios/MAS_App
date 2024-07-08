@@ -14,6 +14,7 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
     const [ visible, setVisible ] = useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
+
     const GetSheikData = () => {
       const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == jummahSpeaker)
       return( 
@@ -21,15 +22,15 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
           <View className=' flex-row'>
             <Image source={{uri : sheik[0].image || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}}/>
             <View className='flex-col px-5'>
-              <Text variant='headlineSmall' >Name: </Text>
-              <Text variant='titleMedium' className='pt-2'> {sheik[0].name} </Text>
+              <Text variant='headlineSmall' className='text-black'>Name: </Text>
+              <Text variant='titleMedium' className='pt-2 text-black'> {sheik[0].name} </Text>
             </View>
           </View>
 
           <View className='flex-col py-3'>
-            <Text variant='titleLarge' >Credentials: </Text>
+            <Text variant='titleLarge' className='text-black'>Credentials: </Text>
             {sheik[0].creds.map( (cred, i) => {
-              return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} </Text>
+              return <Text key={i} className='text-black'> <Icon source="cards-diamond-outline"  size={15} color='black'/> {cred} </Text>
             })}
           </View>
         </View>
@@ -48,19 +49,19 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
         handleIndicatorStyle={{backgroundColor: "white"}}
         backdropComponent={renderBackDrop}
     >
-    <View className='ml-2'>
-        <Text variant="headlineMedium" style={{textAlign: "center", color : "white", fontWeight : "bold"}}>{jummahNum} Prayer</Text>
+      <Text variant="headlineMedium" style={{marginLeft: 4, color : "white", fontWeight : "bold"}}>{jummahNum} Prayer</Text>
+      <View className=' bg-white h-full mt-1 pt-2' style={{borderRadius: 50}}>
         <View className='flex-row'>
-          <Text className='text-white font-bold text-2xl pr-[20%]'>Topic:</Text>
-          <Text className='text-3xl text-white'>{jummahTopic}</Text>
+          <Text className='font-bold text-2xl pr-[20%] pt-2 ml-5'>Topic:</Text>
+          <Text className='text-3xl font-semibold pt-2 '>{jummahTopic}</Text>
         </View>
         <Divider style={{width : "90%", alignSelf: "center"}}/>
         <View>
-         <Text className='font-semi text-2xl text-white'>Description:</Text> 
-         <Text className='text-lg text-white'>{jummahDesc}</Text>
+         <Text className='font-semi text-black text-2xl ml-4'>Description:</Text> 
+         <Text className='text-lg text-black ml-4'>{jummahDesc}</Text>
         </View>
         <View className='flex-row'>
-          <Text><Text className='font-bold text-white text-2xl'>Speaker:</Text> </Text>
+          <Text className='font-bold text-black text-2xl ml-4'>Speaker:</Text> 
           <Button onPress={showModal} style={{cursor: "pointer"}} > <Text variant='titleMedium' style={{color : "blue", textDecorationLine: "underline"}}>{jummahSpeaker}</Text> </Button>
         </View>
         <Portal>
@@ -68,7 +69,7 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
           <GetSheikData />
         </Modal>
       </Portal>
-    </View>
+      </View>
     </BottomSheetModal>
   )
 }

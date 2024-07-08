@@ -4,8 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { useProgram } from '@/src/providers/programProvider';
 import YoutubePlayer from "react-native-youtube-iframe"
 import { Lectures } from '@/src/types';
-import { TabView, SceneMap } from 'react-native-tab-view';
-
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 const LectureAISummay = () => {
   const { lectureID } = useLocalSearchParams();
   const { currentProgram } = useProgram();
@@ -58,6 +57,15 @@ const routes = [
   { key: 'second', title: 'Key Notes' },
 ];
 
+const renderTabBar = (props : any) => (
+  <TabBar
+    {...props}
+    indicatorStyle={{ backgroundColor: 'white' }}
+    style={{ backgroundColor: '#0D509D', }}
+    
+  />
+);
+
 export default function LecturesData() {
   const [ playing, setPlaying ] = useState(false)
   const { lectureID } = useLocalSearchParams();
@@ -88,21 +96,22 @@ export default function LecturesData() {
   const lecID: number = +lectureID
   const currentLecture = currentProgram.lectures[lecID]
   return(
-    <View>
+    <>
       <YoutubePlayer 
-        height={300}
+        height={215}
         play={playing}
-        videoId='oF3YUj2JJvo'
+        videoId={currentLecture.lectureLink}
         onChangeState={onStateChange}
       />
-
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
+      renderTabBar={renderTabBar}
     />
-    </View>
+    </>
   )
 }
+
 

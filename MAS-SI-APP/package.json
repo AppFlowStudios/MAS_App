@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"
@@ -19,6 +19,7 @@
     "@expo/vector-icons": "^14.0.0",
     "@gorhom/bottom-sheet": "^4.6.3",
     "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-menu/menu": "^1.1.2",
     "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/material-top-tabs": "^6.6.13",
     "@react-navigation/native": "^6.0.2",
@@ -43,8 +44,10 @@
     "react-dom": "18.2.0",
     "react-native": "0.74.1",
     "react-native-animatable": "^1.4.0",
-    "react-native-dotenv": "^3.4.11",
+    "react-native-context-menu-view": "^1.16.0",
     "react-native-gesture-handler": "~2.16.1",
+    "react-native-ios-context-menu": "^2.5.1",
+    "react-native-ios-utilities": "^4.4.5",
     "react-native-pager-view": "6.3.0",
     "react-native-paper": "^5.12.3",
     "react-native-reanimated": "~3.10.1",
@@ -55,7 +58,8 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.10",
     "react-native-webview": "^13.10.4",
-    "react-native-youtube-iframe": "^2.3.0"
+    "react-native-youtube-iframe": "^2.3.0",
+    "zeego": "^1.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

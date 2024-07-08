@@ -13,7 +13,7 @@ const addProgramContext = createContext<addProgramProviderProp>({
 const AddProgramProvider = ( {children} : PropsWithChildren ) =>{
     const [ addedPrograms, setAddProgram ] = useState<Program[]>([])
 
-    const onSetAddProgram = ( program: Program) =>{
+    const onSetAddProgram = ( program: Program ) =>{
         const newAddedProgram: Program = {
             programId : program.programId,
             programImg :  program.programImg,
@@ -22,8 +22,15 @@ const AddProgramProvider = ( {children} : PropsWithChildren ) =>{
             programSpeaker : program.programSpeaker,
             lectures : program.lectures
         }
+        
+        setAddProgram( (prev : Program[]) => {
+            const exists = prev.some(
+                exsitingPrograms  => exsitingPrograms.programName == newAddedProgram.programName
+            );
 
-        setAddProgram([newAddedProgram, ...addedPrograms])
+            if( exists ){ return prev }
+
+            return [newAddedProgram, ...addedPrograms]})
     }
 
     return(

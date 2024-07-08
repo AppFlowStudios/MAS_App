@@ -18,9 +18,9 @@ export default function index() {
   const [currentCarousalIndex, setCurrentCarousalIndex] = useState(0)
 
   return (
-    <View className='justify-center items-center  mt-[10%]' style={{height: 500}}>
+    <View className='justify-center items-center h-full border bg-white'>
+            <View className='mt-[15%]'></View>
               <FlatList 
-                
                 data={prayerTimesWeek}
                 renderItem={({item}) => <Table prayerData={item} />}
                 horizontal
@@ -36,7 +36,6 @@ export default function index() {
                 ref={tablesRef}
               />
               <Paginator data={prayerTimesWeek} scrollx={scrollx} />
-
     </View>
   )
 }

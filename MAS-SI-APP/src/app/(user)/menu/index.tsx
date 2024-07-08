@@ -11,8 +11,12 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { JummahBottomSheetProp } from '@/src/types';
 import LinkToVolunteersModal from '@/src/components/linkToVolunteersModal';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
+import { Button } from 'react-native-paper';
+import { Link } from 'expo-router';
 export default function homeScreen() {
-  const { onSetPrayerTimesWeek } = usePrayer();
+  
+  const { onSetPrayerTimesWeek } = usePrayer()
   const [prayerTimes, setPrayerTimes] = useState<prayerTimesType>(
     {"status" : "fail",
     "data" : {
@@ -24,6 +28,7 @@ export default function homeScreen() {
     const [loading, setLoading] = useState(true)
     const tabBarHeight = useBottomTabBarHeight();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
+    
     const getCurrDate = new Date();
     const getWeekDate = new Date();
     const currDate = format(getCurrDate, "yyyy-MM-dd");
@@ -38,14 +43,40 @@ export default function homeScreen() {
       .finally( () => setLoading(false) )
       console.log("getPrayer Called")
     }
-    
+
+    const { width } = Dimensions.get("window")
+    const scrollRef = useAnimatedRef<Animated.ScrollView>()
+    const scrollOffset = useSharedValue(0)
+    const scrollHandler = useAnimatedScrollHandler(event => {
+      scrollOffset.value = event.contentOffset.y;
+    });
+    const imageAnimatedStyle = useAnimatedStyle(() => {
+      return{
+        transform: [
+          {
+            translateY : interpolate(
+            scrollOffset.value,
+            [-width / 2, 0, width / 2 ],
+            [-width/4, 0, width/ 2 * 0.75]
+            )
+          },
+          {
+            scale: interpolate(scrollOffset.value, [-width/ 2, 0, width / 2], [2, 1, 1])
+          }
+        ]
+      }
+    })
+
     useEffect( () => {
       getMasjidalApi();
     }, [])
 
     const prayer : gettingPrayerData[] = ThePrayerData({prayerTimes});
+
+  
     useEffect( () => {
       onSetPrayerTimesWeek(prayer)
+      
     }, [prayerTimes])
 
     if (loading){
@@ -58,7 +89,7 @@ export default function homeScreen() {
    
     const jummahData : JummahBottomSheetProp[] = [
       {
-        jummahSpeaker : "Sh Abdelrahman Badewy",
+        jummahSpeaker : "Sh Abdelrahman Badawy",
         jummahSpeakerImg : "",
         jummahTopic : "United Hope",
         jummahNum: "12:15 PM",
@@ -86,18 +117,13 @@ export default function homeScreen() {
         jummahDesc: "How to increase your iman and stand for Palestine"
       }
   ]
-     
-  
-
-
-
 
     return (
-      <ScrollView className="bg-white h-full flex-1">
-
-            <View className='w-[100%] m-auto  justify-center items-center mt-[10%] flex-0'>
-              <Image source={require("@/assets/images/massiLogo2.png")} style={styles.massiLogo} />
+      <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
+            <View className='justify-center items-center mt-[10%] '>
+              <Animated.Image source={require("@/assets/images/massiLogo2.png")} style={[{width: width / 2, height: 75, justifyContent: "center" }, imageAnimatedStyle]} />
             </View>
+
             <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderEndStartRadius: 30 ,borderEndEndRadius: 30}} className=''>
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
@@ -123,8 +149,12 @@ export default function homeScreen() {
                 <JummahTable jummahData={jummahData} ref={bottomSheetRef}/>
               </ImageBackground>
             </View>
+
+            <Link href={"/SignUp"} asChild>
+            <Button>Go to Sign in Page</Button>
+            </Link>
             <View style={[{paddingBottom : tabBarHeight}]}></View>
-      </ScrollView>
+      </Animated.ScrollView>
     )
     
   }

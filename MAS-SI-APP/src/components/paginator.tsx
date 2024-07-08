@@ -9,7 +9,7 @@ type paginatorProp = {
 export default function Paginator( {data, scrollx} : paginatorProp ) {
     const { width } = useWindowDimensions();
   return (
-    <View className='flex-row w-[50%] m-auto'>
+    <View className='flex-row'>
       { data.map( (_,i) =>{
         
         const inputRange = [ (i - 1) * width, i * width, (i + 1) * width ];

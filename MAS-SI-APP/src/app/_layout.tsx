@@ -10,9 +10,6 @@ import ProgramProvider from '../providers/programProvider';
 import AddProgramProvider from '../providers/addingProgramProvider';
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import * as eva from '@eva-design/eva';
-import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { PaperProvider } from 'react-native-paper';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -43,6 +40,7 @@ export default function RootLayout() {
               <PaperProvider>
                     <Stack>
                       <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                      <Stack.Screen name="(auth)" />
                       <Stack.Screen name="+not-found" />
                     </Stack>
               </PaperProvider>
