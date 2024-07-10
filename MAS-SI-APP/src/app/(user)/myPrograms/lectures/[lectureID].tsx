@@ -1,78 +1,36 @@
 import { View, Text, useWindowDimensions } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useProgram } from '@/src/providers/programProvider';
 import YoutubePlayer from "react-native-youtube-iframe"
 import { Lectures } from '@/src/types';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-const LectureAISummay = () => {
-  const { lectureID } = useLocalSearchParams();
-  const { currentProgram } = useProgram();
-  const programId = currentProgram.programId;
-  if (!lectureID){
-    return(
-      <View>
-        <Text> Lecture Not Found </Text>
-      </View>
-    )
-  }
-  const lecID: number = +lectureID
-  const currentLecture = currentProgram.lectures[lecID]
-  return(
-    <>
-      <Text>{currentLecture.lectureAI}</Text>
-    </>
-  )
-}
-
-const LectureAIKeyNotes = () => {
-  const { lectureID } = useLocalSearchParams();
-  const { currentProgram } = useProgram();
-  const programId = currentProgram.programId;
-  if (!lectureID){
-    return(
-      <View>
-        <Text> Lecture Not Found </Text>
-      </View>
-    )
-  }
-  const lecID: number = +lectureID
-  const currentLecture = currentProgram.lectures[lecID]
-
-  return(
-    <>
-      <Text>{currentLecture.lectureData}</Text>
-    </>
-  )
-}
-
-
-const renderScene = SceneMap({
-  first: LectureAISummay,
-  second: LectureAIKeyNotes,
-});
-
-const routes = [
-  { key: 'first', title: 'Summary' },
-  { key: 'second', title: 'Key Notes' },
-];
-
-const renderTabBar = (props : any) => (
-  <TabBar
-    {...props}
-    indicatorStyle={{ backgroundColor: 'white' }}
-    style={{ backgroundColor: '#0D509D', }}
-    
-  />
-);
+import { useAuth } from "@/src/providers/AuthProvider"
+import { supabase } from '@/src/lib/supabase';
+import { setDate } from 'date-fns';
 
 export default function LecturesData() {
+  const { session } = useAuth()
   const [ playing, setPlaying ] = useState(false)
   const { lectureID } = useLocalSearchParams();
+  const [ currentLecture, setLecture ] = useState<Lectures>()
   const { currentProgram } = useProgram();
   const layout  = useWindowDimensions()
   const [index, setIndex] = useState(0)
-  const programId = currentProgram.programId;
+
+  async function getLecture(){
+    const { data, error } = await supabase.from("program_lectures").select("*").eq("lecture_id", lectureID).single()
+    if( error ){
+      alert(error)
+    }
+    if(data){
+      setLecture(data)
+    }
+  }
+  
+  useEffect(() => {
+    getLecture()
+  },[session])
 
   const onStateChange = useCallback((state : any) => {
     if (state === "ended") {
@@ -84,23 +42,48 @@ export default function LecturesData() {
     setPlaying((prev) => !prev);
   }, []);
 
-  
 
-  if (!lectureID){
+  const LectureAIKeyNotes = () => {
     return(
-      <View>
-        <Text> Lecture Not Found </Text>
-      </View>
+      <>
+        <Text>{currentLecture?.lecture_ai}</Text>
+      </>
     )
   }
-  const lecID: number = +lectureID
-  const currentLecture = currentProgram.lectures[lecID]
+  const LectureAISummay = () => {
+    return(
+      <>
+        <Text>{currentLecture?.lecture_ai}</Text>
+      </>
+    )
+  }
+  
+  const renderScene = SceneMap({
+    first: LectureAISummay,
+    second: LectureAIKeyNotes,
+  });
+  
+  const routes = [
+    { key: 'first', title: 'Summary' },
+    { key: 'second', title: 'Key Notes' },
+  ];
+  
+  const renderTabBar = (props : any) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: '#0D509D', }}
+      
+    />
+  );
+
+
   return(
     <>
       <YoutubePlayer 
         height={215}
         play={playing}
-        videoId={currentLecture.lectureLink}
+        videoId={currentLecture?.lecture_link}
         onChangeState={onStateChange}
       />
     <TabView

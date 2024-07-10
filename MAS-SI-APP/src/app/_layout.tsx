@@ -11,8 +11,8 @@ import AddProgramProvider from '../providers/addingProgramProvider';
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+import { MenuProvider } from "react-native-popup-menu"
+import AuthProvider from '../providers/AuthProvider';// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -33,21 +33,25 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <AddProgramProvider>
-        <ProgramProvider>
-          <PrayerTimesProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <PaperProvider>
-                    <Stack>
-                      <Stack.Screen name="(user)" options={{ headerShown: false }} />
-                      <Stack.Screen name="(auth)" />
-                      <Stack.Screen name="+not-found" />
-                    </Stack>
-              </PaperProvider>
-            </ThemeProvider>
-          </PrayerTimesProvider>
-        </ProgramProvider>
-      </AddProgramProvider>
+      <AuthProvider>
+        <AddProgramProvider>
+          <ProgramProvider>
+            <PrayerTimesProvider>
+              <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <MenuProvider>
+                  <PaperProvider>
+                        <Stack>
+                          <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                          <Stack.Screen name="(auth)" />
+                          <Stack.Screen name="+not-found" />
+                        </Stack>
+                  </PaperProvider>
+                </MenuProvider>
+              </ThemeProvider>
+            </PrayerTimesProvider>
+          </ProgramProvider>
+        </AddProgramProvider>
+      </AuthProvider>
     </GestureHandlerRootView>
   );
 }

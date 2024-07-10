@@ -1,20 +1,21 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export type Lectures ={
-    lectureID: number,
-    lectureName: string,
-    lectureSpeaker: string,
-    lectureLink: string | "N/A",
-    lectureAI: string | "N/A",
-    lectureData: string | "N/A",
-    lectureTime: string
+    lecture_id: number,
+    lecture_name: string,
+    lecture_speaker: string | null,
+    lecture_link: string | "N/A",
+    lecture_ai: string | "N/A",
+    lecture_date: string | "N/A",
+    lecture_time: string
 }
 export type Program = {
-    programId: number,
-    programName: string,
-    programImg: string | null,
-    programDesc: string | null,
-    programSpeaker: string | null,
+    id : number,
+    program_id: number,
+    program_name: string,
+    program_img: string | null,
+    program_desc: string | null,
+    program_speaker: string | null,
     lectures: Lectures[]
 }
 

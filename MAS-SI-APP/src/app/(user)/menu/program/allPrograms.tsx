@@ -3,19 +3,53 @@ import { Stack } from "expo-router";
 import ProgramsListProgram from "../../../../components/ProgramsListProgram"
 import programsData from '@/assets/data/programsData';
 import { Divider, Searchbar } from 'react-native-paper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Program } from "@/src/types"
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { supabase } from '@/src/lib/supabase';
+import { useAuth } from '@/src/providers/AuthProvider';
 export default function ProgramsScreen(){
-  const [ shownData, setShownData ] = useState<Program[]>(programsData)
+  const { session } = useAuth()
+  const [ loading, setLoading ] = useState(false)
+  const [ shownData, setShownData ] = useState<Program[] | null>(null)
   const [ searchBarInput, setSearchBarInput ] = useState('')
+  async function getPrograms(){
+    try{
+      setLoading(true)
+      if (!session?.user) throw new Error('No user on the session!')
+      
+      const { data, error } = await supabase
+      .from("programs")
+      .select("*")
+
+      if(error){
+        throw error
+      }
+
+      if(data){
+        setShownData(data)
+        console.log(data)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message)
+      }
+  }
+  finally{
+    setLoading(false)
+  }
+  }
+  useEffect(() => {
+    getPrograms()
+  }, [session])
   const tabBarHeight = useBottomTabBarHeight() + 30;
-  const filterTestFunc = (searchParam : string) => {
+  async function filterTestFunc (searchParam : string) {
     setSearchBarInput(searchParam)
-    const filterTest = programsData.filter((program) => {
-      return program.programName.includes(searchParam)
-    })
-    setShownData(filterTest)
+    const { data, error } = await supabase.from("programs").select().textSearch('program_name', searchParam)
+    if(error){
+      alert(error)
+    }
+    setShownData(data)
   }
 
   const seperator = () =>{

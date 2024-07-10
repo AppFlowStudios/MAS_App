@@ -1,5 +1,5 @@
 import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocalSearchParams, Stack, router } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import LecturesListLecture from '@/src/components/LectureListLecture';
@@ -10,10 +10,14 @@ import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOf
 import { SheikDataType } from '@/src/types';
 import SheikData from '@/assets/data/sheikData';
 import { Divider, Portal, Modal ,Icon, IconButton } from "react-native-paper"
-
+import { useAuth } from '@/src/providers/AuthProvider';
+import {Lectures, Program} from "@/src/types"
+import { supabase } from '@/src/lib/supabase';
 const UserProgramLectures = () => {
+  const { session } = useAuth()
   const { programId } = useLocalSearchParams();
-  const program = programsData.find(p => p.programId.toString() == programId)
+  const [ lectures, setLectures ] = useState<Lectures[] | null>(null)
+  const [ program, setProgram ] = useState<Program>()
   const [ visible, setVisible ] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -38,14 +42,33 @@ const UserProgramLectures = () => {
       ]
     }
   })
-  if (!program){
-    return (
-      <Text> Program Not Found </Text>
-    )
-  }
 
+  async function getProgram(){
+    const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
+    if( error ) {
+      alert(error)
+    }
+    if ( data ) {
+      setProgram(data)
+    }
+   }
+   async function getProgramLectures() {
+    const { data, error } = await supabase.from("program_lectures").select("*").eq("lecture_program", programId)
+    if( error ) {
+      alert(error)
+    }
+    if ( data ) {
+      setLectures(data)
+    }
+  }
+  
+    useEffect(() => {
+      getProgram()
+      getProgramLectures()
+    }, [session])
+  
   const GetSheikData = () => {
-    const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.programSpeaker)
+    const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.program_speaker)
     return( 
       <View>
         <View className=' flex-row'>
@@ -66,26 +89,26 @@ const UserProgramLectures = () => {
     )
   } 
 
-  const lectures = program.lectures
+
   return (
       <Animated.ScrollView ref={scrollRef} style={{backgroundColor: "white", height: "100%", paddingBottom: Tab}}>
         <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <IconButton icon={"backburger"} iconColor="black" size={35} onPress={() => router.back()}/> }}  />
           <View className='justify-center items-center h-[300]'>
           <Animated.Image 
-            source={ { uri: program.programImg || defaultProgramImage }}
+            source={ { uri: program?.program_img || defaultProgramImage }}
             style={[{width: width, height: "100%" }, imageAnimatedStyle] }
             resizeMode='stretch'
           />
           </View>
           <View className='bg-white'>
-            <Text className='text-center mt-2 text-xl text-black font-bold'>{program.programName}</Text>
-            <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program.programSpeaker}</Text>
+            <Text className='text-center mt-2 text-xl text-black font-bold'>{program?.program_name}</Text>
+            <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program?.program_speaker}</Text>
             {
               lectures ? lectures.map((item, index) => {
                 return(
                   <>
-                  <RenderMyLibraryProgramLectures key={index} lecture={item} index={index} speaker={program.programSpeaker}/>
-                  <Divider style={{width: "95%", marginLeft: 8}}/>
+                  <RenderMyLibraryProgramLectures key={index} lecture={item} index={index} speaker={program?.program_speaker}/>
+                  <Divider key={index + 1} style={{width: "95%", marginLeft: 8}}/>
                   </>
                 )
               }) : <></>

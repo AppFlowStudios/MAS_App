@@ -150,7 +150,7 @@ export default function homeScreen() {
               </ImageBackground>
             </View>
 
-            <Link href={"/SignUp"} asChild>
+            <Link href={"/SignIn"} asChild>
             <Button>Go to Sign in Page</Button>
             </Link>
             <View style={[{paddingBottom : tabBarHeight}]}></View>
