@@ -95,3 +95,24 @@ export type SheikDataType = {
     creds : string[],
     image : string
 }
+
+export type EventsType = {
+    id : number,
+    event_id : string,
+    event_name : string,
+    event_speaker : string,
+    event_desc : string,
+    event_img: string,
+    has_lecture : boolean
+}
+
+export type EventLectureType = {
+    id : number,
+    event_lecture_id : string
+    event_id : string,
+    event_lecture_name : string,
+    event_lecture_speaker : string,
+    event_lecture_desc : string,
+    event_lecture_link: string,
+    event_lecture_date : string
+}

@@ -21,9 +21,7 @@ type LecturesListProp = {
   speaker : string | null | undefined
 }
 const { width } = Dimensions.get("window")
-type ProgramDataType = {
-    programData : Program
-}
+
 
 const RenderMyLibraryProgramLectures = ( {lecture, index, speaker} : LecturesListProp ) => {
   const liked = useSharedValue(0)

@@ -11,7 +11,7 @@ import { useAuth } from '@/src/providers/AuthProvider';
 export default function ProgramsScreen(){
   const { session } = useAuth()
   const [ loading, setLoading ] = useState(false)
-  const [ shownData, setShownData ] = useState<Program[] | null>(null)
+  const [ shownData, setShownData ] = useState<Program[]>()
   const [ searchBarInput, setSearchBarInput ] = useState('')
   async function getPrograms(){
     try{
@@ -28,7 +28,7 @@ export default function ProgramsScreen(){
 
       if(data){
         setShownData(data)
-        console.log(data)
+        console.log
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -42,14 +42,13 @@ export default function ProgramsScreen(){
   useEffect(() => {
     getPrograms()
   }, [session])
-  const tabBarHeight = useBottomTabBarHeight() + 30;
-  async function filterTestFunc (searchParam : string) {
+  const tabBarHeight = useBottomTabBarHeight() + 35;
+  const filterTestFunc = (searchParam : string) => {
     setSearchBarInput(searchParam)
-    const { data, error } = await supabase.from("programs").select().textSearch('program_name', searchParam)
-    if(error){
-      alert(error)
-    }
-    setShownData(data)
+    const filterTest = programsData.filter((program) => {
+      return program.program_name.includes(searchParam)
+    })
+    setShownData(filterTest)
   }
 
   const seperator = () =>{
@@ -63,12 +62,14 @@ export default function ProgramsScreen(){
 
   return (
    <View className=' bg-[#0D509D] flex-1' >
-      <View className='bg-white pt-2 mt-1 flex-1'style={{borderTopLeftRadius: 40, borderTopRightRadius: 40, paddingBottom: tabBarHeight}}>
+      <View className='bg-white pt-2 mt-1 flex-1'style={{borderTopLeftRadius: 40, borderTopRightRadius: 40, paddingBottom: tabBarHeight }}>
       <Searchbar placeholder='Search...' onChangeText={filterTestFunc} value={searchBarInput} className='mt-2 w-[95%] mb-2' style={{alignSelf : "center", justifyContent: "center"}} elevation={1}/>
+      <View className='mb-5'/>
       <FlatList 
         data={shownData} 
         renderItem={({item}) => <ProgramsListProgram program={item}/>}
         ItemSeparatorComponent={() => seperator()}
+        contentContainerStyle={{rowGap: 1}}
       />
       </View>
     </View>

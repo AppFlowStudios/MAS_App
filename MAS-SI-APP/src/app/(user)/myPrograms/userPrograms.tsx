@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable } from 'react-native'
+import { View, Text, FlatList, Pressable, ScrollView, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useAddProgram } from '@/src/providers/addingProgramProvider'
 import { add } from 'date-fns';
@@ -8,6 +8,7 @@ import { supabase } from '@/src/lib/supabase';
 import { Program } from '@/src/types';
 import { Divider, Icon } from 'react-native-paper';
 import { Link } from 'expo-router';
+import RenderLikedLectures from '@/src/components/UserProgramComponets/RenderLikedLectures';
 export default function userPrograms() {
   const { addedPrograms } = useAddProgram();
   const { session } = useAuth()
@@ -16,12 +17,11 @@ export default function userPrograms() {
   }
   const [ userPrograms, setUserPrograms ] = useState<program_id[]>()
   async function getUserProgramLibrary(){
-    const {data, error} = await supabase.from("liked_programs").select("program_id").eq("user_id", session?.user.id)
+    const {data, error} = await supabase.from("added_programs").select("program_id").eq("user_id", session?.user.id)
     if(error){
       console.log(error)
     }
     if(data){
-      console.log(data)
       setUserPrograms(data)
     }
   }
@@ -29,23 +29,41 @@ export default function userPrograms() {
   useEffect(() => {
     getUserProgramLibrary()
   }, [session])
-  console.log(addedPrograms)
   return (
-    <View className='bg-white flex-1 '>
-      <View className='flex-row h-[30] items-center'>
-        <Link href={"/myPrograms/likedLectures/AllLikedLectures"} asChild>
+    <ScrollView className='bg-white flex-1 w-[100%]'>
+      <View className='ml-2 mt-[15%]'>
+        <Text className='text-3xl font-bold'>My Library</Text>
+      </View>
+      <View className='flex-row items-center ml-2 mt-2'>
+        <Link href={"/myPrograms/PlaylistIndex"} asChild>
         <Pressable className='flex-row items-center'>
-          <Icon source={"heart-box-outline"} color='red' size={20}/>
-          <Text>Favorite Lectures</Text>
+          <Icon source={"playlist-play"} color='red' size={30}/>
+          <Text className='text-xl font-bold px-[13]'>Playlists</Text>
         </Pressable>
         </Link>
       </View> 
       <Divider />
-      <FlatList 
-        numColumns={2}
-        data={userPrograms}
-        renderItem={({item}) => <RenderMyLibraryProgram program_id={item.program_id} />}
-      />
-    </View>
+      <View className='flex-row items-center ml-2'>
+        <Link href={"/myPrograms/notifications/NotificationEvents"} asChild>
+        <Pressable className='flex-row items-center'>
+          <Icon source={"bell"} color='red' size={30}/>
+          <Text className='text-xl font-bold px-[13]'>Notifications</Text>
+        </Pressable>
+        </Link>
+      </View> 
+      <Divider className='mb-3'/>
+
+      <View className='flex-row w-[100%] flex-wrap justify-center mt-5' > 
+        {userPrograms ? userPrograms.map((program, index) => {
+          return(
+            <View className='pb-5' key={index}>
+              <RenderMyLibraryProgram program_id={program.program_id} />
+            </View>
+          )
+        }) : <></>}
+      </View>
+
+
+    </ScrollView>
   )
 }

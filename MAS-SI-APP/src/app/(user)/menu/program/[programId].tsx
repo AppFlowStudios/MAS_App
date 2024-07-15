@@ -89,35 +89,40 @@ const programLectures = () => {
   } 
 
   return (
-      <Animated.ScrollView ref={scrollRef} style={{backgroundColor: "white", height: "100%", paddingBottom: Tab, flex: 1}}>
-        <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
-          <View className='justify-center items-center h-[300] mt-[14%]' style={{ shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6}}>
+    <View className='flex-1 bg-white' style={{flexGrow: 1}}>
+     <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
+      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
+          
           <Animated.Image 
             source={ { uri: program?.program_img || defaultProgramImage }}
-            style={[{width: width / 1.2, height: "100%", borderRadius: 8 }, imageAnimatedStyle] }
+            style={ [{width: width / 1.2, height: 300, borderRadius: 8 }, imageAnimatedStyle] }
             resizeMode='stretch'
           />
-          </View>
-          <View className='bg-white'>
+
+          <View className='bg-white' style={{paddingBottom : Tab * 3}}>
             <Text className='text-center mt-2 text-xl text-black font-bold'>{program?.program_name}</Text>
             <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program?.program_speaker}</Text>
-            {
-              lectures ? lectures.map((item, index) => {
-                return(
-                  <>
-                  <LecturesListLecture key={index} lecture={item} index={index} speaker={program?.program_speaker}/>
-                  <Divider key={index + 1} style={{width: "95%", marginLeft: 8}}/>
-                  </>
-                )
-              }) : <></>
-            }
+              <View className='ml-3'>
+                {
+                  lectures ? lectures.map((item, index) => {
+                    return(
+                      <View key={index}>
+                      <LecturesListLecture  lecture={item} index={index} speaker={program?.program_speaker}/>
+                      <Divider style={{width: "95%", marginLeft: 8}}/>
+                      </View>
+                    )
+                  }) : <></>
+                }
+              </View>
           </View>
+
           <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "35%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
               <GetSheikData />
             </Modal>
           </Portal>
       </Animated.ScrollView>
+      </View>
   )
 }
 

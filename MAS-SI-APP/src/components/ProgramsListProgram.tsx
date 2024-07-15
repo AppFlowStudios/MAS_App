@@ -33,7 +33,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     async function addToProgramToUserLibrary(){
         console.log(session?.user.id)
         console.log(program.program_id)
-        const { error } = await supabase.from("liked_programs").insert({ user_id : session?.user.id, program_id : program.program_id})
+        const { error } = await supabase.from("added_programs").insert({ user_id : session?.user.id, program_id : program.program_id})
         if(error) {
             console.log(error)
         }
@@ -58,10 +58,10 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
                 <TouchableOpacity className=''>
                     <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
 
-                        <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 30}} className=''>
+                        <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} className=''>
                             <Image 
                                 source={{ uri: program.program_img || defaultProgramImage }}
-                                style={{width: 150, height: 120, objectFit: "contain", borderRadius: 30}}
+                                style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}
                                 className=''
                             />
                         </View>
@@ -74,7 +74,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
                                 onSwipeableClose={() => setIsSwiped(false)}
                             >
                                 <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
-                                    <Text style={{textAlign: "center"}}>{program.program_name}</Text>
+                                    <Text style={{textAlign: "center", fontWeight: "bold"}}>{program.program_name}</Text>
                                     <Text style={{textAlign: "center"}}>By: {program.program_speaker}</Text>
                                 </View>
                             </Swipeable>

@@ -1,19 +1,20 @@
-import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions, } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack, router } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import LecturesListLecture from '@/src/components/LectureListLecture';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
-import RenderMyLibraryProgramLectures from "@/src/components/UserProgramComponets/RenderMyLibraryProgramLectures"
+import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
+import SheikData from "@/assets/data/sheikData";
+import { Lectures, SheikDataType, Program } from '@/src/types';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
-import { SheikDataType } from '@/src/types';
-import SheikData from '@/assets/data/sheikData';
-import { Divider, Portal, Modal ,Icon, IconButton } from "react-native-paper"
-import { useAuth } from '@/src/providers/AuthProvider';
-import {Lectures, Program} from "@/src/types"
 import { supabase } from '@/src/lib/supabase';
-const UserProgramLectures = () => {
+import { useAuth } from '@/src/providers/AuthProvider';
+import RenderMyLibraryProgramLectures from '@/src/components/UserProgramComponets/RenderMyLibraryProgramLectures';
+const programLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
   const [ lectures, setLectures ] = useState<Lectures[] | null>(null)
@@ -42,31 +43,30 @@ const UserProgramLectures = () => {
       ]
     }
   })
-
-  async function getProgram(){
-    const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
-    if( error ) {
-      alert(error)
-    }
-    if ( data ) {
-      setProgram(data)
-    }
-   }
-   async function getProgramLectures() {
-    const { data, error } = await supabase.from("program_lectures").select("*").eq("lecture_program", programId)
-    if( error ) {
-      alert(error)
-    }
-    if ( data ) {
-      setLectures(data)
-    }
+ async function getProgram(){
+  const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
+  if( error ) {
+    alert(error)
   }
-  
-    useEffect(() => {
-      getProgram()
-      getProgramLectures()
-    }, [session])
-  
+  if ( data ) {
+    setProgram(data)
+  }
+ }
+ async function getProgramLectures() {
+  const { data, error } = await supabase.from("program_lectures").select("*").eq("lecture_program", programId)
+  if( error ) {
+    alert(error)
+  }
+  if ( data ) {
+    setLectures(data)
+  }
+}
+
+  useEffect(() => {
+    getProgram()
+    getProgramLectures()
+  }, [session])
+
   const GetSheikData = () => {
     const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.program_speaker)
     return( 
@@ -80,8 +80,8 @@ const UserProgramLectures = () => {
         </View>
   
         <View className='flex-col py-3'>
-          { sheik[0].name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text>} 
-          {sheik[0].creds.map( (cred, i) => {
+          { sheik[0].name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 
+          { sheik[0].creds.map( (cred, i) => {
             return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} </Text>
           })}
         </View>
@@ -89,43 +89,46 @@ const UserProgramLectures = () => {
     )
   } 
 
-
   return (
-      <Animated.ScrollView ref={scrollRef} style={{backgroundColor: "white", height: "100%", paddingBottom: Tab}}>
-        <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <IconButton icon={"backburger"} iconColor="black" size={35} onPress={() => router.back()}/> }}  />
-          <View className='justify-center items-center h-[300]'>
+    <View className='flex-1 bg-white' style={{flexGrow: 1}}>
+     <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
+      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
+          
           <Animated.Image 
             source={ { uri: program?.program_img || defaultProgramImage }}
-            style={[{width: width, height: "100%" }, imageAnimatedStyle] }
+            style={ [{width: width / 1.2, height: 300, borderRadius: 8 }, imageAnimatedStyle] }
             resizeMode='stretch'
           />
-          </View>
-          <View className='bg-white'>
+
+          <View className='bg-white' style={{paddingBottom : Tab * 3}}>
             <Text className='text-center mt-2 text-xl text-black font-bold'>{program?.program_name}</Text>
             <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program?.program_speaker}</Text>
-            {
-              lectures ? lectures.map((item, index) => {
-                return(
-                  <>
-                  <RenderMyLibraryProgramLectures key={index} lecture={item} index={index} speaker={program?.program_speaker}/>
-                  <Divider key={index + 1} style={{width: "95%", marginLeft: 8}}/>
-                  </>
-                )
-              }) : <></>
-            }
+              <View className='ml-3'>
+                {
+                  lectures ? lectures.map((item, index) => {
+                    return(
+                      <View key={index}>
+                      <LecturesListLecture  lecture={item} index={index} speaker={program?.program_speaker}/>
+                      <Divider style={{width: "95%", marginLeft: 8}}/>
+                      </View>
+                    )
+                  }) : <></>
+                }
+              </View>
           </View>
+
           <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "35%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
               <GetSheikData />
             </Modal>
           </Portal>
       </Animated.ScrollView>
+      </View>
   )
 }
-
 
 
 const styles={
   programImageStyle: "h-200 w-300"
 }
-export default UserProgramLectures
+export default programLectures

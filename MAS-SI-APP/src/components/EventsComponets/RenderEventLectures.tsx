@@ -2,36 +2,33 @@ import { View, Text, Pressable, FlatList, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack } from 'expo-router';
 import programsData from '@/assets/data/programsData';
-import { Lectures, Program } from '@/src/types';
+import { EventLectureType, Lectures, Program } from '@/src/types';
 import { Link } from "expo-router";
-import { defaultProgramImage } from './ProgramsListProgram';
+import { defaultProgramImage } from '../ProgramsListProgram';
 import { Icon, IconButton } from 'react-native-paper';
-import LectureDotsMenu from './LectureComponets/LectureDotsMenu';
+import LectureDotsMenu from '../LectureComponets/LectureDotsMenu';
 import {
   Menu,
   MenuOptions,
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import { useAuth } from '../providers/AuthProvider';
-import { supabase } from '../lib/supabase';
+import { useAuth } from '../../providers/AuthProvider';
+import { supabase } from '../../lib/supabase';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
 type LecturesListProp = {
-  lecture : Lectures
+  lecture : EventLectureType
   index : number
   speaker : string | null | undefined
 }
 const { width } = Dimensions.get("window")
-type ProgramDataType = {
-    programData : Program
-}
 
-const LecturesListLecture = ( {lecture, index, speaker} : LecturesListProp ) => {
+const RenderEventsLectures = ( {lecture, index, speaker} : LecturesListProp ) => {
 const { session } = useAuth()
 const liked = useSharedValue(0)
 
 async function checkIfLectureIsLiked(){
-  const { data , error } = await supabase.from("liked_lectures").select("lecture_id").eq("user_id", session?.user.id).eq("lecture_id", lecture.lecture_id).single()
+  const { data , error } = await supabase.from("liked_lectures").select("lecture_id").eq("user_id", session?.user.id).eq("lecture_id", lecture.event_lecture_id).single()
 
   if( data ){
     return 1
@@ -51,13 +48,13 @@ async function setLiked() {
 
 async function stateOfLikedLecture(){
   if( liked.value == 0 ){
-  const { error } = await supabase.from("liked_lectures").insert({user_id : session?.user.id, lecture_id: lecture.lecture_id})
+  const { error } = await supabase.from("liked_event_lectures").insert({user_id : session?.user.id, event_lecture_id: lecture.event_lecture_id})
   if (error) {
     console.log(error)
   }
   }
   if ( liked.value == 1 ){
-    const { error } = await supabase.from("liked_lectures").delete().eq("user_id", session?.user.id).eq("lecture_id", lecture.lecture_id)
+    const { error } = await supabase.from("liked_event_lectures").delete().eq("user_id", session?.user.id).eq("event_lecture_id", lecture.event_lecture_id)
     if (error) {
       console.log(error)
     }
@@ -122,8 +119,8 @@ const fillStyle = useAnimatedStyle(() => {
       </Menu>           
     )
   }
-
-  useEffect(() => {
+  
+ useEffect(() => {
     setLiked()
   },[])
   
@@ -131,12 +128,12 @@ const fillStyle = useAnimatedStyle(() => {
     <View className='bg-white mt-4'>
       <Pressable>
       <View className='ml-2 flex-row items-center' >
-        <Link href={`/menu/program/lectures/${lecture.lecture_id}`}>
+        <Link href={`/menu/program/events/event_lecture/${lecture.event_lecture_id}`}>
           <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
           <View className='flex-col justify-center' style={{width: width / 1.5}}>
-            <Text className='text-md font-bold ml-2 text-black' style={{flexShrink: 1, }} numberOfLines={1}>{lecture.lecture_name}</Text>
+            <Text className='text-md font-bold ml-2 text-black' style={{flexShrink: 1, }} numberOfLines={1}>{lecture.event_lecture_name}</Text>
             <View className='flex-row' style={{flexShrink: 1, width: width / 1.5}}>
-              {speaker == "MAS" ? <Text className='ml-2 text-gray-500' style={{flexShrink:1}} numberOfLines={1}>{lecture.lecture_speaker} </Text> : <Text className='ml-2 text-gray-500'> {lecture.lecture_date}</Text>}
+              {speaker == "MAS" ? <Text className='ml-2 text-gray-500' style={{flexShrink:1}} numberOfLines={1}>{lecture.event_lecture_name} </Text> : <Text className='ml-2 text-gray-500'> {lecture.event_lecture_date}</Text>}
             </View>
           </View>
         </Link>
@@ -152,5 +149,5 @@ const fillStyle = useAnimatedStyle(() => {
   )
 }
 
-export default LecturesListLecture;
+export default RenderEventsLectures
 

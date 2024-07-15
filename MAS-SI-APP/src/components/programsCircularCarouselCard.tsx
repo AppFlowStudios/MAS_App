@@ -10,7 +10,7 @@ type ProgramsCircularCarouselCardProp = {
     index : number,
     listItemWidth : number,
     itemSpacer : number,
-    lastIndex: number,
+    lastIndex: number | undefined,
     scrollX : number,
     spacing : number
 }
@@ -39,55 +39,21 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
       }
     })
 
-  if ( index == 0 ){
-    return (
-    <Animated.View style={[{width: listItemWidth, marginLeft: itemSpacer, marginRight: spacing}, cardStyle]} className=''>
-      <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-        <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
-        <View style={{width: 200 , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
-          <Image 
-          source={require("@/assets/images/masSummerProgram.png")}
-          style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
-          borderBottomLeftRadius={20}
-          />
-        </View>
-          <Text className='text-center mt-3 font-bold'>{program.programDesc}</Text>
-        </Pressable>
-      </Link>
-    </Animated.View>
-    )
-  }
-  if ( index == lastIndex - 1 ){
-    return(
-    <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: itemSpacer}, cardStyle]} className=''>
-      <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-      <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
-      <View style={{width: 200 , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
-        <Image 
-        source={require("@/assets/images/masSummerProgram.png")}
-        style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
-        borderBottomLeftRadius={20}
-        />
-      </View>
-        <Text className='text-center mt-3 font-bold'>{program.programDesc}</Text>
-      </Pressable>
-      </Link>
-      </Animated.View>
-    )
+  if( lastIndex == null ) {
+    return
   }
   return (
-    <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: spacing}, cardStyle]} className=''>
+    <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: spacing}, cardStyle, {marginLeft : index == 0 ? itemSpacer : spacing, marginRight : index == lastIndex - 1 ? itemSpacer : spacing}]} className=''>
       <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-      <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
-      <View style={{width: 200 , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
-        <Image 
-        source={require("@/assets/images/masSummerProgram.png")}
-        style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
-        borderBottomLeftRadius={20}
-        />
-      </View>
-        <Text className='text-center mt-3 font-bold'>{program.programDesc}</Text>
-      </Pressable>
+        <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
+        <View style={{width: listItemWidth , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
+          <Image 
+          source={{ uri: program.program_img || defaultProgramImage}}
+          style={{width: "100%", height: "100%", resizeMode: "stretch", overflow :"hidden", borderRadius: 20}} 
+          />
+        </View>
+          <Text className='text-center mt-3 font-bold'>{program.program_desc}</Text>
+        </Pressable>
       </Link>
     </Animated.View>
   )

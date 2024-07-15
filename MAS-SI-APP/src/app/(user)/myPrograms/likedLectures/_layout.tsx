@@ -1,9 +1,9 @@
 import { Stack } from "expo-router"
 
-const likedLecturesLayout = () => {
+export default function likedLecturesLayout (){
     return(
         <Stack>
-            <Stack.Screen name="AllLikedLectures" />
+            <Stack.Screen name="AllLikedLectures" options={{headerShown : false}}/>
         </Stack>
     )
 }

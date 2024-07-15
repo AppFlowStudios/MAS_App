@@ -1,13 +1,14 @@
-import { View, Text, Animated, FlatList } from 'react-native';
+import { View, Text, Animated, FlatList, Image, FlatListProps } from 'react-native';
 import Paginator from '@/src/components/paginator';
 import Table from "@/src/components/prayerTimeTable";
 import React, {useEffect, useRef, useState } from 'react';
 import { usePrayer } from '@/src/providers/prayerTimesProvider';
 import { gettingPrayerData } from '@/src/types';
+import { Divider } from 'react-native-paper';
 
 
 
-export default function index() {
+export default function Index() {
   const { prayerTimesWeek } = usePrayer();
   const scrollx = useRef( new Animated.Value(0) ).current;
   const tablesRef = useRef(null);
@@ -17,9 +18,29 @@ export default function index() {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;
   const [currentCarousalIndex, setCurrentCarousalIndex] = useState(0)
 
+{/*  const flatListRef = useRef<FlatList>(null);
+        const nextPress = (index : number) => {
+            if (index <= 2) {
+                flatListRef?.current?.scrollToIndex({
+                    animated: true,
+                    index: index + 1
+                });
+            }
+        };
+        const backPress = (index : number) => {
+            if (index >= 1) {
+                flatListRef?.current?.scrollToIndex({
+                    animated: true,
+                    index: index - 1
+                });
+            }
+        };
+*/}
+
   return (
-    <View className='justify-center items-center h-full border bg-white'>
-            <View className='mt-[15%]'></View>
+    <View className='h-full  bg-white'>
+          <View className='items-center justify-center '>
+            <View className='mt-[15%] h-[400] items-center justify-center '>
               <FlatList 
                 data={prayerTimesWeek}
                 renderItem={({item}) => <Table prayerData={item} />}
@@ -34,8 +55,59 @@ export default function index() {
                 onViewableItemsChanged={viewableItemsChanged}
                 viewabilityConfig={viewConfig}
                 ref={tablesRef}
+                contentContainerStyle={{justifyContent: "center", alignItems: "center"}}
               />
-              <Paginator data={prayerTimesWeek} scrollx={scrollx} />
+            </View>
+          </View>
+
+
+            <View className='flex-row flex-wrap items-center justify-between  mt-[15] '>
+
+                <View className='flex-col items-center justify-center ml-[10]'>
+                    <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                      <Image source={{ uri : "https://cdn-icons-png.freepik.com/512/1705/1705004.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                    </View>
+                    <Text className='text-xl font-bold'> Quran </Text>
+                </View>
+
+                <View className='flex-col items-center justify-center'>
+                    <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                      <Image source={{ uri : "https://cdn.icon-icons.com/icons2/2922/PNG/512/ramadhan_moslem_fasting_islam_mosque_icon_183482.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                    </View>
+                    <Text className='text-xl font-bold'> Athkar </Text>
+                </View>
+
+                <View className='flex-col items-center justify-center mr-[10]'>
+                    <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                      <Image source={{ uri : "https://cdn.iconscout.com/icon/premium/png-256-thumb/dua-4355084-3611324.png?f=webp&w=256" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                    </View>
+                    <Text className='text-xl font-bold'> Duaa </Text>
+                </View>
+
+            </View>
+
+            <View className='flex-row items-center justify-between  flex-wrap mt-[10]'>
+              <View className='flex-col items-center justify-center ml-[10]'>
+                  <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                    <Image source={{ uri : "https://cdn-icons-png.freepik.com/512/10073/10073987.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                  </View>
+                    <Text className='text-xl font-bold'> Qibla </Text>
+                </View>
+
+                <View className='flex-col items-center justify-center '>
+                  <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                    <Image source={{ uri : "https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678116-calendar-512.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                  </View>
+                    <Text className='text-xl font-bold'> Calender </Text>
+                </View>
+
+                <View className='flex-col items-center justify-center mr-[10]'>
+                  <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                    <Image source={{ uri : "https://cdn-icons-png.flaticon.com/512/5195/5195218.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                  </View>
+                    <Text className='text-xl font-bold'> 99 Names</Text>
+                </View>
+            </View>
     </View>
   )
 }
