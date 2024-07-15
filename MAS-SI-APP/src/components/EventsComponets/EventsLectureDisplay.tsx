@@ -6,13 +6,14 @@ import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOf
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
-import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
+import { Divider, Portal, Modal, IconButton, Icon } from 'react-native-paper';
 import SheikData from "@/assets/data/sheikData";
 import { Lectures, SheikDataType, Program } from '@/src/types';
 import { EventsType } from '@/src/types';
 import { EventLectureType } from '@/src/types';
 import RenderEventsLectures from './RenderEventLectures';
 import RenderEventLectures from "./RenderEventLectures"
+import Header from '../headerTest';
 type EventsLectureDisplayProp = {
     event_id : string
     event_name : string
@@ -82,10 +83,10 @@ const EventsLectureDisplay = ( {event_id, event_img, event_speaker, event_name} 
         fetchEventLectures()
     }, [])
 
+
       return (
         <View className='flex-1 bg-white' style={{flexGrow: 1}}>
-         <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
-          <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
+          <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%" }} >
               
               <Animated.Image 
                 source={ { uri: event_img || defaultProgramImage } }

@@ -45,7 +45,7 @@ export default function ProgramsCircularCarousel(   ) {
         )
       })}
     </ScrollView> */}
-    { /* useEffect(() => {
+     useEffect(() => {
       let interval =  setInterval(() =>{
         if (active < Number(endOfList) - 1) {
           flatListRef.current?.scrollToIndex({
@@ -63,7 +63,7 @@ export default function ProgramsCircularCarousel(   ) {
   
       return () => clearInterval(interval);
     });
-  */}
+  
   
     const getItemLayout = (data : any,index : any) => ({
       length : listItemWidth,
@@ -100,6 +100,7 @@ export default function ProgramsCircularCarousel(   ) {
                 disableScrollViewPanResponder={true}
                 snapToAlignment={"start"}
                 showsHorizontalScrollIndicator={false}
+                getItemLayout={getItemLayout}
                 ref={flatListRef}
        />
        

@@ -1,5 +1,5 @@
 import { View, Text, Pressable, FlatList, Dimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import { Lectures, Program } from '@/src/types';
@@ -14,7 +14,9 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
-
+import { supabase } from '@/src/lib/supabase';
+import * as Haptics from "expo-haptics"
+import { useAuth } from '@/src/providers/AuthProvider';
 type LecturesListProp = {
   lecture : Lectures
   index : number
@@ -24,7 +26,48 @@ const { width } = Dimensions.get("window")
 
 
 const RenderMyLibraryProgramLectures = ( {lecture, index, speaker} : LecturesListProp ) => {
+  const { session } = useAuth()
   const liked = useSharedValue(0)
+
+
+  async function checkIfLectureIsLiked(){
+    const { data , error } = await supabase.from("liked_lectures").select("lecture_id").eq("user_id", session?.user.id).eq("lecture_id", lecture.lecture_id).single()
+  
+    if( data ){
+      return 1
+    }else{
+      return 0
+    }
+  }
+  
+  async function setLiked() {
+    try {
+      const isLiked = await checkIfLectureIsLiked(); 
+      liked.value = isLiked; 
+    } catch (error) {
+      console.error("Error setting liked value:", error);
+    }
+  }
+  
+  async function stateOfLikedLecture(){
+    if( liked.value == 0 ){
+    const { error } = await supabase.from("liked_lectures").insert({user_id : session?.user.id, lecture_id: lecture.lecture_id})
+    if (error) {
+      console.log(error)
+    }
+    }
+    if ( liked.value == 1 ){
+      const { error } = await supabase.from("liked_lectures").delete().eq("user_id", session?.user.id).eq("lecture_id", lecture.lecture_id)
+      if (error) {
+        console.log(error)
+      }
+    }
+    liked.value = withSpring(liked.value ? 0: 1)
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success
+    )
+  }
+
   const outlineStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -82,26 +125,32 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker} : LecturesLis
         </Menu>           
       )
     }
+
+    useEffect(() => {
+      setLiked()
+    }, [])
     return (
       <View className='bg-white mt-2'>
         <Pressable>
         <View className='ml-2 flex-row items-center' >
           <Link href={`/myPrograms/lectures/${lecture.lecture_id}`}>
-            <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
+            <View className='w-[35] h-[25] items-center justify-center mb-2'>
+              <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
+            </View>
             <View className='flex-col justify-center' style={{width: width / 1.5}}>
               <Text className='text-md font-bold ml-2 text-black' style={{flexShrink: 1, }} numberOfLines={1}>{lecture.lecture_name}</Text>
               <View className='flex-row' style={{flexShrink: 1, width: width / 1.5}}>
                 {speaker == "MAS" ? <Text className='ml-2 text-gray-500' style={{flexShrink:1}} numberOfLines={1}>{lecture.lecture_speaker} </Text> : <Text className='ml-2 text-gray-500'> {lecture.lecture_date}</Text>}
               </View>
             </View>
-            </Link>
-            <View className='flex-row items-center justify-center ml-3 px-5'>
+          </Link>
+          <View className='flex-row px-3'>
               <LikeButton />
               <View className='w-5'></View>
               <DotsButton />
-            </View>
           </View>
-        </Pressable>
+        </View>
+          </Pressable>
         
       </View>
     )

@@ -16,6 +16,7 @@ import {
 import { useAuth } from '../providers/AuthProvider';
 import { supabase } from '../lib/supabase';
 import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
+import * as Haptics from "expo-haptics"
 type LecturesListProp = {
   lecture : Lectures
   index : number
@@ -63,6 +64,9 @@ async function stateOfLikedLecture(){
     }
   }
   liked.value = withSpring(liked.value ? 0: 1)
+  Haptics.notificationAsync(
+    Haptics.NotificationFeedbackType.Success
+  )
 }
 
 const outlineStyle = useAnimatedStyle(() => {
@@ -130,9 +134,11 @@ const fillStyle = useAnimatedStyle(() => {
   return (
     <View className='bg-white mt-4'>
       <Pressable>
-      <View className='ml-2 flex-row items-center' >
+      <View className='mr-[5] flex-row items-center' >
         <Link href={`/menu/program/lectures/${lecture.lecture_id}`}>
-          <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
+          <View className='w-[35] h-[25] items-center justify-center mb-2'>
+            <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
+          </View>
           <View className='flex-col justify-center' style={{width: width / 1.5}}>
             <Text className='text-md font-bold ml-2 text-black' style={{flexShrink: 1, }} numberOfLines={1}>{lecture.lecture_name}</Text>
             <View className='flex-row' style={{flexShrink: 1, width: width / 1.5}}>

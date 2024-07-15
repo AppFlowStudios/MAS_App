@@ -14,6 +14,8 @@ import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOf
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 import RenderMyLibraryProgramLectures from '@/src/components/UserProgramComponets/RenderMyLibraryProgramLectures';
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import * as Haptics from "expo-haptics"
 const programLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
@@ -89,10 +91,38 @@ const programLectures = () => {
     )
   } 
 
+  const HeaderRight = () => {
+    const removeFromLibrary = async () => {
+      const { error } = await supabase.from("added_programs").delete().eq("user_id", session?.user.id).eq("program_id", programId)
+      if( error ){
+        alert(error)
+      }else{
+        Haptics.notificationAsync(
+          Haptics.NotificationFeedbackType.Success
+        )
+      }
+    }
+    return(
+      <Menu>
+      <MenuTrigger>
+        <Icon source={"dots-horizontal"} color='black' size={25}/>
+      </MenuTrigger>
+      <MenuOptions customStyles={{optionsContainer: {width: 200, borderRadius: 8, marginTop: 20, padding: 8}}}>
+        <MenuOption onSelect={removeFromLibrary}>
+          <View className='flex-row justify-between items-center'>
+           <Text className='text-red-600 '>Delete From Library</Text> 
+           <Icon source="delete" color='red' size={15}/>
+          </View>
+        </MenuOption>
+      </MenuOptions>
+    </Menu>          
+    )
+  }
+
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
-     <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
-      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
+      <Stack.Screen options={{ title : "", headerBackTitleVisible: false, headerRight :() => <HeaderRight />}} />
+      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%" }} >
           
           <Animated.Image 
             source={ { uri: program?.program_img || defaultProgramImage }}
@@ -108,7 +138,7 @@ const programLectures = () => {
                   lectures ? lectures.map((item, index) => {
                     return(
                       <View key={index}>
-                      <LecturesListLecture  lecture={item} index={index} speaker={program?.program_speaker}/>
+                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker}/>
                       <Divider style={{width: "95%", marginLeft: 8}}/>
                       </View>
                     )

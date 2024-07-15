@@ -34,7 +34,7 @@ const RenderMyLibraryProgram = ( {program_id} : RenderProgramProp) => {
         <Link  href={`../myPrograms/${program?.program_id}`}  asChild>
             <TouchableOpacity className=''>
             <View style={{width: 170, height: 170}}>
-                    <Image source={{uri: program?.program_img || defaultProgramImage }} style={{width : "100%", height: "100%",borderRadius: 8}}/>
+                    <Image source={{uri: program?.program_img || defaultProgramImage }} style={{width : "100%", height: "100%",borderRadius: 8, objectFit: "fill"}}/>
             </View>
             <View className='flex-col'>
                 <Text className='text-black font-bold'>{program?.program_name}</Text>

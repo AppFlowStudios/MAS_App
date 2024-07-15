@@ -39,7 +39,7 @@ const RenderEvents = ( {event} : RenderEventsProp ) => {
 
   return (
     <View className='h-[120] w-[100%]' style={{marginHorizontal: 10}}>
-        <Link href={`/menu/program/events/${event.event_id}`} asChild>
+        <Link  href={`/menu/program/events/${event.event_id}`} asChild>
             <TouchableOpacity>
                 <View className='flex-row item-center justify-center'>
                     <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} className=''>

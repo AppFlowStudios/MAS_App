@@ -80,19 +80,20 @@ export default function LecturesData() {
 
   return(
     <>
+      <Stack.Screen options={{ title : currentLecture?.lecture_name}} />
       <YoutubePlayer 
         height={215}
         play={playing}
         videoId={currentLecture?.lecture_link}
         onChangeState={onStateChange}
       />
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
-    />
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        renderTabBar={renderTabBar}
+      />
     </>
   )
 }

@@ -6,6 +6,7 @@ import { EventsType } from '@/src/types'
 import EventsLectureDisplay from '@/src/components/EventsComponets/EventsLectureDisplay'
 import { ActivityIndicator } from 'react-native-paper'
 import EventInfoDisplay from '@/src/components/EventsComponets/EventInfoDisplay'
+import { Stack } from 'expo-router'
 const EventInfo = () => {
   const { event_id } = useLocalSearchParams()
   const [ eventInfoData, setEventInfoData ] = useState<EventsType | null>()
@@ -29,10 +30,11 @@ const EventInfo = () => {
   }
 
   return (
-  <>
-   {eventInfoData?.has_lecture ?  <EventsLectureDisplay event_id={eventInfoData?.event_id} event_img={eventInfoData?.event_img} event_name={eventInfoData?.event_name} event_speaker={eventInfoData?.event_speaker}/> 
-    : <EventInfoDisplay event_img={eventInfoData.event_img} event_speaker={eventInfoData.event_speaker} event_name={eventInfoData.event_name} event_desc={eventInfoData.event_desc}/>}
-  </>
+    <>
+       <Stack.Screen options={{ headerBackTitleVisible : false, title : ""}}/>
+        {eventInfoData?.has_lecture ?  <EventsLectureDisplay event_id={eventInfoData?.event_id} event_img={eventInfoData?.event_img} event_name={eventInfoData?.event_name} event_speaker={eventInfoData?.event_speaker}/> 
+      : <EventInfoDisplay event_img={eventInfoData.event_img} event_speaker={eventInfoData.event_speaker} event_name={eventInfoData.event_name} event_desc={eventInfoData.event_desc}/>}
+    </>
   )
 }
 

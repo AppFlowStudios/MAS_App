@@ -128,8 +128,10 @@ const fillStyle = useAnimatedStyle(() => {
     <View className='bg-white mt-4'>
       <Pressable>
       <View className='ml-2 flex-row items-center' >
-        <Link href={`/menu/program/events/event_lecture/${lecture.event_lecture_id}`}>
-          <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
+        <Link href={`/menu/program/events/event_lectures/${lecture.event_lecture_id}`}>
+          <View className='w-[35] h-[25] items-center justify-center mb-2'>
+              <Text className='text-xl font-bold text-gray-400 ml-2' >{index + 1}</Text>
+          </View>
           <View className='flex-col justify-center' style={{width: width / 1.5}}>
             <Text className='text-md font-bold ml-2 text-black' style={{flexShrink: 1, }} numberOfLines={1}>{lecture.event_lecture_name}</Text>
             <View className='flex-row' style={{flexShrink: 1, width: width / 1.5}}>

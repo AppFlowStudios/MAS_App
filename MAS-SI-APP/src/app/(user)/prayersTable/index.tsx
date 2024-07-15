@@ -1,11 +1,11 @@
-import { View, Text, Animated, FlatList, Image, FlatListProps } from 'react-native';
+import { View, Text, Animated, FlatList, Image, FlatListProps, Pressable } from 'react-native';
 import Paginator from '@/src/components/paginator';
 import Table from "@/src/components/prayerTimeTable";
 import React, {useEffect, useRef, useState } from 'react';
 import { usePrayer } from '@/src/providers/prayerTimesProvider';
 import { gettingPrayerData } from '@/src/types';
 import { Divider } from 'react-native-paper';
-
+import { Link } from 'expo-router';
 
 
 export default function Index() {
@@ -63,12 +63,14 @@ export default function Index() {
 
             <View className='flex-row flex-wrap items-center justify-between  mt-[15] '>
 
-                <View className='flex-col items-center justify-center ml-[10]'>
-                    <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
-                      <Image source={{ uri : "https://cdn-icons-png.freepik.com/512/1705/1705004.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
-                    </View>
-                    <Text className='text-xl font-bold'> Quran </Text>
-                </View>
+              <Link href="/prayersTable/Quran/Quran" asChild>
+                  <Pressable className='flex-col items-center justify-center ml-[10]'>
+                      <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>
+                        <Image source={{ uri : "https://cdn-icons-png.freepik.com/512/1705/1705004.png" || undefined}} style={{width: 50, height: 50, objectFit: "contain"}} />
+                      </View>
+                      <Text className='text-xl font-bold'> Quran </Text>
+                  </Pressable>
+              </Link>
 
                 <View className='flex-col items-center justify-center'>
                     <View className='w-[95] h-[80] items-center justify-center bg-white' style={{shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 3, borderRadius: 8}}>

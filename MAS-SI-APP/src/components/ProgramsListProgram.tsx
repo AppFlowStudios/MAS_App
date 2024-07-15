@@ -10,6 +10,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export const defaultProgramImage = "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../providers/AuthProvider'; 
+import * as Haptics from "expo-haptics"
 type ProgramsListProgramProps = {
     program : Program,
 }
@@ -24,11 +25,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
         swipeableRef.current.close();
       }
     };
-    const { onSetAddProgram } = useAddProgram();
-    const { onSetProgram } = useProgram();
-    const setTheProgram = () =>{
-        onSetProgram(program)
-    }
+
 
     async function addToProgramToUserLibrary(){
         console.log(session?.user.id)
@@ -44,7 +41,12 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
             <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "center"}}>
                 <Button
                     title='Add To Programs'
-                    onPress={() => {onSetAddProgram(program); addToProgramToUserLibrary(); closeSwipeable()}}
+                    onPress={() => {
+                        addToProgramToUserLibrary();   
+                        Haptics.notificationAsync(
+                        Haptics.NotificationFeedbackType.Success
+                        );
+                        closeSwipeable()}}
                 />
             </View>
         )
@@ -54,7 +56,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
 
     return(
         <View style={{ width: "100%", height: 120, marginHorizontal: 10}} className=''>
-            <Link  href={`/menu/program/${program.program_id}`} onPress={setTheProgram} asChild>
+            <Link  href={`/menu/program/${program.program_id}`} asChild>
                 <TouchableOpacity className=''>
                     <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
 

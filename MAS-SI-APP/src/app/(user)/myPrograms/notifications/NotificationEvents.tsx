@@ -27,7 +27,7 @@ const NotificationEvents = () => {
       <View className='flex-row w-[100%] flex-wrap justify-center mt-5' > 
         {addedEvents ? addedEvents.map((event, index) => {
           return(
-            <View className='pb-5'>
+            <View className='pb-5' key={index}>
               <RenderAddedEvents event_id={event.event_id} />
             </View>
           )

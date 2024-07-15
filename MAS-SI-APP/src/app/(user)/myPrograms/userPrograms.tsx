@@ -1,7 +1,5 @@
 import { View, Text, FlatList, Pressable, ScrollView, } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useAddProgram } from '@/src/providers/addingProgramProvider'
-import { add } from 'date-fns';
 import RenderMyLibraryProgram from '@/src/components/UserProgramComponets/renderMyLibraryProgram';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { supabase } from '@/src/lib/supabase';
@@ -9,8 +7,8 @@ import { Program } from '@/src/types';
 import { Divider, Icon } from 'react-native-paper';
 import { Link } from 'expo-router';
 import RenderLikedLectures from '@/src/components/UserProgramComponets/RenderLikedLectures';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 export default function userPrograms() {
-  const { addedPrograms } = useAddProgram();
   const { session } = useAuth()
   type program_id  = {
     program_id : string
@@ -29,31 +27,32 @@ export default function userPrograms() {
   useEffect(() => {
     getUserProgramLibrary()
   }, [session])
+  const tabBarHeight = useBottomTabBarHeight() + 35
   return (
-    <ScrollView className='bg-white flex-1 w-[100%]'>
+    <ScrollView className='bg-white flex-1 w-[100%]' >
       <View className='ml-2 mt-[15%]'>
         <Text className='text-3xl font-bold'>My Library</Text>
       </View>
-      <View className='flex-row items-center ml-2 mt-2'>
+      <View className='flex-row items-center ml-2 mt-2 '>
         <Link href={"/myPrograms/PlaylistIndex"} asChild>
         <Pressable className='flex-row items-center'>
-          <Icon source={"playlist-play"} color='red' size={30}/>
+          <Icon source={"playlist-play"} color='#0D509D' size={30}/>
           <Text className='text-xl font-bold px-[13]'>Playlists</Text>
         </Pressable>
         </Link>
       </View> 
-      <Divider />
-      <View className='flex-row items-center ml-2'>
+      <Divider style={{marginTop : 2}}/>
+      <View className='flex-row items-center ml-2 mt-2'>
         <Link href={"/myPrograms/notifications/NotificationEvents"} asChild>
         <Pressable className='flex-row items-center'>
-          <Icon source={"bell"} color='red' size={30}/>
+          <Icon source={"bell"} color='#0D509D' size={30}/>
           <Text className='text-xl font-bold px-[13]'>Notifications</Text>
         </Pressable>
         </Link>
       </View> 
-      <Divider className='mb-3'/>
+      <Divider className='mb-3 mt-2'/>
 
-      <View className='flex-row w-[100%] flex-wrap justify-center mt-5' > 
+      <View className='flex-row w-[100%] flex-wrap justify-center mt-5' style={{ paddingBottom : tabBarHeight }} > 
         {userPrograms ? userPrograms.map((program, index) => {
           return(
             <View className='pb-5' key={index}>

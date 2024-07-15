@@ -5,7 +5,7 @@ import { useAuth } from '@/src/providers/AuthProvider'
 import { EventLectureType, Lectures } from '@/src/types'
 import { Stack } from 'expo-router'
 import RenderLikedLectures from '@/src/components/UserProgramComponets/RenderLikedLectures'
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import RenderLikedEventLectures from '@/src/components/UserProgramComponets/RenderLikedEventLectures'
 const AllLikedLectures = () => {
   const { session } = useAuth()
@@ -100,7 +100,7 @@ const AllLikedLectures = () => {
   useEffect(() => {
     fetchLikedLectures()
     fetchLikedEventLectures()
-  }, [])
+  }, [ session ])
 
   const layout = useWindowDimensions()
   const renderScene = SceneMap({
@@ -115,12 +115,22 @@ const AllLikedLectures = () => {
     {key : "second", title : "Event Lectures"},
   ])
 
+  const renderTabBar = (props : any) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: '#0D509D', }}
+      
+    />
+  );
+
   return (
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
+      renderTabBar={renderTabBar}
     />
   )
 }

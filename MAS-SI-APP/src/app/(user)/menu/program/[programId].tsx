@@ -90,8 +90,8 @@ const programLectures = () => {
 
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
-     <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
-      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
+     <Stack.Screen options={ { title: "" , headerBackTitleVisible : false } }  />
+      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%" }} >
           
           <Animated.Image 
             source={ { uri: program?.program_img || defaultProgramImage }}
