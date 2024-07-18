@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs } from "expo-router";
+import { Tabs, Redirect } from "expo-router";
 import * as Animatable from 'react-native-animatable';
 import { AccessibilityInfo, TouchableOpacity, View, Text } from "react-native"
 import { useEffect, useRef } from "react"
@@ -7,6 +7,7 @@ import TabArray from './tabArray';
 import { TabArrayType } from '@/src/types';
 import { Icon } from "react-native-paper";
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
+import { useAuth } from "@/src/providers/AuthProvider"
 function TabBarIcon(props: {
   source: string;
   color: string;
@@ -55,6 +56,11 @@ const TabButton = ({props ,items} : TabButtonProps) => {
   )
 }
 export default function TabLayout() {
+  const { session } = useAuth();
+
+  if (!session) {
+    return <Redirect href={'/sign-in'} />;
+  }
 
   return (
     <Tabs 

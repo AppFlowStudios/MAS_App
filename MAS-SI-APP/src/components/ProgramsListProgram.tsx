@@ -1,7 +1,7 @@
 import { Text, View, Pressable, Image, Alert, Button, Animated, StyleSheet} from 'react-native'
 import programsData from '@/assets/data/programsData'
 import {Program} from "../types"
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Link, router } from 'expo-router';
 import { useProgram } from '../providers/programProvider';
 import  Swipeable, { SwipeableProps }  from 'react-native-gesture-handler/Swipeable';
@@ -20,42 +20,87 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     const { session } = useAuth()
     const [ isSwiped, setIsSwiped ] = useState(false);
     const swipeableRef = useRef<Swipeable>(null);
+    const [ hasLecture , setHasLecture ] = useState(false)
+
+    const checkIfHasLecture = async() => {
+    const { data, error : check } = await supabase.from("programs").select("has_lectures").eq("program_id", program.program_id).single()
+    if( check ){
+        console.log( check )
+    }
+    if ( data?.has_lectures == true ){
+        setHasLecture(true)
+    }
+    else{
+        setHasLecture(false)
+    }
+    }
     const closeSwipeable = () => {
-      if (swipeableRef.current) {
+      if ( swipeableRef.current ) {
         swipeableRef.current.close();
       }
     };
 
+    useEffect(() => {
+        checkIfHasLecture()
+    }, [])
+
 
     async function addToProgramToUserLibrary(){
-        console.log(session?.user.id)
-        console.log(program.program_id)
         const { error } = await supabase.from("added_programs").insert({ user_id : session?.user.id, program_id : program.program_id})
         if(error) {
             console.log(error)
         }
     }
+   
+    async function addProgramToNotifications(){
+        const { error } = await supabase.from("added_notifications_programs").insert({ user_id : session?.user.id, program_id : program.program_id})
+        if(error) {
+            console.log(error)
+        }
 
+    }
     const rightSideButton = () => {
-        return (
-            <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "center"}}>
-                <Button
-                    title='Add To Programs'
-                    onPress={() => {
-                        addToProgramToUserLibrary();   
-                        Haptics.notificationAsync(
-                        Haptics.NotificationFeedbackType.Success
-                        );
-                        closeSwipeable()}}
-                />
-            </View>
-        )
+        if( !hasLecture ){
+            return (
+                <View className=''>
+                    <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "flex-start"}}>
+                    <Button
+                        title='Add To Notifications'
+                        onPress={() => {
+                            addProgramToNotifications();   
+                            Haptics.notificationAsync(
+                            Haptics.NotificationFeedbackType.Success
+                            );
+                            closeSwipeable()}}
+                    />
+                    </View>
+                </View>
+            )
+        }
+        else {
+            return (
+                <View>
+                    <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "flex-start", marginRight: 2}} className='' >
+                        <Button
+                            title='Add To Programs'
+                            onPress={() => {
+                                addToProgramToUserLibrary();   
+                                Haptics.notificationAsync(
+                                Haptics.NotificationFeedbackType.Success
+                                );
+                                closeSwipeable()}}
+                        />
+                    </View>
+                </View>
+            )
+        }
+        
     }
 
 
-
+    
     return(
-        <View style={{ width: "100%", height: 120, marginHorizontal: 10}} className=''>
+        <View style={{ width: "100%", height: 120, marginHorizontal: 5}} className=''>
             <Link  href={`/menu/program/${program.program_id}`} asChild>
                 <TouchableOpacity className=''>
                     <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>

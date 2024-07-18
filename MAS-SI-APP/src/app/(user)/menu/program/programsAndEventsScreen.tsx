@@ -104,9 +104,6 @@ const ProgramsAndEventsScreen = () => {
     );
   };
   
-
-
-
   return (
         <Tabs.Navigator 
         screenOptions={{

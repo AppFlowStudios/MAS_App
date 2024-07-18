@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const QuranWidget = () => {
+const BookmarkQuran = () => {
   return (
     <View>
-      <Text>QuranWidget</Text>
+      <Text>BookmarkQuran</Text>
     </View>
   )
 }
 
-export default QuranWidget
+export default BookmarkQuran

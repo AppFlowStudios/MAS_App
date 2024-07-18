@@ -15,7 +15,7 @@ const Event = () => {
 
   }
   const  fetchEventsData =  async () => {
-    const { data, error } = await supabase.from("events").select("*")
+    const { data, error } = await supabase.from("events").select("*").eq("has_lecture", true)
     if( error ) {
       console.log(error)
     }
