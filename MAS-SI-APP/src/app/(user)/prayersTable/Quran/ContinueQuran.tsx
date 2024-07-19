@@ -33,7 +33,7 @@ const ContinueQuran = () => {
     <ScrollView className='bg-white flex-1'>
         <View className='flex-col'>
             <Text className='text-2xl font-bold'> Juz</Text>
-
+            
         </View>
         
         <Text className='text-2xl font-bold ml-3'> Surah</Text>

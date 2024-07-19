@@ -47,10 +47,10 @@ const Surahs = () => {
         {
             surah ? surah.map(( item, index ) => {
                 return (
-                <>
+                <View key={index}>
                     <RenderSurahs surah={item} index={index} />
                     <Divider />
-                </>
+                </View>
             )
             }) : <></>
         }

@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions, ImageBackground } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions, ImageBackground, StatusBar } from 'react-native';
 import React, { useState, useEffect, useRef, useContext, useCallback} from 'react';
 import { gettingPrayerData, prayerTimesType } from '@/src/types';
 import { format } from 'date-fns';
@@ -120,6 +120,7 @@ export default function homeScreen() {
 
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
+            <StatusBar barStyle={"dark-content"}/>
             <View className='justify-center items-center mt-[10%] '>
               <Animated.Image source={require("@/assets/images/massiLogo2.png")} style={[{width: width / 2, height: 75, justifyContent: "center" }, imageAnimatedStyle]} />
             </View>

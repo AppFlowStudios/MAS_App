@@ -1,6 +1,6 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { Stack, useLocalSearchParams } from 'expo-router'
 import RenderAyah from '@/src/components/PrayerTimesComponets/RenderAyah'
 export type ayahsProp = {
      number : number
@@ -16,29 +16,48 @@ export type ayahsProp = {
 const Ayats = () => {
   const { surah_id } = useLocalSearchParams()
   const [ ayahs, setAyahs ] = useState<ayahsProp[] | null>()
-  const [ ayahsEnglish, setAyahsEnglish ] = useState()
+  const [ ayahsEnglish, setAyahsEnglish ] = useState<ayahsProp[] | null>()
   const getAyahs = async () => {
     const ayahURL = `https://api.alquran.cloud/v1/surah/${surah_id}/quran-uthmani`
+    const ayahEnglishURL = `https://api.alquran.cloud/v1/surah/${surah_id}/en.asad`
     const response = await fetch(ayahURL)
     if( !response.ok ){
         console.log( response.status )
     }
-
+    const englishResponse = await fetch(ayahEnglishURL)
+    if( ! englishResponse.ok ){
+        console.log( englishResponse.status )
+    }
     const data = await response.json()
     if( data ){
         setAyahs(data.data.ayahs)
+    }
+
+    const englishData = await englishResponse.json()
+    if ( englishData ){
+        setAyahsEnglish(englishData.data.ayahs)
     }
   }
 
   useEffect(() => {
     getAyahs()
   }, [])
+  
+  if ( !ayahs || !ayahsEnglish ){
+    return 
+  }
   return (
-    <ScrollView>
+    <ScrollView className='bg-white flex-1'>
+        <Stack.Screen options={{ title : ""  }} />
        <View>
         {
+            
             ayahs ? ayahs.map((item, index) => {
-                return <RenderAyah ayah={item} index={index} />
+                return (
+                <View key={index}>
+                    <RenderAyah ayah={item} english={ayahsEnglish[index]} index={index} surah_id={surah_id}/>
+                </View>
+                )
             })
             : <></>
         }

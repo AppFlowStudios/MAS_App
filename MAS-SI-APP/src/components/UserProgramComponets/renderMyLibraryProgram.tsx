@@ -30,7 +30,7 @@ const RenderMyLibraryProgram = ( {program_id} : RenderProgramProp) => {
 
 
   return (
-    <View style={{ width: 170, height: 200, justifyContent: "center", alignItems: "center", marginHorizontal: 8}} className=''>
+    <View style={{ width: 170, height: 200, justifyContent: "center", alignItems: "center"}} className=''>
         <Link  href={`../myPrograms/${program?.program_id}`}  asChild>
             <TouchableOpacity className=''>
             <View style={{width: 170, height: 170}}>

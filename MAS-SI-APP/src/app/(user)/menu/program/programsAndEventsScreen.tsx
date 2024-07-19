@@ -4,7 +4,7 @@ import ProgramsScreen from './allPrograms';
 import Event from './events/Event';
 import Pace from './pace/Pace';
 import UpcomingEvents from './upcomingEvents/UpcomingEvents';
-import { View, TouchableOpacity, StyleSheet, Text, SafeAreaView, } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, SafeAreaView, StatusBar, } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, interpolate } from 'react-native-reanimated';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { TabArrayType } from '@/src/types'
@@ -105,21 +105,24 @@ const ProgramsAndEventsScreen = () => {
   };
   
   return (
+        <>
+        <StatusBar barStyle={"light-content"}/>
         <Tabs.Navigator 
         screenOptions={{
           tabBarStyle : {paddingTop : "16%",backgroundColor: "#0D509D", },
           tabBarIndicatorContainerStyle : {justifyContent: "center", marginLeft: 25, alignItems: "center"},
           tabBarIndicatorStyle: {backgroundColor : "#57BA47", width: 100, marginBottom: 4},
           tabBarLabelStyle : {color: "white", fontWeight: "bold", textShadowColor: "black", textShadowOffset: { width: 0, height: 2 }, textShadowRadius: 0.6},
-          tabBarScrollEnabled: true
-        }}
-
+          tabBarScrollEnabled: true,
+          
+          }}
         >
           <Tabs.Screen name='Upcoming...' component={UpcomingEvents} />
           <Tabs.Screen name="Programs /Tarbiya"  component={ProgramsScreen} />
           <Tabs.Screen name="Events" component={Event} />
           <Tabs.Screen name="P.A.C.E" component={Pace} />
         </Tabs.Navigator>
+        </>
   )
 }
 

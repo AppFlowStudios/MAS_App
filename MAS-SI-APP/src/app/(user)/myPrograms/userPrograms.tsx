@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Pressable, ScrollView, } from 'react-native'
+import { View, Text, FlatList, Pressable, ScrollView, StatusBar, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import RenderMyLibraryProgram from '@/src/components/UserProgramComponets/renderMyLibraryProgram';
 import { useAuth } from '@/src/providers/AuthProvider';
@@ -30,6 +30,7 @@ export default function userPrograms() {
   const tabBarHeight = useBottomTabBarHeight() + 35
   return (
     <ScrollView className='bg-white flex-1 w-[100%]' >
+      <StatusBar barStyle={"dark-content"}/>
       <View className='ml-2 mt-[15%]'>
         <Text className='text-3xl font-bold'>My Library</Text>
       </View>
@@ -55,7 +56,7 @@ export default function userPrograms() {
       <View className='flex-row w-[100%] flex-wrap justify-center mt-5' style={{ paddingBottom : tabBarHeight }} > 
         {userPrograms ? userPrograms.map((program, index) => {
           return(
-            <View className='pb-5' key={index}>
+            <View className='pb-5 justify-between mx-2' key={index}>
               <RenderMyLibraryProgram program_id={program.program_id} />
             </View>
           )
