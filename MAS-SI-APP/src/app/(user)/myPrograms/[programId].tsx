@@ -10,18 +10,20 @@ import { Lectures, SheikDataType, Program } from '@/src/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
+import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 import RenderMyLibraryProgramLectures from '@/src/components/UserProgramComponets/RenderMyLibraryProgramLectures';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import * as Haptics from "expo-haptics"
+
 const programLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
   const [ lectures, setLectures ] = useState<Lectures[] | null>(null)
   const [ program, setProgram ] = useState<Program>()
   const [ visible, setVisible ] = useState(false);
+  const [ playAnimation , setPlayAnimation ] = useState( false )
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const Tab = useBottomTabBarHeight()
@@ -45,6 +47,31 @@ const programLectures = () => {
       ]
     }
   })
+
+
+  const animationOpactiy = useSharedValue(1)
+  const animationHeight = useSharedValue(scrollOffset.value)
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return{
+      transform: [ 
+          {
+            translateY :  interpolate(
+              scrollOffset.value,
+              [-250, 0, 250 ],
+              [2,2,2]
+              )
+          }
+      ]
+    }
+  })
+  
+  const animatedStyleFunc = () => {
+    
+    animationOpactiy.value = withTiming(1, {})
+    animationHeight.value = withTiming(400, {})
+    
+  }
  async function getProgram(){
   const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
   if( error ) {
@@ -68,6 +95,7 @@ const programLectures = () => {
     getProgram()
     getProgramLectures()
   }, [session])
+
 
   const GetSheikData = () => {
     const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.program_speaker)
@@ -129,7 +157,6 @@ const programLectures = () => {
             style={ [{width: width / 1.2, height: 300, borderRadius: 8 }, imageAnimatedStyle] }
             resizeMode='stretch'
           />
-
           <View className='bg-white' style={{paddingBottom : Tab * 3}}>
             <Text className='text-center mt-2 text-xl text-black font-bold'>{program?.program_name}</Text>
             <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program?.program_speaker}</Text>
@@ -138,15 +165,20 @@ const programLectures = () => {
                   lectures ? lectures.map((item, index) => {
                     return(
                       <View key={index}>
-                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker}/>
+                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation}/>
                       <Divider style={{width: "95%", marginLeft: 8}}/>
                       </View>
                     )
-                  }) : <></>
+                  }) 
+                  
+                  : <></>
+                  
                 }
+                <Animated.View style={[animatedStyle, {flexDirection : "row", backgroundColor: "black"}]} className="border"> 
+                    <Icon source={"cards-heart"} color='red' size={20}/>
+                </Animated.View>
               </View>
           </View>
-
           <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "35%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
               <GetSheikData />

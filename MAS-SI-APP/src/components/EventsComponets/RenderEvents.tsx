@@ -46,7 +46,7 @@ const RenderEvents = ( {event} : RenderEventsProp ) => {
                                 <Image 
                                     source={{ uri: event.event_img || defaultProgramImage }}
                                     style={{width: 130, height: 100, objectFit: "fill", borderRadius: 8}}
-                                    className='border'
+                                    
                                 />
                     </View>
 

@@ -1,19 +1,21 @@
 import { View, Text, FlatList, Dimensions, useWindowDimensions, ScrollView, Image  } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, { runOnJS } from 'react-native-reanimated';
 import React, {useRef, useState, useEffect, useCallback }from 'react';
 import { Program } from '../types';
 import programsData from '@/assets/data/programsData';
 import ProgramsCircularCarouselCard from './programsCircularCarouselCard';
 import { supabase } from '../lib/supabase';
+import { ActivityIndicator } from 'react-native-paper';
 
 type ProgramsCircularProp = {
   sideCardLength : number,
   spaceing : number,
   cardLength : number
-  
 }
-export default function ProgramsCircularCarousel(   ) {
+
+export default function ProgramsCircularCarousel(  ) {
     const [scrollX, setScrollX] = useState(0);
+    const [ loading, setLoading ] = useState( true ) 
     const windowWidth = Dimensions.get("window").width;
     const flatListRef = useRef<FlatList>(null);
     const [active, setActive] = useState(0);
@@ -28,11 +30,14 @@ export default function ProgramsCircularCarousel(   ) {
       }
       if( data ){
         setProgramsData(data)
+        setLoading( false )
       }
+    
     }
     
     useEffect(() => {
       fetchProgramsData()
+
     }, [])
 { /*<ScrollView horizontal>
       {programsData?.map((item, index) => {
@@ -81,10 +86,15 @@ export default function ProgramsCircularCarousel(   ) {
     const listItemWidth = windowWidth * 0.6;
     const endOfList = programsData?.length;
     const SIDE_CARD_LENGTH = (windowWidth * 0.25) / 2;
+  
+  if( loading ){
+    return (<View className=' justify-center items-center '> <ActivityIndicator /> </View>)
+  }
   return (
     
     <View>
     <Animated.View className='' style={{height: 300}}>
+      
       <Animated.FlatList 
                 data={programsData}
                 renderItem={({item, index}) =>  <ProgramsCircularCarouselCard scrollX={scrollX} listItemWidth={listItemWidth} program={item} index={index} itemSpacer={SIDE_CARD_LENGTH} spacing={SPACEING} lastIndex={endOfList}/>}

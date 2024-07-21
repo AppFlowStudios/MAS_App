@@ -26,7 +26,19 @@ export default function userPrograms() {
 
   useEffect(() => {
     getUserProgramLibrary()
-  }, [session])
+    const channel = supabase.channel("user_programs").on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table : "added_programs",
+      },
+      (payload) => getUserProgramLibrary()
+    )
+    .subscribe()
+
+    return() => { supabase.removeChannel(channel) }
+  }, [])
   const tabBarHeight = useBottomTabBarHeight() + 35
   return (
     <ScrollView className='bg-white flex-1 w-[100%]' >

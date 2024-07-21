@@ -1,12 +1,14 @@
-import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet, Button } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/src/lib/supabase'
 import { EventsType, Program } from '@/src/types'
 import { Link } from 'expo-router'
-import { defaultProgramImage } from '@/src/components/ProgramsListProgram'
+import ProgramsListProgram, { defaultProgramImage } from '@/src/components/ProgramsListProgram'
 import  Swipeable, { SwipeableProps }  from 'react-native-gesture-handler/Swipeable';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { Searchbar } from 'react-native-paper'
+import RenderEvents from '@/src/components/EventsComponets/RenderEvents'
+
 const UpcomingEvents = () => {
   const [ eventsUpcoming, setEventsUpcoming ] = useState<EventsType[] | null>()
   const [ programsUpcoming, setProgramsUpcoming ]= useState<Program[] | null>()
@@ -14,6 +16,11 @@ const UpcomingEvents = () => {
   const [ isSwiped, setIsSwiped ] = useState(false);
   const swipeableRef = useRef<Swipeable>(null);
   const tabBarHeight = useBottomTabBarHeight()
+  const closeSwipeable = () => {
+    if (swipeableRef.current) {
+      swipeableRef.current.close();
+    }
+  }
   const getUpcomingEvent =  async () => {
     const currDate = new Date().toISOString()
     console.log(currDate)
@@ -39,16 +46,33 @@ const UpcomingEvents = () => {
   useEffect(() => {
     getUpcomingEvent()
     getUpcomingPrograms()
+    const listenForUpcomingEvents = supabase.channel("upcoming").on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema : "public",
+        table: "events",
+      },
+      (payload) => getUpcomingEvent()
+    )
+    .subscribe()
+
+    const listenForUpcomingPrograms = supabase.channel("upcoming programs").on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema : "public",
+        table: "events",
+      },
+      (payload) => getUpcomingPrograms()
+    )
+    .subscribe()
+
+    return () => { supabase.removeChannel(listenForUpcomingEvents); supabase.removeChannel(listenForUpcomingPrograms)}
   }, [])
 
-  const rightSideButton = () => {
-    return (
-    <View>
-      <Text>Button</Text>
-    </View>
-  )
-  }
-
+  
+  
   return (
     <View className=' bg-[#0D509D] flex-1' >
     <View  className='bg-white pt-2 mt-1 flex-1'style={{borderTopLeftRadius: 40, borderTopRightRadius: 40, paddingBottom: tabBarHeight }}>
@@ -59,46 +83,12 @@ const UpcomingEvents = () => {
           <View>
             <Text className='text-3xl font-bold text-black'> Upcoming Events</Text>
 
-            <View>
+            
               { eventsUpcoming.map((item, index) => {
-                return(
-                  <View style={{ width: "100%", height: 120, marginHorizontal: 3}} className='' key={index}>
-                    <Link  href={"/"} asChild>
-                    <TouchableOpacity className=''>
-                        <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
-
-                            <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} className=''>
-                                <Image 
-                                    source={{ uri: item.event_img || defaultProgramImage }}
-                                    style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}
-                                    className=''
-                                />
-                            </View>
-                            <View>
-                                <Swipeable
-                                    ref={swipeableRef}
-                                    renderRightActions={rightSideButton}
-                                    containerStyle={{flexDirection:"row"}}
-                                    onSwipeableOpen={() => setIsSwiped(true)}
-                                    onSwipeableClose={() => setIsSwiped(false)}
-                                >
-                                    <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
-                                        <Text style={{textAlign: "center", fontWeight: "bold"}}>{item.event_name}</Text>
-                                        <Text style={{textAlign: "center"}}>By: {item.event_speaker}</Text>
-                                    </View>
-                                </Swipeable>
-                                <View className='flex-row justify-center top-0'>
-                                    <View style={[styles.dot, !isSwiped ? styles.activeDot : null]} />
-                                    <View style={[styles.dot, isSwiped ? styles.activeDot : null]} />
-                            </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </Link>
-              </View>
-                )
-              })}
-            </View>
+                return <RenderEvents event={item} />
+              })
+              }
+          
           </View>
         : <></>
         }
@@ -109,46 +99,13 @@ const UpcomingEvents = () => {
             <View> 
               <Text className='text-3xl font-bold text-black'> Upcoming Programs</Text>
 
-              <View>
-                { programsUpcoming.map((item, index) => {
-                  return(
-                    <View style={{ width: "100%", height: 120, marginHorizontal: 3}} className='' key={index}>
-                    <Link  href={"/"} asChild>
-                    <TouchableOpacity className=''>
-                        <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
-
-                            <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} className=''>
-                                <Image 
-                                    source={{ uri: item.program_img || defaultProgramImage }}
-                                    style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}
-                                    className=''
-                                />
-                            </View>
-                            <View>
-                                <Swipeable
-                                    ref={swipeableRef}
-                                    renderRightActions={rightSideButton}
-                                    containerStyle={{flexDirection:"row"}}
-                                    onSwipeableOpen={() => setIsSwiped(true)}
-                                    onSwipeableClose={() => setIsSwiped(false)}
-                                >
-                                    <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
-                                        <Text style={{textAlign: "center", fontWeight: "bold"}}>{item.program_name}</Text>
-                                        <Text style={{textAlign: "center"}}>By: {item.program_speaker}</Text>
-                                    </View>
-                                </Swipeable>
-                                <View className='flex-row justify-center top-0'>
-                                    <View style={[styles.dot, !isSwiped ? styles.activeDot : null]} />
-                                    <View style={[styles.dot, isSwiped ? styles.activeDot : null]} />
-                            </View>
-                            </View>
-                        </View>
-                    </TouchableOpacity>
-                </Link>
-              </View>
-                  )
-                })}
-              </View>
+              
+                { 
+                programsUpcoming.map((item, index) => {
+                  return <ProgramsListProgram program={item} />
+                })
+                }
+              
             </View>
           : <></>
         }

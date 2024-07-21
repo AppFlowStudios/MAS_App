@@ -2,6 +2,7 @@ import { View, Text, ScrollView, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import RenderAyah from '@/src/components/PrayerTimesComponets/RenderAyah'
+import { ActivityIndicator } from 'react-native-paper'
 export type ayahsProp = {
      number : number
      text : string
@@ -15,6 +16,7 @@ export type ayahsProp = {
 }
 const Ayats = () => {
   const { surah_id } = useLocalSearchParams()
+  const [ loading, setLoading ] = useState(true)
   const [ ayahs, setAyahs ] = useState<ayahsProp[] | null>()
   const [ ayahsEnglish, setAyahsEnglish ] = useState<ayahsProp[] | null>()
   const getAyahs = async () => {
@@ -37,14 +39,20 @@ const Ayats = () => {
     if ( englishData ){
         setAyahsEnglish(englishData.data.ayahs)
     }
+    setLoading(false)
   }
 
   useEffect(() => {
     getAyahs()
   }, [])
   
-  if ( !ayahs || !ayahsEnglish ){
-    return 
+  if ( !ayahs || !ayahsEnglish || loading ){
+    return (
+      <>
+        <Stack.Screen options={{ title: "" }} />
+        <ActivityIndicator />
+      </>
+    )
   }
   return (
     <ScrollView className='bg-white flex-1'>

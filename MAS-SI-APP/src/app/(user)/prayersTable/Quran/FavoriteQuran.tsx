@@ -37,7 +37,7 @@ type likedSurahsProp = {
           <ScrollView className='bg-white flex-1'>
             {likedAyahs ? likedAyahs.map((item, index) => {
               return(
-                <View key={index} style={{ justifyContent : "center" }}>
+                <View key={index} style={{ justifyContent : "center", alignItems: "center" }}>
                   <RenderLikedAyahs surah_number={item.surah_number} ayah_number={item.ayah_number}/>
                   <Divider />
                 </View>
@@ -71,7 +71,7 @@ type likedSurahsProp = {
           { 
           likedSurahs ? likedSurahs.map((item, index) => {
             return(
-              <View key={index}>
+              <View key={index} style={{ justifyContent: "center", alignItems: "center" }}>
                     <RenderLikedSurahs surah_number={item.surah_number} />
               </View>
                 )

@@ -13,7 +13,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation, runOnJS } from 'react-native-reanimated';
 import { supabase } from '@/src/lib/supabase';
 import * as Haptics from "expo-haptics"
 import { useAuth } from '@/src/providers/AuthProvider';
@@ -21,11 +21,12 @@ type LecturesListProp = {
   lecture : Lectures
   index : number
   speaker : string | null | undefined
+  setPlayAnimation : (playAnimation : boolean) => void
 }
 const { width } = Dimensions.get("window")
 
 
-const RenderMyLibraryProgramLectures = ( {lecture, index, speaker} : LecturesListProp ) => {
+const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimation} : LecturesListProp ) => {
   const { session } = useAuth()
   const liked = useSharedValue(0)
 
@@ -62,7 +63,7 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker} : LecturesLis
         console.log(error)
       }
     }
-    liked.value = withSpring(liked.value ? 0: 1)
+    liked.value = withSpring( liked.value ? 0: 1, {}, () => runOnJS(setPlayAnimation)(true) )
     Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Success
     )
@@ -91,7 +92,7 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker} : LecturesLis
   
     const LikeButton = () => {
       return(
-        <Pressable onPress={() => (liked.value = withSpring(liked.value ? 0: 1))} className=' relative'>
+        <Pressable onPress={stateOfLikedLecture} className=' relative'>
           <Animated.View style={outlineStyle}>
             <Icon source="cards-heart-outline"  color='black'size={25}/>
           </Animated.View>

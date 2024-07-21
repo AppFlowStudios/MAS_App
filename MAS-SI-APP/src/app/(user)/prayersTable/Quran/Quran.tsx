@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Stack } from "expo-router"
 import { isLoading } from 'expo-font'
@@ -7,15 +7,30 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ContinueQuran from './ContinueQuran'
 import FavoriteQuran from './FavoriteQuran'
 import BookmarkQuran from './BookmarkQuran'
+import AnimatedTabBar, { AnimatedTabBarProp } from '@/src/components/PrayerTimesComponets/AnimatedTabBar'
+enum CustomTab {
+    Tab1,
+    Tab2,
+    Tab3
+}  
+const AnimatedTabs:AnimatedTabBarProp[] = [
+        {title : "Continue"},
+        {title : "Bookmark"},
+        {title : "Favorite"}
+]
 const Quran = () => {
+    const [ selectedTab, setSelectedTab ] = useState<CustomTab>(CustomTab.Tab1)
   
-    const Tabs = createMaterialTopTabNavigator()
+
     return (
-        <Tabs.Navigator>
-           <Tabs.Screen name='Continue' component={ContinueQuran} />
-           <Tabs.Screen name="Bookmark" component={BookmarkQuran} />
-           <Tabs.Screen name='Favorite' component={FavoriteQuran} />
-        </Tabs.Navigator>
+        <View className='flex-1 bg-white'>
+        <AnimatedTabBar animatedTabs={AnimatedTabs} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+        
+                { selectedTab == 0 ? ( <ContinueQuran />) : <></>}
+                { selectedTab == 1 ? ( <BookmarkQuran />) : <></>}
+                { selectedTab == 2 ? ( <FavoriteQuran />) : <></>}
+            
+        </View>
     )
     }
 

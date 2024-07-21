@@ -57,7 +57,7 @@ const RenderSurahs = ({ surah, index } : RenderSurahsProp) => {
             <View className='flex-col items-center justify-center w-[50%]'>
                 <Text className='text-xl font-bold'>{surah.englishName}</Text>
                 <View className='flex-row justify-center items-center'>
-                    <Text className='text-xl font-bold'>{surah.numberOfAyahs}</Text>
+                    <Text className='text-xl font-bold'>{surah.numberOfAyahs} ayahs {surah.revelationType}</Text>
                 </View>
             </View>
             <View className='justify-center w-[40%] flex-col'>

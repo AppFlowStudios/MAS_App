@@ -16,7 +16,8 @@ export type Program = {
     program_img: string | null,
     program_desc: string | null,
     program_speaker: string | null,
-    lectures: Lectures[]
+    lectures: Lectures[],
+    has_lectures : boolean
 }
 
 export type salahData = {

@@ -2,7 +2,7 @@ import { View, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { surahProp } from '@/src/app/(user)/prayersTable/Quran/surahs/Surahs'
 import { Link } from 'expo-router'
-import { Divider } from 'react-native-paper'
+import { Divider, Icon } from 'react-native-paper'
 type RenderLikedSurahsProp = {
     surah_number : number
 }
@@ -26,18 +26,23 @@ const RenderLikedSurahs = ( { surah_number  } : RenderLikedSurahsProp) => {
   }, [])
   return (
     <Link href={`/prayersTable/Quran/surahs/${surah_number}`} asChild>
-        <Pressable className='flex-col bg-white' >
-            <View className='flex-row'>
-                <Text>{surah_number}    </Text>
-                <Text>{surah?.name}</Text>
+          <Pressable className='flex-row bg-[#0d509D] items-center w-[95%] mt-1' style={{ borderRadius : 10 }} >
+            <View className='flex-col w-[60%] py-1 items-center'>
+                <View className='flex-row'>
+                    <Text className='text-white font-bold'>{surah_number}    </Text>
+                    <Text className='text-white font-bold'>{surah?.name}</Text>
+                </View>
+                <View>
+                    <Text className='text-white'>{surah?.englishName} ({surah?.englishNameTranslation})</Text>
+                    <Text className='text-white'>Type of Surah: {surah?.revelationType}</Text>
+                </View>
             </View>
-            <View>
-                <Text>{surah?.englishName} ({surah?.englishNameTranslation})</Text>
-                <Text>Type of Surah: {surah?.revelationType}</Text>
+            <View className='w-[40%] items-center'>
+                <Icon source={"cards-heart"} color='#e5cea2' size={25} />
             </View>
-            <Divider  />
-        </Pressable>
-    </Link>
+              <Divider  />
+          </Pressable>
+      </Link>
   )
 }
 

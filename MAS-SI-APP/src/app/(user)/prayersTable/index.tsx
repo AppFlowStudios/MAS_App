@@ -1,4 +1,4 @@
-import { View, Text, Animated, FlatList, Image, FlatListProps, Pressable } from 'react-native';
+import { View, Text, Animated, FlatList, Image, FlatListProps, Pressable, StatusBar } from 'react-native';
 import Paginator from '@/src/components/paginator';
 import Table from "@/src/components/prayerTimeTable";
 import React, {useEffect, useRef, useState } from 'react';
@@ -39,6 +39,7 @@ export default function Index() {
 
   return (
     <View className='h-full  bg-white'>
+          <StatusBar barStyle={"dark-content"} />
           <View className='items-center justify-center '>
             <View className='mt-[15%] h-[400] items-center justify-center '>
               <FlatList 
