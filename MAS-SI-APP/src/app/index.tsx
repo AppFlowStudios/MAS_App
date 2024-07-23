@@ -15,11 +15,7 @@ const index = () => {
    }
 
   return (
-    <View className='flex-1 justify-center items-center'>
-        <Link href={"/(user)"} asChild>
-        <Button title="User"/>
-        </Link>
-    </View>
+    <Redirect href={"/(user)"}/>
   )
 }
 

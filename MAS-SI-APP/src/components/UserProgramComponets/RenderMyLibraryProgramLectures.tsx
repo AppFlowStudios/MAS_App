@@ -22,11 +22,12 @@ type LecturesListProp = {
   index : number
   speaker : string | null | undefined
   setPlayAnimation : (playAnimation : boolean) => void
+  setLectureInfoAnimation : ( lectureInfoAnimation : Lectures ) => void
 }
 const { width } = Dimensions.get("window")
 
 
-const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimation} : LecturesListProp ) => {
+const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimation, setLectureInfoAnimation} : LecturesListProp ) => {
   const { session } = useAuth()
   const liked = useSharedValue(0)
 
@@ -63,7 +64,7 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimat
         console.log(error)
       }
     }
-    liked.value = withSpring( liked.value ? 0: 1, {}, () => runOnJS(setPlayAnimation)(true) )
+    liked.value = withSpring( liked.value ? 0: 1, {}, () => {if( liked.value == 1) {runOnJS(setPlayAnimation)(true); runOnJS(setLectureInfoAnimation)(lecture) } } )
     Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Success
     )

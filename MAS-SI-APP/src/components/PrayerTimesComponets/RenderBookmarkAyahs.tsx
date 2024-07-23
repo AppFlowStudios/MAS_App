@@ -1,8 +1,12 @@
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { surahProp } from '@/src/app/(user)/prayersTable/Quran/surahs/Surahs'
 import { ayahsProp } from '@/src/app/(user)/prayersTable/Quran/surahs/[surah_id]'
 import { Divider, Icon } from 'react-native-paper'
+import { useAuth } from '@/src/providers/AuthProvider'
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation, runOnJS} from 'react-native-reanimated'
+import * as Haptics from "expo-haptics"
+import { supabase } from '@/src/lib/supabase'
 type RenderBookmarkAyahsProp = {
     surah_number : number,
     ayah_number : number
@@ -35,7 +39,65 @@ const RenderBookmarkAyahs = ({ surah_number , ayah_number } : RenderBookmarkAyah
           setEnglishAyah(englishData.data.text)
       }
     }
+    
+  const { session } = useAuth()
+  const liked = useSharedValue(1)
+
+
+
   
+  async function stateOfLikedLecture(){
+    if( liked.value == 0 ){
+    const { error } = await supabase.from("user_bookmarked_ayahs").insert({user_id : session?.user.id, surah_number : surah_number, ayah_number: ayah_number})
+    if (error) {
+      console.log(error)
+    }
+    }
+    if ( liked.value == 1 ){
+      const { error } = await supabase.from("user_bookmarked_ayahs").delete().eq("user_id", session?.user.id).eq("surah_number", surah_number).eq("ayah_number", ayah_number)
+      if (error) {
+        console.log(error)
+      }
+    }
+    liked.value = withSpring( liked.value ? 0: 1 )
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success
+    )
+  }
+
+  const outlineStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolation.CLAMP),
+        },
+      ],
+    };
+  });
+  
+  const fillStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: liked.value,
+        },
+      ],
+      opacity: liked.value
+    };
+  });
+
+  const BookmarkButton = () => {
+    return(
+      <Pressable onPress={stateOfLikedLecture} className=' relative'>
+        <Animated.View style={outlineStyle}>
+          <Icon source="bookmark-outline"  color='black'size={25}/>
+        </Animated.View>
+        <Animated.View style={[{position: "absolute"} ,fillStyle]}>
+          <Icon source="bookmark"  color='#e5cea2'size={25}/>
+        </Animated.View>
+    </Pressable>
+    )
+  }
     useEffect(() => {
       getInfo()
     }, [])
@@ -48,7 +110,7 @@ const RenderBookmarkAyahs = ({ surah_number , ayah_number } : RenderBookmarkAyah
               </View>
               <View className='flex-row '> 
                    <Icon source={"share-variant"} color='black' size={25}/>
-                  <Icon source={"bookmark"} color='#e5cea2' size={25}/>
+                   <BookmarkButton />
               </View>
           </View>
           <Divider />

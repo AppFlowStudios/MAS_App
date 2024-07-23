@@ -19,7 +19,7 @@ const RenderLikedAyahs = ( { surah_number , ayah_number } : RenderLikedAyahsProp
   const [ englishAyah, setEnglishAyah ] = useState<string>()
  
   const { session } = useAuth()
-  const liked = useSharedValue(0)
+  const liked = useSharedValue(1)
 
 
 
@@ -32,7 +32,7 @@ const RenderLikedAyahs = ( { surah_number , ayah_number } : RenderLikedAyahsProp
     }
     }
     if ( liked.value == 1 ){
-      const { error } = await supabase.from("liked_lectures").delete().eq("user_id", session?.user.id).eq("surah_number", surah_number).eq("ayah_number" , ayah_number)
+      const { error } = await supabase.from("user_liked_ayahs").delete().eq("user_id", session?.user.id).eq("surah_number", surah_number).eq("ayah_number" , ayah_number)
       if (error) {
         console.log(error)
       }

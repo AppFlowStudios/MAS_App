@@ -28,6 +28,17 @@ type likedSurahsProp = {
 
     useEffect(() => {
       getLikedAyahs()
+      const listenForLikedAyahs = supabase.channel(" Liked Ayah Channel ").on(
+        "postgres_changes",
+        {
+            event: "*",
+            schema : "public",
+            table : "user_liked_ayahs"
+        },
+        (payload) => getLikedAyahs()
+    ).subscribe()
+
+    return () => { supabase.removeChannel( listenForLikedAyahs ) }
     }, [])
 
     if( !likedAyahs ){
@@ -61,6 +72,17 @@ type likedSurahsProp = {
     }
     useEffect(() => {
       getLikedSurahs()
+      const listenForLikedSurah = supabase.channel(" Liked Surah Channel ").on(
+        "postgres_changes",
+        {
+            event: "*",
+            schema : "public",
+            table : "user_liked_surahs"
+        },
+        (payload) => getLikedSurahs()
+    ).subscribe()
+
+    return () => { supabase.removeChannel( listenForLikedSurah) }
     }, [])
 
     if( !likedSurahs ){

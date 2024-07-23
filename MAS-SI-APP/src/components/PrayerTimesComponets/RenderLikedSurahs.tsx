@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { surahProp } from '@/src/app/(user)/prayersTable/Quran/surahs/Surahs'
 import { Link } from 'expo-router'
 import { Divider, Icon } from 'react-native-paper'
+import { useAuth } from '@/src/providers/AuthProvider'
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation, runOnJS} from 'react-native-reanimated'
+import * as Haptics from "expo-haptics"
+import { supabase } from '@/src/lib/supabase'
 type RenderLikedSurahsProp = {
     surah_number : number
 }
@@ -21,6 +25,65 @@ const RenderLikedSurahs = ( { surah_number  } : RenderLikedSurahsProp) => {
     }
   }
 
+   
+  const { session } = useAuth()
+  const liked = useSharedValue(1)
+
+
+
+  
+  async function stateOfLikedLecture(){
+    if( liked.value == 0 ){
+    const { error } = await supabase.from("user_liked_surahs").insert({user_id : session?.user.id, surah_number : surah_number})
+    if (error) {
+      console.log(error)
+    }
+    }
+    if ( liked.value == 1 ){
+      const { error } = await supabase.from("user_liked_surahs").delete().eq("user_id", session?.user.id).eq("surah_number", surah_number)
+      if (error) {
+        console.log(error)
+      }
+    }
+    liked.value = withSpring( liked.value ? 0: 1 )
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success
+    )
+  }
+
+  const outlineStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: interpolate(liked.value, [0, 1], [1, 0], Extrapolation.CLAMP),
+        },
+      ],
+    };
+  });
+  
+  const fillStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        {
+          scale: liked.value,
+        },
+      ],
+      opacity: liked.value
+    };
+  });
+
+  const LikeButton = () => {
+    return(
+      <Pressable onPress={stateOfLikedLecture} className=' relative'>
+        <Animated.View style={outlineStyle}>
+          <Icon source="cards-heart-outline"  color='black'size={25}/>
+        </Animated.View>
+        <Animated.View style={[{position: "absolute"} ,fillStyle]}>
+          <Icon source="cards-heart"  color='#e5cea2'size={25}/>
+        </Animated.View>
+    </Pressable>
+    )
+  }
   useEffect(() => {
     getSurah()
   }, [])
@@ -38,7 +101,7 @@ const RenderLikedSurahs = ( { surah_number  } : RenderLikedSurahsProp) => {
                 </View>
             </View>
             <View className='w-[40%] items-center'>
-                <Icon source={"cards-heart"} color='#e5cea2' size={25} />
+                <LikeButton />
             </View>
               <Divider  />
           </Pressable>

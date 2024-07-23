@@ -52,14 +52,14 @@ const SignIn = () => {
       </Animated.View>
 
       <View className=' justify-center items-center bg-white'>
-        <View className='w-[85%] justify-center items-center h-[550]  bg-white' style={{shadowColor: "black", shadowOffset: {width: 0, height: 0}, shadowOpacity: 3, shadowRadius: 3, borderRadius: 8}}>
-          <Text className='font-bold text-black text-3xl'>LOGIN</Text>
+        <View className='w-[85%]  items-center h-[550]  bg-white' style={{shadowColor: "black", shadowOffset: {width: 0, height: 0}, shadowOpacity: 3, shadowRadius: 3, borderRadius: 8}}>
+          <Text className='font-bold text-[#0D509D] text-3xl mt-[10%]'>LOGIN</Text>
 
-        <View className='mt-2'>
+        <View className='mt-2 items-center'>
           <TextInput
             mode='outlined'
             theme={{ roundness : 50 }}
-            style={{ width: 250, backgroundColor: "#e8e8e8", height: 50 }}
+            style={{ width: 300, backgroundColor: "#e8e8e8", height: 45 }}
             activeOutlineColor='#0D509D'
             value={email}
             onChangeText={setEmail}
@@ -73,7 +73,7 @@ const SignIn = () => {
           <TextInput
             mode='outlined'
             theme={{ roundness : 50 }}
-            style={{ width: 250, backgroundColor: "#e8e8e8", height: 50}}
+            style={{ width: 300, backgroundColor: "#e8e8e8", height: 45}}
             activeOutlineColor='#0D509D'
             value={password}
             onChangeText={setPassword}
@@ -91,14 +91,9 @@ const SignIn = () => {
           </View>
 
 
-          <View className='flex-row mt-4 justify-center'>
-            <View className='border' style={{ borderRadius : 40 }}>
-              <IconButton icon={"google"} iconColor='black' size={20}/>
-            </View>
-            <View className='w-[15]'></View>
-            <View className="border" style={{ borderRadius : 40 }}>
-              <IconButton icon={"apple"} iconColor='black' size={20}/>
-            </View>
+          <View className='flex-col mt-4 justify-center items-center px-3'>
+          <Image source={require("@/assets/images/googlelog2.png")} style={{ width : 250, height: 55, objectFit: 'fill'}} className='mb-1'/>
+            <Image source={require("@/assets/images/apple-signinbutton-560.png")} style={{ width : 300, height: 50, objectFit: 'cover'}} className='mb-1'/>
           </View>
 
 
@@ -107,7 +102,7 @@ const SignIn = () => {
 
         </View>
         <View className='mt-5'/>
-          <Button  mode='contained' onPress={signInWithEmail} disabled={loading} buttonColor='#57BA47' textColor='white' className='w-[150]'>Login</Button>
+          <Button  mode='contained' onPress={signInWithEmail} disabled={loading} buttonColor='#57BA47' textColor='white' className='w-[150]'>LOGIN</Button>
 
           <Link href="/SignUp" asChild>
             <Pressable className='flex-row justify-center mt-[8%]'>

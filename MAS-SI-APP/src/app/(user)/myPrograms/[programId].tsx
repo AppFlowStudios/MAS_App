@@ -10,12 +10,13 @@ import { Lectures, SheikDataType, Program } from '@/src/types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 import RenderMyLibraryProgramLectures from '@/src/components/UserProgramComponets/RenderMyLibraryProgramLectures';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import * as Haptics from "expo-haptics"
+import { transform } from '@babel/core';
 
 const programLectures = () => {
   const { session } = useAuth()
@@ -24,10 +25,11 @@ const programLectures = () => {
   const [ program, setProgram ] = useState<Program>()
   const [ visible, setVisible ] = useState(false);
   const [ playAnimation , setPlayAnimation ] = useState( false )
+  const [ lectureInfoAnimation, setLectureInfoAnimation ] = useState<Lectures>()
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const Tab = useBottomTabBarHeight()
-
+  const windowHeight = Dimensions.get("window").height 
   const { width } = Dimensions.get("window")
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
   const scrollOffset = useScrollViewOffset(scrollRef)
@@ -49,29 +51,37 @@ const programLectures = () => {
   })
 
 
-  const animationOpactiy = useSharedValue(1)
+  const animationOpactiy = useSharedValue(0)
   const animationHeight = useSharedValue(scrollOffset.value)
 
+  const resetAnimation = () => {
+    animationOpactiy.value = withTiming(0, { duration : 2000 })
+    animationHeight.value = scrollOffset.value
+  }
+
+  const playAnimationFunc = () => {
+    if( playAnimation ){
+      animationOpactiy.value = withTiming(1, {}, (finished, current) => { if( finished ){ current = 0 }})
+      animationHeight.value = withSpring( ( scrollOffset.value - windowHeight ) / 3.5  , {})
+      }
+  }
   const animatedStyle = useAnimatedStyle(() => {
-    return{
-      transform: [ 
-          {
-            translateY :  interpolate(
-              scrollOffset.value,
-              [-250, 0, 250 ],
-              [2,2,2]
-              )
-          }
-      ]
+    if( playAnimation ){
+      animationOpactiy.value = withTiming(1, { duration: 2000 }, (finished) => { if( finished ){ runOnJS(setPlayAnimation)(false) }})
+      animationHeight.value = withSpring( scrollOffset.value == 0 ? ( scrollOffset.value - windowHeight ) / 3.5 : ( scrollOffset.value - windowHeight ) / 5  , {})
+      }
+      if( !playAnimation ){
+        animationOpactiy.value = withTiming(0)
+        animationHeight.value = withSpring(scrollOffset.value)
+      }
+      return{
+      opacity : animationOpactiy.value,
+      transform : [{ translateY : animationHeight.value }]
     }
   })
   
-  const animatedStyleFunc = () => {
-    
-    animationOpactiy.value = withTiming(1, {})
-    animationHeight.value = withTiming(400, {})
-    
-  }
+
+
  async function getProgram(){
   const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
   if( error ) {
@@ -94,7 +104,8 @@ const programLectures = () => {
   useEffect(() => {
     getProgram()
     getProgramLectures()
-  }, [session])
+  }, [])
+
 
 
   const GetSheikData = () => {
@@ -146,7 +157,7 @@ const programLectures = () => {
     </Menu>          
     )
   }
-
+  console.log("Animation Played : ", playAnimation)
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
       <Stack.Screen options={{ title : "", headerBackTitleVisible: false, headerRight :() => <HeaderRight />}} />
@@ -165,7 +176,7 @@ const programLectures = () => {
                   lectures ? lectures.map((item, index) => {
                     return(
                       <View key={index}>
-                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation}/>
+                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation} setLectureInfoAnimation={setLectureInfoAnimation}/>
                       <Divider style={{width: "95%", marginLeft: 8}}/>
                       </View>
                     )
@@ -174,9 +185,18 @@ const programLectures = () => {
                   : <></>
                   
                 }
-                <Animated.View style={[animatedStyle, {flexDirection : "row", backgroundColor: "black"}]} className="border"> 
-                    <Icon source={"cards-heart"} color='red' size={20}/>
-                </Animated.View>
+                <Button onPress={ () => setPlayAnimation(!playAnimation)}>Test</Button>
+                <View className='justify-center items-center'>
+                  <Animated.View style={[animatedStyle, {flexDirection : "row", backgroundColor: "white", alignItems : 'center', paddingHorizontal : 3, width: "85%", shadowColor: "black", shadowOffset: { width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 1, borderRadius : 15 }]}>
+                      <View className='w-[15%] border'>
+                       <Image source={{ uri : program?.program_img || defaultProgramImage}} style={{objectFit : "contain", height: 50, width: 60, borderRadius: 8}}/> 
+                      </View>
+                      <View className='flex-col border w-[70%] justify-center items-center'> 
+                        <Text className='text-[#b4b4b4] font-bold'>1 Lecture Added</Text>
+                        <Text>{lectureInfoAnimation?.lecture_name}</Text>
+                      </View>
+                  </Animated.View>
+                </View>
               </View>
           </View>
           <Portal>

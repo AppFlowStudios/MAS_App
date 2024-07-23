@@ -7,6 +7,36 @@ import { Stack } from 'expo-router'
 import RenderLikedLectures from '@/src/components/UserProgramComponets/RenderLikedLectures'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import RenderLikedEventLectures from '@/src/components/UserProgramComponets/RenderLikedEventLectures'
+type likedProgramLectureProp ={
+  likedLecture : Lectures[] | undefined
+}
+const AllLikedProgramLectures = ({ likedLecture} : likedProgramLectureProp) => { 
+  return (
+    <View className='bg-white h-[100%]'>
+      <FlatList 
+        data={likedLecture}
+        renderItem={({item, index}) => <RenderLikedLectures lecture={item} index={index} speaker={item.lecture_speaker}/>}
+      />
+    </View>
+  )
+}
+
+type likedEventLectureProp = {
+  likedEventLecture : EventLectureType[] | undefined
+}
+const AllLikedEventLectures = ({ likedEventLecture } : likedEventLectureProp) => {
+  
+  return(
+    <View>
+       <View className='bg-white h-[100%]'>
+        <FlatList 
+          data={likedEventLecture}
+          renderItem={({item, index}) => <RenderLikedEventLectures lecture={item} index={index} speaker={item.event_lecture_speaker}/>}
+        />
+      </View>
+    </View>
+  )
+  }
 const AllLikedLectures = () => {
   const { session } = useAuth()
   const [ likedLecture, setLikedLectures ] = useState<Lectures[]>()
@@ -71,42 +101,46 @@ const AllLikedLectures = () => {
   }
   }
 
-  const allLikedProgramLectures = () => { 
-    return (
-      <View className='bg-white h-[100%]'>
-        <FlatList 
-          data={likedLecture}
-          renderItem={({item, index}) => <RenderLikedLectures lecture={item} index={index} speaker={item.lecture_speaker}/>}
-        />
-      </View>
-    )
-  }
 
 
-  const allLikedEventLectures = () => {
-  
-  return(
-    <View>
-       <View className='bg-white h-[100%]'>
-        <FlatList 
-          data={likedEventLecture}
-          renderItem={({item, index}) => <RenderLikedEventLectures lecture={item} index={index} speaker={item.event_lecture_speaker}/>}
-        />
-      </View>
-    </View>
-  )
-  }
 
   useEffect(() => {
     fetchLikedLectures()
     fetchLikedEventLectures()
-  }, [ session ])
+    const listenForLikedProgram = supabase.channel("listen for liked program lec").on(
+      "postgres_changes",
+      {
+        event : "*",
+        schema : "public",
+        table : "liked_lectures"
+      },
+      (payload) => fetchLikedLectures()
+    ).subscribe()
+
+    const listenForLikedEvent= supabase.channel("listen for liked event lec").on(
+      "postgres_changes",
+      {
+        event : "*",
+        schema : "public",
+        table : "liked_event_lectures"
+      },
+      (payload) => fetchLikedEventLectures()
+    ).subscribe()
+
+
+    return () => { supabase.removeChannel(listenForLikedProgram); supabase.removeChannel(listenForLikedEvent)}
+  }, [])
 
   const layout = useWindowDimensions()
-  const renderScene = SceneMap({
-    first: allLikedProgramLectures,
-    second: allLikedEventLectures,
-  });
+
+  const renderScene = ({ route } : any) => {
+    switch( route.key ){
+      case "first":
+        return <AllLikedProgramLectures likedLecture={likedLecture} />
+      case "second" :
+        return <AllLikedEventLectures likedEventLecture={likedEventLecture} />
+    }
+  }
 
   const [ index, setIndex ] = useState(0)
 

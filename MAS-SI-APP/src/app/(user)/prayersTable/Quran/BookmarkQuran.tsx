@@ -81,6 +81,20 @@ const getBookmarkedAyahs = async () => {
 
 useEffect(() => {
   getBookmarkedAyahs()
+  const user_bookmark_ayahs_channel = supabase
+  .channel('user_bookmarked_ayahs_changes')
+  .on(
+    'postgres_changes',
+    {
+      event: '*',
+      schema: 'public',
+      table: "user_bookmarked_ayahs",
+    },
+    (payload) => getBookmarkedAyahs()
+  )
+  .subscribe()
+
+  return () => {supabase.removeChannel(user_bookmark_ayahs_channel)}
 }, [])
 
 if( !bookmarkedAyahs ){

@@ -7,13 +7,9 @@ import { Link } from "expo-router";
 import { defaultProgramImage } from '../ProgramsListProgram';
 import { ActivityIndicator, Icon, IconButton } from 'react-native-paper';
 import LectureDotsMenu from '../LectureComponets/LectureDotsMenu';
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from 'react-native-popup-menu';
-import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
+import { Menu, MenuOptions, MenuOption, MenuTrigger} from 'react-native-popup-menu';
+import * as Haptics from "expo-haptics"
+import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Extrapolation, runOnJS } from 'react-native-reanimated';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 type RenderLikedLecturesProp = {
@@ -47,6 +43,25 @@ const RenderLikedLectures = ({lecture, index, speaker} : RenderLikedLecturesProp
       } catch (error) {
         console.error("Error setting liked value:", error);
       }
+    }
+
+    async function stateOfLikedLecture(){
+      if( liked.value == 0 ){
+      const { error } = await supabase.from("liked_lectures").insert({user_id : session?.user.id, lecture_id: lecture.lecture_id})
+      if (error) {
+        console.log(error)
+      }
+      }
+      if ( liked.value == 1 ){
+        const { error } = await supabase.from("liked_lectures").delete().eq("user_id", session?.user.id).eq("lecture_id", lecture.lecture_id)
+        if (error) {
+          console.log(error)
+        }
+      }
+      liked.value = withSpring( liked.value ? 0: 1, {} )
+      Haptics.notificationAsync(
+        Haptics.NotificationFeedbackType.Success
+      )
     }
         
     const outlineStyle = useAnimatedStyle(() => {
@@ -90,7 +105,7 @@ const RenderLikedLectures = ({lecture, index, speaker} : RenderLikedLecturesProp
     
       const LikeButton = () => {
         return(
-          <Pressable onPress={() => (liked.value = withSpring(liked.value ? 0: 1))} className=' relative'>
+          <Pressable onPress={stateOfLikedLecture} className=' relative'>
             <Animated.View style={outlineStyle}>
               <Icon source="cards-heart-outline"  color='black'size={25}/>
             </Animated.View>
