@@ -14,7 +14,7 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
     const [ visible, setVisible ] = useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-
+  
     const GetSheikData = () => {
       const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == jummahSpeaker)
       return( 
@@ -36,6 +36,7 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
         </View>
       )
     } 
+
 
 
     const renderBackDrop = useCallback( (props : any ) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props}/> , [])

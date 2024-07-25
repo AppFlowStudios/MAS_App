@@ -85,6 +85,7 @@ export const JummahTable = forwardRef<Ref,jummahTableProp>(({jummahData}, ref) =
 )
 
 
+
 /*{<DataTable.Header style={{width: "90%", position:"relative"}}>
 <DataTable.Title  textStyle={{fontSize:20, color: "#0D509F"}}>   Salah </DataTable.Title>
 <DataTable.Title style={{marginLeft: 50}} textStyle={{fontSize:20, fontWeight: 700, color: "black"}}> Iqamah </DataTable.Title>

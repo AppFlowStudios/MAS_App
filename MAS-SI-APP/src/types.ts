@@ -1,7 +1,7 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export type Lectures ={
-    lecture_id: number,
+    lecture_id: string,
     lecture_name: string,
     lecture_speaker: string | null,
     lecture_link: string | "N/A",
@@ -116,4 +116,18 @@ export type EventLectureType = {
     event_lecture_desc : string,
     event_lecture_link: string,
     event_lecture_date : string
+}
+
+export type UserPlaylistType = {
+    user_id : string,
+    playlist_id : string,
+    playlist_img : string,
+    playlist_name : string
+}
+
+export type UserPlaylistLectureType = {
+    user_id : string
+    playlist_id : string
+    program_lecture_id : string | null
+    event_lecture_id : string | null
 }

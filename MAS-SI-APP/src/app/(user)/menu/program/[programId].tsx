@@ -13,6 +13,8 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
+import { UserPlaylistType } from '@/src/types';
+import RenderAddToUserPlaylistsListProgram from '@/src/components/RenderAddToUserPlaylistsList';
 const programLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
@@ -21,8 +23,14 @@ const programLectures = () => {
   const [ visible, setVisible ] = useState(false);
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const Tab = useBottomTabBarHeight()
+  const [ addToPlaylistVisible, setAddToPlaylistVisible ] = useState(false)
+  const [ lectureToBeAddedToPlaylist, setLectureToBeAddedToPlaylist ] = useState<string>("")
+  const [ playAnimation , setPlayAnimation ] = useState( false )
+  const [ lectureInfoAnimation, setLectureInfoAnimation ] = useState<Lectures>()
+  const [ usersPlaylists, setUsersPlaylists ] = useState<UserPlaylistType[]>()
+  const hideAddToPlaylist = () => setAddToPlaylistVisible(false)
 
+  const Tab = useBottomTabBarHeight()
   const { width } = Dimensions.get("window")
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
   const scrollOffset = useScrollViewOffset(scrollRef)
@@ -121,6 +129,21 @@ const programLectures = () => {
               <GetSheikData />
             </Modal>
           </Portal>
+          <Portal>
+            <Modal visible={addToPlaylistVisible} onDismiss={hideAddToPlaylist} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "50%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
+              <ScrollView>
+                  { usersPlaylists ? usersPlaylists.map(( item, index) => {
+                    return( <RenderAddToUserPlaylistsListProgram playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible}/>)
+                  })
+                  :( 
+                  <View className=' items-center justify-center '> 
+                      <Text> No User Playlists Yet </Text>
+                  </View>
+                  )
+                }
+              </ScrollView>
+            </Modal>
+        </Portal>
       </Animated.ScrollView>
       </View>
   )

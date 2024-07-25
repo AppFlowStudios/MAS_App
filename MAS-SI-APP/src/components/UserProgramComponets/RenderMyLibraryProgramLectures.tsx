@@ -1,11 +1,11 @@
-import { View, Text, Pressable, FlatList, Dimensions } from 'react-native'
+import { View, Text, Pressable, FlatList, Dimensions, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import { Lectures, Program } from '@/src/types';
 import { Link } from "expo-router";
 import { defaultProgramImage } from '../ProgramsListProgram';
-import { Icon, IconButton } from 'react-native-paper';
+import { Icon, IconButton, PaperProvider } from 'react-native-paper';
 import LectureDotsMenu from '../LectureComponets/LectureDotsMenu';
 import {
   Menu,
@@ -17,20 +17,22 @@ import Animated, { useSharedValue, withSpring, useAnimatedStyle, interpolate, Ex
 import { supabase } from '@/src/lib/supabase';
 import * as Haptics from "expo-haptics"
 import { useAuth } from '@/src/providers/AuthProvider';
+import { Portal, Modal } from 'react-native-paper';
 type LecturesListProp = {
   lecture : Lectures
   index : number
   speaker : string | null | undefined
   setPlayAnimation : (playAnimation : boolean) => void
   setLectureInfoAnimation : ( lectureInfoAnimation : Lectures ) => void
+  setAddToPlaylistVisible : ( addToPlaylistVisible : boolean ) => void
+  setLectureToBeAddedToPlaylist : ( lectureToBeAddedToPlaylist : string) => void
 }
 const { width } = Dimensions.get("window")
 
 
-const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimation, setLectureInfoAnimation} : LecturesListProp ) => {
+const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimation, setLectureInfoAnimation, setAddToPlaylistVisible, setLectureToBeAddedToPlaylist} : LecturesListProp ) => {
   const { session } = useAuth()
   const liked = useSharedValue(0)
-
 
   async function checkIfLectureIsLiked(){
     const { data , error } = await supabase.from("liked_lectures").select("lecture_id").eq("user_id", session?.user.id).eq("lecture_id", lecture.lecture_id).single()
@@ -103,7 +105,10 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimat
       </Pressable>
       )
     }
-  
+    const onPickAddToPlaylist = () => {
+      setAddToPlaylistVisible(true)
+      setLectureToBeAddedToPlaylist(lecture.lecture_id)
+    }
     const DotsButton = () => {
       return(
         <Menu>
@@ -111,7 +116,7 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimat
             <Icon source={"dots-horizontal"} color='black' size={25}/>
           </MenuTrigger>
           <MenuOptions customStyles={{optionsContainer: {width: 150, borderRadius: 8, marginTop: 20, padding: 8}}}>
-            <MenuOption>
+            <MenuOption onSelect={ onPickAddToPlaylist }>
               <View className='flex-row justify-between items-center'>
                <Text>Add To Playlist</Text> 
                <Icon source="playlist-plus" color='black' size={15}/>
@@ -132,6 +137,7 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimat
       setLiked()
     }, [])
     return (
+      
       <View className='bg-white mt-2'>
         <Pressable>
         <View className='ml-2 flex-row items-center' >
@@ -153,7 +159,6 @@ const RenderMyLibraryProgramLectures = ( {lecture, index, speaker, setPlayAnimat
           </View>
         </View>
           </Pressable>
-        
       </View>
     )
   }

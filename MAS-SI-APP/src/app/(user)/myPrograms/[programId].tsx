@@ -1,14 +1,10 @@
-import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions, } from 'react-native'
+import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions, ScrollView} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack, router } from 'expo-router';
-import programsData from '@/assets/data/programsData';
-import LecturesListLecture from '@/src/components/LectureListLecture';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
 import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
 import SheikData from "@/assets/data/sheikData";
-import { Lectures, SheikDataType, Program } from '@/src/types';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
+import { Lectures, SheikDataType, Program, UserPlaylistType } from '@/src/types';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
 import { supabase } from '@/src/lib/supabase';
@@ -16,18 +12,23 @@ import { useAuth } from '@/src/providers/AuthProvider';
 import RenderMyLibraryProgramLectures from '@/src/components/UserProgramComponets/RenderMyLibraryProgramLectures';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import * as Haptics from "expo-haptics"
-import { transform } from '@babel/core';
-
+import { Link } from 'expo-router';
+import RenderAddToUserPlaylistsListProgram from '@/src/components/RenderAddToUserPlaylistsList';
 const programLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
   const [ lectures, setLectures ] = useState<Lectures[] | null>(null)
   const [ program, setProgram ] = useState<Program>()
   const [ visible, setVisible ] = useState(false);
+  const [ addToPlaylistVisible, setAddToPlaylistVisible ] = useState(false)
+  const [ lectureToBeAddedToPlaylist, setLectureToBeAddedToPlaylist ] = useState<string>("")
   const [ playAnimation , setPlayAnimation ] = useState( false )
   const [ lectureInfoAnimation, setLectureInfoAnimation ] = useState<Lectures>()
+  const [ usersPlaylists, setUsersPlaylists ] = useState<UserPlaylistType[]>()
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+  const hideAddToPlaylist = () => setAddToPlaylistVisible(false)
+  
   const Tab = useBottomTabBarHeight()
   const windowHeight = Dimensions.get("window").height 
   const { width } = Dimensions.get("window")
@@ -52,7 +53,7 @@ const programLectures = () => {
 
 
   const animationOpactiy = useSharedValue(0)
-  const animationHeight = useSharedValue(scrollOffset.value)
+  const animationHeight = useSharedValue(windowHeight)
 
   const resetAnimation = () => {
     animationOpactiy.value = withTiming(0, { duration : 2000 })
@@ -67,13 +68,10 @@ const programLectures = () => {
   }
   const animatedStyle = useAnimatedStyle(() => {
     if( playAnimation ){
-      animationOpactiy.value = withTiming(1, { duration: 2000 }, (finished) => { if( finished ){ runOnJS(setPlayAnimation)(false) }})
-      animationHeight.value = withSpring( scrollOffset.value == 0 ? ( scrollOffset.value - windowHeight ) / 3.5 : ( scrollOffset.value - windowHeight ) / 5  , {})
+      animationOpactiy.value = withTiming(1, {duration : 3000}, (finished) => { if( finished ){ withTiming(0, {duration : 3000}); runOnJS(setPlayAnimation)(false) }})
+      animationHeight.value = withSpring( scrollOffset.value - (windowHeight / 1.5) , {})
       }
-      if( !playAnimation ){
-        animationOpactiy.value = withTiming(0)
-        animationHeight.value = withSpring(scrollOffset.value)
-      }
+      
       return{
       opacity : animationOpactiy.value,
       transform : [{ translateY : animationHeight.value }]
@@ -82,28 +80,37 @@ const programLectures = () => {
   
 
 
- async function getProgram(){
-  const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
-  if( error ) {
-    alert(error)
-  }
-  if ( data ) {
-    setProgram(data)
-  }
- }
- async function getProgramLectures() {
-  const { data, error } = await supabase.from("program_lectures").select("*").eq("lecture_program", programId)
-  if( error ) {
-    alert(error)
-  }
-  if ( data ) {
-    setLectures(data)
-  }
-}
-
+    async function getProgram(){
+      const { data, error } = await supabase.from("programs").select("*").eq("program_id", programId).single()
+      if( error ) {
+        alert(error)
+      }
+      if ( data ) {
+        setProgram(data)
+      }
+    }
+    async function getProgramLectures() {
+      const { data, error } = await supabase.from("program_lectures").select("*").eq("lecture_program", programId)
+      if( error ) {
+        alert(error)
+      }
+      if ( data ) {
+        setLectures(data)
+      }
+    }
+    async function getUserPlaylists(){
+      const { data, error } = await supabase.from("user_playlist").select("*").eq("user_id", session?.user.id)
+      if( error ){
+        console.log( error )
+      }
+      if( data ){
+        setUsersPlaylists(data)
+      }
+    }
   useEffect(() => {
     getProgram()
     getProgramLectures()
+    getUserPlaylists()
   }, [])
 
 
@@ -157,7 +164,6 @@ const programLectures = () => {
     </Menu>          
     )
   }
-  console.log("Animation Played : ", playAnimation)
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
       <Stack.Screen options={{ title : "", headerBackTitleVisible: false, headerRight :() => <HeaderRight />}} />
@@ -176,7 +182,7 @@ const programLectures = () => {
                   lectures ? lectures.map((item, index) => {
                     return(
                       <View key={index}>
-                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation} setLectureInfoAnimation={setLectureInfoAnimation}/>
+                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation} setLectureInfoAnimation={setLectureInfoAnimation} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
                       <Divider style={{width: "95%", marginLeft: 8}}/>
                       </View>
                     )
@@ -185,18 +191,6 @@ const programLectures = () => {
                   : <></>
                   
                 }
-                <Button onPress={ () => setPlayAnimation(!playAnimation)}>Test</Button>
-                <View className='justify-center items-center'>
-                  <Animated.View style={[animatedStyle, {flexDirection : "row", backgroundColor: "white", alignItems : 'center', paddingHorizontal : 3, width: "85%", shadowColor: "black", shadowOffset: { width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 1, borderRadius : 15 }]}>
-                      <View className='w-[15%] border'>
-                       <Image source={{ uri : program?.program_img || defaultProgramImage}} style={{objectFit : "contain", height: 50, width: 60, borderRadius: 8}}/> 
-                      </View>
-                      <View className='flex-col border w-[70%] justify-center items-center'> 
-                        <Text className='text-[#b4b4b4] font-bold'>1 Lecture Added</Text>
-                        <Text>{lectureInfoAnimation?.lecture_name}</Text>
-                      </View>
-                  </Animated.View>
-                </View>
               </View>
           </View>
           <Portal>
@@ -204,6 +198,38 @@ const programLectures = () => {
               <GetSheikData />
             </Modal>
           </Portal>
+         { playAnimation ? 
+         ( <Animated.View style={[animatedStyle, {flexDirection : "row", backgroundColor: "white",justifyContent: "center", alignItems : 'center', width: "85%", shadowColor: "black", shadowOffset: { width: 0, height: 0}, shadowOpacity: 1, shadowRadius: 1, borderRadius : 15 }]}>
+            <Link href={"/myPrograms/likedLectures/AllLikedLectures"} asChild>
+              <Pressable className='items-center'>
+                      <View className='w-[15%]'>
+                        <Image source={{ uri : program?.program_img || defaultProgramImage}} style={{objectFit : "contain", height: 50, width: 60, borderRadius: 8}}/> 
+                      </View>
+                      <View className='flex-col border w-[70%] justify-center items-center'> 
+                      <Text className='text-[#b4b4b4] font-bold'>1 Lecture Added</Text>
+                      <Text>{lectureInfoAnimation?.lecture_name}</Text>
+                      </View>
+                      </Pressable>
+                </Link>
+          </Animated.View> )
+            : 
+            <></>
+          }
+          <Portal>
+            <Modal visible={addToPlaylistVisible} onDismiss={hideAddToPlaylist} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "50%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
+              <ScrollView>
+                  { usersPlaylists ? usersPlaylists.map(( item, index) => {
+                    return( <RenderAddToUserPlaylistsListProgram playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible}/>)
+                  })
+                  :( 
+                  <View className=' items-center justify-center '> 
+                      <Text> No User Playlists Yet </Text>
+                  </View>
+                  )
+                }
+              </ScrollView>
+            </Modal>
+        </Portal>
       </Animated.ScrollView>
       </View>
   )
