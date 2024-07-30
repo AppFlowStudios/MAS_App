@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, StatusBar } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { supabase } from '@/src/lib/supabase'
@@ -31,7 +31,8 @@ const EventInfo = () => {
 
   return (
     <>
-       <Stack.Screen options={{ headerBackTitleVisible : false, title : ""}}/>
+       <Stack.Screen options={{ headerBackTitleVisible : false, title : "", headerStyle : {backgroundColor : "white"} }}/>
+       <StatusBar barStyle={"dark-content"}/>
         {eventInfoData?.has_lecture ?  <EventsLectureDisplay event_id={eventInfoData?.event_id} event_img={eventInfoData?.event_img} event_name={eventInfoData?.event_name} event_speaker={eventInfoData?.event_speaker}/> 
       : <EventInfoDisplay event_img={eventInfoData.event_img} event_speaker={eventInfoData.event_speaker} event_name={eventInfoData.event_name} event_desc={eventInfoData.event_desc}/>}
     </>

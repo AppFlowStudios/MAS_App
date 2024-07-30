@@ -21,13 +21,15 @@ type LecturesListProp = {
   lecture : Lectures
   index : number
   speaker : string | null | undefined
+  setAddToPlaylistVisible : ( addToPlaylistVisible : boolean ) => void
+  setLectureToBeAddedToPlaylist : ( lectureToBeAddedToPlaylist : string ) => void
 }
 const { width } = Dimensions.get("window")
 type ProgramDataType = {
     programData : Program
 }
 
-const LecturesListLecture = ( {lecture, index, speaker} : LecturesListProp ) => {
+const LecturesListLecture = ( {lecture, index, speaker, setAddToPlaylistVisible, setLectureToBeAddedToPlaylist} : LecturesListProp ) => {
 const { session } = useAuth()
 const liked = useSharedValue(0)
 
@@ -103,6 +105,10 @@ const fillStyle = useAnimatedStyle(() => {
     )
   }
 
+  const onPickAddToPlaylist = () => {
+    setAddToPlaylistVisible(true)
+    setLectureToBeAddedToPlaylist(lecture.lecture_id)
+  }
   const DotsButton = () => {
     return(
       <Menu>
@@ -110,7 +116,7 @@ const fillStyle = useAnimatedStyle(() => {
           <Icon source={"dots-horizontal"} color='black' size={25}/>
         </MenuTrigger>
         <MenuOptions customStyles={{optionsContainer: {width: 150, borderRadius: 8, marginTop: 20, padding: 8}}}>
-          <MenuOption>
+          <MenuOption onSelect={onPickAddToPlaylist}>
             <View className='flex-row justify-between items-center'>
              <Text>Add To Playlist</Text> 
              <Icon source="playlist-plus" color='black' size={15}/>

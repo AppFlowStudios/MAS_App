@@ -31,12 +31,9 @@ const TabButton = ({props ,items} : TabButtonProps) => {
 
   useEffect(() => {
     if(focused) {
-      viewRef.current?.animate(animate1)
       textRef.current.transitionTo({scale: 1})
     }else{
-      viewRef.current?.animate(animate2)
       textRef.current.transitionTo({scale: 0})
-
     }
 
   }
@@ -44,14 +41,15 @@ const TabButton = ({props ,items} : TabButtonProps) => {
   return(
     <TouchableOpacity
     onPress={onPress}
-    style={{ alignItems: "center", justifyContent: "center", flex : 1}}
+    style={{ alignItems: "center", flex : 1, marginTop : 4.5}}
+    className=''
     >
-    <Animatable.View ref={viewRef} className='justify-center items-center' style={{width : 30, height: 30, borderRadius: 25, borderWidth: 4, backgroundColor: "white", borderColor: "white", justifyContent: "center", alignItems: "center"}} animation="zoomIn" duration={1000}>
-      <Icon source={items?.icon}  size={20} color={ focused ? "#57BA47" : "#0D509D"}/>
-    </Animatable.View>
-    <Animatable.Text ref={textRef} style={{fontSize: 14, color: "black", textAlign: "center", paddingTop : 2, fontWeight: "bold"}}>
-      {items?.title ? items?.title : "\n"}
-    </Animatable.Text>
+      <Animatable.View className='justify-center items-center' style={{width : 30, height: 20, justifyContent: "center", alignItems: "center"}} animation="zoomIn" duration={1000}>
+        <Icon source={items?.icon}  size={20} color={ focused ? "#57BA47" : "#0D509D"}/>
+      </Animatable.View>
+      <Animatable.Text ref={textRef} style={{fontSize: 14, color: "black", textAlign: "center", fontWeight: "bold"}}>
+        {items?.title ? items?.title : ""}
+      </Animatable.Text>
     </TouchableOpacity>
   )
 }
@@ -65,9 +63,10 @@ export default function TabLayout() {
   return (
     <Tabs 
     screenOptions={{
-      tabBarStyle : {backgroundColor: "white", height: 50, position: "absolute",bottom: 16, right: 16, left: 16, borderRadius: 16, marginBottom: 5, shadowColor:"black", shadowOffset: { width: 0, height: 0},shadowOpacity: 1, shadowRadius: 8, justifyContent: "center", alignItems : "center", flex:1},
-      tabBarItemStyle: { height: 40 }
+      tabBarStyle : {backgroundColor: "white", height: 50, position: "absolute", bottom: 16, right: 16, left: 16, borderRadius: 16, marginBottom: 5, shadowColor:"black", shadowOffset: { width: 0, height: 0},shadowOpacity: 1, shadowRadius: 8, justifyContent: "center", alignItems : "center", },
+      tabBarItemStyle: { height: 30 }
     }}
+    
     >
 
       <Tabs.Screen name="index" options={{ href: null }} />
@@ -81,9 +80,6 @@ export default function TabLayout() {
             options={{
               title: tab.title,
               headerShown : false,
-              tabBarIcon: ( {color} ) =>(
-                <TabBarIcon source={tab.icon} color={color} />
-              ),
               tabBarButton: (props) => <TabButton items={TabArray[i]} props={{...props}}/>
             }}
           />

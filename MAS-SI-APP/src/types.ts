@@ -11,13 +11,15 @@ export type Lectures ={
 }
 export type Program = {
     id : number,
-    program_id: number,
+    program_id: string,
     program_name: string,
     program_img: string | null,
     program_desc: string | null,
     program_speaker: string | null,
     lectures: Lectures[],
-    has_lectures : boolean
+    has_lectures : boolean,
+    program_is_paid : boolean,
+    program_price : number
 }
 
 export type salahData = {

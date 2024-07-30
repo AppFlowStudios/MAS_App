@@ -164,9 +164,10 @@ const programLectures = () => {
     </Menu>          
     )
   }
+  console.log(lectures)
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
-      <Stack.Screen options={{ title : "", headerBackTitleVisible: false, headerRight :() => <HeaderRight />}} />
+      <Stack.Screen options={{ title : "", headerBackTitleVisible: false, headerRight :() => <HeaderRight />, headerStyle : {backgroundColor : "white"}}} />
       <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%" }} >
           
           <Animated.Image 
@@ -188,7 +189,16 @@ const programLectures = () => {
                     )
                   }) 
                   
-                  : <></>
+                  : (
+                    <View> 
+                      <View>
+                        <Text className='text-left text-2xl font-bold text-black'>Description: </Text>
+                      </View>
+                    </View>
+                  )
+                  
+                }
+                {
                   
                 }
               </View>

@@ -1,4 +1,4 @@
-import { Text, View, Pressable, Image, Alert, Button, Animated, StyleSheet} from 'react-native'
+import { Text, View, Pressable, Image, Alert, Button, StyleSheet, Share} from 'react-native'
 import programsData from '@/assets/data/programsData'
 import {Program} from "../types"
 import React, { useState, useRef, useEffect } from 'react'
@@ -11,6 +11,10 @@ export const defaultProgramImage = "https://ugc.production.linktr.ee/e3KxJRUJTu2
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../providers/AuthProvider'; 
 import * as Haptics from "expo-haptics"
+import { SharedElement } from "react-navigation-shared-element"
+import Animated, { Easing, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { SharedTransition } from 'react-native-reanimated';
+import { useNavigation, } from '@react-navigation/native';
 type ProgramsListProgramProps = {
     program : Program,
 }
@@ -20,30 +24,12 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     const { session } = useAuth()
     const [ isSwiped, setIsSwiped ] = useState(false);
     const swipeableRef = useRef<Swipeable>(null);
-    const [ hasLecture , setHasLecture ] = useState(false)
-
-    const checkIfHasLecture = async() => {
-    const { data, error : check } = await supabase.from("programs").select("has_lectures").eq("program_id", program.program_id).single()
-    if( check ){
-        console.log( check )
-    }
-    if ( data?.has_lectures == true ){
-        setHasLecture(true)
-    }
-    else{
-        setHasLecture(false)
-    }
-    }
+   
     const closeSwipeable = () => {
       if ( swipeableRef.current ) {
         swipeableRef.current.close();
       }
     };
-
-    useEffect(() => {
-        checkIfHasLecture()
-    }, [])
-
 
     async function addToProgramToUserLibrary(){
         const { error } = await supabase.from("added_programs").insert({ user_id : session?.user.id, program_id : program.program_id})
@@ -60,7 +46,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
 
     }
     const rightSideButton = () => {
-        if( !hasLecture ){
+        if( !program.has_lectures && !program.program_is_paid){
             return (
                 <View className=''>
                     <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "flex-start"}}>
@@ -77,7 +63,7 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
                 </View>
             )
         }
-        else {
+        else if(program.has_lectures && !program.program_is_paid){
             return (
                 <View>
                     <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "flex-start", marginRight: 2}} className='' >
@@ -94,24 +80,57 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
                 </View>
             )
         }
+        else if( program.program_is_paid ){
+            return (
+                <View>
+                    <View style={{width: "80%", height: "80%", justifyContent: "center", alignItems: "flex-start", marginRight: 2}} className='border' >
+                        <Button
+                            title='Add To Cart'
+                            onPress={() => {  
+                                Haptics.notificationAsync(
+                                Haptics.NotificationFeedbackType.Success
+                                );
+                                closeSwipeable()}}
+                        />
+                    </View>
+                </View>
+            )
+        }
         
     }
 
-
+    const transition = SharedTransition.custom(values => {
+        'worklet';
+      
+        return {
+          height: withTiming(values.targetHeight, {duration: 300}),
+          width: withTiming(values.targetWidth, {duration: 300}),
+          originX: withTiming(values.targetOriginX, {duration: 300}),
+          originY: withSequence(
+            withTiming(values.currentOriginY + 50, {
+              duration: 300,
+              easing: Easing.linear,
+            }),
+            withTiming(values.targetOriginY, {
+              duration: 500,
+              easing: Easing.linear,
+            }),
+          ),
+        };
+      });
     
     return(
-        <View style={{ width: "100%", height: 120, marginHorizontal: 5}} className=''>
-            <Link  href={`/menu/program/${program.program_id}`} asChild>
-                <TouchableOpacity className=''>
+        <View style={{ width: "100%", height: 120, marginHorizontal: 5}}>
+            <Link  href={`/menu/program/${program.program_id}`} asChild >
+                <TouchableOpacity>
                     <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
 
-                        <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} className=''>
-                            <Image 
-                                source={{ uri: program.program_img || defaultProgramImage }}
-                                style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}
-                                className=''
-                            />
-                        </View>
+                        <Animated.View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} >
+                                <Animated.Image 
+                                    source={{ uri: program.program_img || defaultProgramImage }}
+                                    style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}                                    
+                                />
+                        </Animated.View>
                         <View>
                             <Swipeable
                                 ref={swipeableRef}

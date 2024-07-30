@@ -150,10 +150,6 @@ export default function homeScreen() {
                 <JummahTable jummahData={jummahData} ref={bottomSheetRef}/>
               </ImageBackground>
             </View>
-
-            <Link href={"/SignIn"} asChild>
-            <Button>Go to Sign in Page</Button>
-            </Link>
             <View style={[{paddingBottom : tabBarHeight}]}></View>
       </Animated.ScrollView>
     )

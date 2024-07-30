@@ -20,10 +20,12 @@ type LecturesListProp = {
   lecture : EventLectureType
   index : number
   speaker : string | null | undefined
+  setAddToPlaylistVisible : ( addToPlaylistVisible : boolean ) => void
+  setLectureToBeAddedToPlaylist : ( lectureToBeAddedToPlaylist : string ) => void
 }
 const { width } = Dimensions.get("window")
 
-const RenderEventsLectures = ( {lecture, index, speaker} : LecturesListProp ) => {
+const RenderEventsLectures = ( {lecture, index, speaker, setAddToPlaylistVisible, setLectureToBeAddedToPlaylist} : LecturesListProp ) => {
 const { session } = useAuth()
 const liked = useSharedValue(0)
 
@@ -96,6 +98,10 @@ const fillStyle = useAnimatedStyle(() => {
     )
   }
 
+  const onPickAddToPlaylist = () => {
+    setAddToPlaylistVisible(true)
+    setLectureToBeAddedToPlaylist(lecture.event_lecture_id)
+  }
   const DotsButton = () => {
     return(
       <Menu>
@@ -103,7 +109,7 @@ const fillStyle = useAnimatedStyle(() => {
           <Icon source={"dots-horizontal"} color='black' size={25}/>
         </MenuTrigger>
         <MenuOptions customStyles={{optionsContainer: {width: 150, borderRadius: 8, marginTop: 20, padding: 8}}}>
-          <MenuOption>
+          <MenuOption onSelect={onPickAddToPlaylist}>
             <View className='flex-row justify-between items-center'>
              <Text>Add To Playlist</Text> 
              <Icon source="playlist-plus" color='black' size={15}/>

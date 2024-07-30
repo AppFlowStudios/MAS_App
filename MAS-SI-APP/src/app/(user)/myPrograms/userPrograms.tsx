@@ -3,17 +3,20 @@ import React, { useEffect, useState } from 'react'
 import RenderMyLibraryProgram from '@/src/components/UserProgramComponets/renderMyLibraryProgram';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { supabase } from '@/src/lib/supabase';
-import { Program } from '@/src/types';
-import { Divider, Icon } from 'react-native-paper';
+import { Program, UserPlaylistType } from '@/src/types';
+import { Button, Divider, Icon } from 'react-native-paper';
 import { Link } from 'expo-router';
 import RenderLikedLectures from '@/src/components/UserProgramComponets/RenderLikedLectures';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { UserPlaylistFliers } from '@/src/components/UpcomingFliers';
 export default function userPrograms() {
   const { session } = useAuth()
   type program_id  = {
     program_id : string
   }
   const [ userPrograms, setUserPrograms ] = useState<program_id[]>()
+  const [ userPlaylists, setUserPlaylists ] = useState<UserPlaylistType[]>()
+  const [ userNotis, setUserNotis ] = useState()
   async function getUserProgramLibrary(){
     const {data, error} = await supabase.from("added_programs").select("program_id").eq("user_id", session?.user.id)
     if(error){
@@ -24,8 +27,15 @@ export default function userPrograms() {
     }
   }
 
+  async function getUserPlaylists(){
+    const { data , error } = await supabase.from("user_playlist").select("*").eq("user_id", session?.user.id).range(0,1)
+    if( data ){
+      setUserPlaylists(data)
+    }
+  }
   useEffect(() => {
     getUserProgramLibrary()
+    getUserPlaylists()
     const channel = supabase.channel("user_programs").on(
       "postgres_changes",
       {
@@ -53,6 +63,26 @@ export default function userPrograms() {
           <Text className='text-xl font-bold px-[13]'>Playlists</Text>
         </Pressable>
         </Link>
+      </View>
+      <View className='flex-row'> 
+        {userPlaylists && userPlaylists.length > 0 ? 
+        (
+        <View className='flex-row'> 
+           <View className='mt-2'/>
+              <FlatList 
+              data={userPlaylists}
+              renderItem={( {item} ) => <View className=' px-3'><UserPlaylistFliers playlist={item}/></View>}
+              contentContainerStyle={{ paddingHorizontal : 1, paddingVertical : 2 }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className='w-[75%]'
+              />
+              <View className='items-start justify-center'> 
+                 <Button buttonColor='#0D509D' textColor='white' mode='contained' style={{ flexShrink : 1 , alignItems : 'center', justifyContent : "center", flexDirection : "row"}}><Text adjustsFontSizeToFit allowFontScaling className='text-center'>View All</Text></Button>
+              </View>
+        </View>
+        ) :  <></> 
+      }
       </View> 
       <Divider style={{marginTop : 2}}/>
       <View className='flex-row items-center ml-2 mt-2'>
