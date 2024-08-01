@@ -42,7 +42,6 @@ const TabButton = ({props ,items} : TabButtonProps) => {
     <TouchableOpacity
     onPress={onPress}
     style={{ alignItems: "center", flex : 1, marginTop : 4.5}}
-    className=''
     >
       <Animatable.View className='justify-center items-center' style={{width : 30, height: 20, justifyContent: "center", alignItems: "center"}} animation="zoomIn" duration={1000}>
         <Icon source={items?.icon}  size={20} color={ focused ? "#57BA47" : "#0D509D"}/>

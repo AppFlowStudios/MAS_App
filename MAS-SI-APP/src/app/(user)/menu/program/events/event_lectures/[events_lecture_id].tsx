@@ -61,7 +61,8 @@ const EventsLectureID = () => {
         
         <View className='mt-2'/>
           <ScrollView 
-          onScroll={(event) => {handleScroll(event); setScrollY(event.nativeEvent.contentOffset.y)}} contentContainerStyle={{ alignItems : "center", paddingBottom : tabBarHeight }} 
+          onScroll={(event) => {handleScroll(event); setScrollY(event.nativeEvent.contentOffset.y)}} 
+          contentContainerStyle={{ alignItems : "center", paddingBottom : tabBarHeight }} 
           decelerationRate={0.6}
           snapToInterval={KEYNOTECARDHEIGHT + (20 * 0.2)}
           showsVerticalScrollIndicator={false}
@@ -140,7 +141,7 @@ const EventsLectureID = () => {
       <>
       <Stack.Screen options={{ title : "" }} />
         <YoutubePlayer 
-          height={240}
+          height={layoutHeight / 4}
           width={layout * 0.98}
           webViewStyle={{ borderRadius : 20, marginLeft : '2%', marginTop : 8, backgroundColor : "#fafafa" }}
           play={playing}

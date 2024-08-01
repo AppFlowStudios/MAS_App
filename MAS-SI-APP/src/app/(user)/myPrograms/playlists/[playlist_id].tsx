@@ -10,7 +10,7 @@ import { useAuth } from '@/src/providers/AuthProvider'
 import * as Haptics from "expo-haptics"
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram'
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { Icon } from 'react-native-paper'
+import { Divider, Icon } from 'react-native-paper'
 import RenderAddedProgramLectures from '@/src/components/UserProgramComponets/RenderAddedLecturesToPlaylist'
 import { RenderAddedEventLectures } from '@/src/components/UserProgramComponets/RenderAddedLecturesToPlaylist'
 const UserPlayListLectures = () => {
@@ -61,7 +61,7 @@ const UserPlayListLectures = () => {
 
   const HeaderRight = () => {
     const removeFromLibrary = async () => {
-      const { error } = await supabase.from("added_programs").delete().eq("user_id", session?.user.id)
+      const { error } = await supabase.from("user_playlist").delete().eq("playlist_id", playlist_id)
       if( error ){
         alert(error)
       }else{
@@ -123,9 +123,19 @@ const UserPlayListLectures = () => {
                 {
                   userPlaylistLectures ? userPlaylistLectures.map((lecture, index) => {
                     if(lecture.program_lecture_id){
-                      return (<RenderAddedProgramLectures program_lecture_id={lecture.program_lecture_id}/>)
+                      return (
+                      <>
+                        <RenderAddedProgramLectures program_lecture_id={lecture.program_lecture_id}/>
+                        <Divider />
+                      </>
+                    )
                     }else if(lecture.event_lecture_id){
-                      return(<RenderAddedEventLectures event_lecture_id={lecture.event_lecture_id} />)
+                      return(
+                      <>                      
+                      <RenderAddedEventLectures event_lecture_id={lecture.event_lecture_id} />
+                      <Divider />
+                      </>
+                    )
                     }
                   }) :
                   <View>

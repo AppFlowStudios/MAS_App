@@ -123,7 +123,7 @@ export default function LecturesData() {
     <>
         <Stack.Screen options={{ title : currentLecture?.lecture_name}} />
         <YoutubePlayer 
-          height={240}
+          height={layoutHeight / 4}
           width={layout * 0.98}
           webViewStyle={{ borderRadius : 20, marginLeft : '2%', marginTop : 8, backgroundColor : "#ededed" }}
           play={playing}

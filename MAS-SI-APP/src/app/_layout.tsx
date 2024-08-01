@@ -34,23 +34,21 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView>
       <AuthProvider>
-        <AddProgramProvider>
-          <ProgramProvider>
-            <PrayerTimesProvider>
-              <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-                <MenuProvider>
-                  <PaperProvider>
-                        <Stack>
-                          <Stack.Screen name="(user)" options={{ headerShown : false }} />
-                          <Stack.Screen name="(auth)" options={{ headerShown : false }}/>
-                          <Stack.Screen name="+not-found" />
-                        </Stack>
-                  </PaperProvider>
-                </MenuProvider>
-              </ThemeProvider>
-            </PrayerTimesProvider>
-          </ProgramProvider>
-        </AddProgramProvider>
+        <PrayerTimesProvider>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <BottomSheetModalProvider>
+              <MenuProvider>
+                <PaperProvider>
+                  <Stack>
+                    <Stack.Screen name="(user)" options={{ headerShown : false }} />
+                    <Stack.Screen name="(auth)" options={{ headerShown : false }}/>
+                    <Stack.Screen name="+not-found" />
+                    </Stack>
+                </PaperProvider>
+              </MenuProvider>
+            </BottomSheetModalProvider>
+          </ThemeProvider>
+        </PrayerTimesProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );

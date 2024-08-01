@@ -121,7 +121,7 @@ export default function homeScreen() {
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
             <StatusBar barStyle={"dark-content"}/>
-            <View className='justify-center items-center mt-[10%] '>
+            <View className='justify-center items-center mt-[12%] '>
               <Animated.Image source={require("@/assets/images/massiLogo2.png")} style={[{width: width / 2, height: 75, justifyContent: "center" }, imageAnimatedStyle]} />
             </View>
 

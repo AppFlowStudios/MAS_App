@@ -8,24 +8,22 @@ type RenderUserPlaylistProp = {
 }
 const RenderUserPlaylist = ({ playlist } : RenderUserPlaylistProp) => {
   return (
-    <View className='h-[120] w-[100%]'>
-        <Link  href={`/myPrograms/playlists/${playlist.playlist_id}`} asChild>
+        <Link  href={`/myPrograms/playlists/${playlist.playlist_id}`} asChild className='items-center h-[170] w-[100%]'>
             <TouchableOpacity>
-                <View className='flex-row item-center px-2'>
-                    <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15, width: "30%"}} className=''>
+                <View className='flex-col item-center px-2'>
+                    <View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15, width: "30%"}}>
                                 <Image 
                                     source={{ uri: playlist.playlist_img || defaultProgramImage }}
-                                    style={{width: 130, height: 100, objectFit: "fill", borderRadius: 8}}
+                                    style={{width: 160, height: 140, objectFit: "fill", borderRadius: 8}}
                                 />
                     </View>
                     <View className='items-center justify-center w-[70%]'>
-                        <Text className='text-xl font-bold'> {playlist.playlist_name} </Text>
+                        <Text className='text-xl font-bold' numberOfLines={1}> {playlist.playlist_name} </Text>
                     </View>
                 </View>
                 
             </TouchableOpacity>
         </Link>
-    </View>
   )
 }
 

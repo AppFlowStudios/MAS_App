@@ -11,7 +11,7 @@ import { EventsType } from '../../types'
 type RenderEventProp = {
     event_id: string
 }
-const RenderMyLibraryProgram = ( {event_id} : RenderEventProp) => {
+const RenderAddedEvents = ( {event_id} : RenderEventProp ) => {
   const { session } = useAuth()
   const [ event, setEvent] = useState<EventsType>()
   async function fetchUserProgram(){
@@ -21,30 +21,29 @@ const RenderMyLibraryProgram = ( {event_id} : RenderEventProp) => {
     }
     if(data){
     setEvent(data)
-    console.log(data)
     }
   }
 
   useEffect(() => {
     fetchUserProgram()
-  }, [session])
+  }, [])
 
 
   return (
-    <View style={{ width: 170, height: 200, justifyContent: "center", alignItems: "center", marginHorizontal: 8}} className=''>
-        <Link  href={`../myPrograms/}`}  asChild>
-            <TouchableOpacity className=''>
-            <View style={{width: 170, height: 170}}>
-                    <Image source={{uri: event?.event_img || defaultProgramImage }} style={{width : "100%", height: "100%",borderRadius: 8}}/>
-            </View>
-            <View className='flex-col'>
-                <Text className='text-black font-bold'>{event?.event_name}</Text>
-                <Text className='text-gray-500'>{event?.event_speaker}</Text>
-            </View>
+    <View style={{ justifyContent: "center", alignItems: "center", marginHorizontal: 8 }} className=''>
+        <Link  href={`/myPrograms/notifications/${event?.event_id}`}  asChild>
+            <TouchableOpacity>
+              <View style={{width: 170, height: 170}}>
+                      <Image source={{uri: event?.event_img || defaultProgramImage }} style={{width : "100%", height: "100%",borderRadius: 8}}/>
+              </View>
+              <View className='flex-col w-[170] h-[40] flex-shrink'>
+                  <Text className='text-black font-bold'  numberOfLines={1}>{event?.event_name}</Text>
+                  <Text className='text-gray-500' numberOfLines={1}>{event?.event_speaker}</Text>
+              </View>
             </TouchableOpacity>
         </Link>
     </View>
   )
 }
 
-export default RenderMyLibraryProgram
+export default RenderAddedEvents

@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ScrollView } from 'react-native'
+import { View, Text, Pressable, ScrollView, useWindowDimensions } from 'react-native'
 import { Link, Stack } from 'expo-router'
 import React, { useEffect, useRef, useState } from 'react'
 import { Icon } from "react-native-paper"
@@ -12,6 +12,7 @@ const PlaylistIndex = () => {
   const { session } = useAuth()
   const [ userPlayLists, setUserPlaylists ] = useState<UserPlaylistType[]>()
   const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const layout = useWindowDimensions().width
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
   const getUserPlaylists = async () => {
     const { data : user_playlist , error } = await supabase.from("user_playlist").select("*").eq("user_id" , session?.user.id)
@@ -41,32 +42,34 @@ const PlaylistIndex = () => {
     return () => { supabase.removeChannel( listenForUserPlaylistChanges )}
   }, [])
 
-  console.log(userPlayLists)
   return (
-    <BottomSheetModalProvider>
-      <ScrollView className='bg-white h-full'>
-          <Pressable className='flex-row items-center ml-2' onPress={handlePresentModalPress}>
-              <Icon source={"plus-box-outline"} size={40} color='red'/>
-              <Text className='text-xl font-bold px-[13]'>Create New Playlist...</Text>
-          </Pressable>
-          <View className='flex-row items-center'>
-            <Link href={"/myPrograms/likedLectures"} asChild>
-              <Pressable className='flex-row items-center ml-2'>
-                <Icon source={"heart-box-outline"} color='red' size={40}/>
-                <Text className='text-xl font-bold px-[13]'>Favorite Lectures</Text>
-              </Pressable>
-            </Link>
-        </View> 
-        <View>
-          { userPlayLists ? userPlayLists.map((item, index) => {
-            return( 
-              <RenderUserPlaylist playlist={item}/>
-          )
-          }) : <></>}
-        </View>
-      <CreatePlaylistBottomSheet ref={bottomSheetRef} />
+    <ScrollView className=' bg-white flex-1'>
+            <Pressable className='flex-row items-center ml-2' onPress={handlePresentModalPress}>
+                <Icon source={"plus-box-outline"} size={40} color='red'/>
+                <Text className='text-xl font-bold px-[13]'>Create New Playlist...</Text>
+            </Pressable>
+            <View className='flex-row items-center'>
+              <Link href={"/myPrograms/likedLectures"} asChild>
+                <Pressable className='flex-row items-center ml-2'>
+                  <Icon source={"heart-box-outline"} color='red' size={40}/>
+                  <Text className='text-xl font-bold px-[13]'>Favorite Lectures</Text>
+                </Pressable>
+              </Link>
+            </View>
+            <View style={{ flexDirection : "row", flexWrap : "wrap" }}>
+              { 
+              userPlayLists ? userPlayLists.map((item, index) => {
+                return( 
+                  <View key={index} style={{ width : layout / 2, justifyContent : "center", alignItems : "center", paddingTop : 5}} >
+                    <RenderUserPlaylist playlist={item}/>
+                  </View>
+              )
+              }) : 
+              <></>
+              }
+            </View> 
+        <CreatePlaylistBottomSheet ref={bottomSheetRef} />
       </ScrollView>
-    </BottomSheetModalProvider>
   )
 }
 
