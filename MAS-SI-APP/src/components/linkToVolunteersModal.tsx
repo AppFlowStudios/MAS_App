@@ -10,17 +10,6 @@ const VolunteerImages = [
 { image: require("@/assets/images/volunteerImages/DSC00937.png")}
 ]
 
-const randomIndex = Math.floor(Math.random() % VolunteerImages.length )
-const VolunterImageCarousel = () => {
-  return (
-    <FlatList 
-    data={VolunteerImages}
-    renderItem={({item}) => { return <Image source={item.image}  style={{width: 100, height: 100, borderRadius: 20}} />} }
-    horizontal
-    pagingEnabled
-    />
-  )
-}
 const onPress = () => Linking.canOpenURL("https://chat.whatsapp.com/EJZZgYlIGuR4veJjeBnJrr").then(() => {
   Linking.openURL("https://chat.whatsapp.com/EJZZgYlIGuR4veJjeBnJrr");
 });

@@ -21,6 +21,7 @@ import { SharedElement } from 'react-navigation-shared-element';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import CreatePlaylistBottomSheet from '@/src/components/UserProgramComponets/CreatePlaylistBottomSheet';
 import * as Haptics from "expo-haptics"
+import LottieView from 'lottie-react-native';
 const ProgramLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
@@ -124,6 +125,7 @@ async function getUserPlaylists(){
     )
   } 
   const NotificationBell = () => {
+  const notificationAnimation = useRef<LottieView>(null)
    const handlePress = async () => {
     if( programInNotfications ) {
       const { error } = await supabase.from("added_notifications_programs").delete().eq("user_id" , session?.user.id).eq("program_id", programId)
@@ -133,13 +135,14 @@ async function getUserPlaylists(){
       const { error } = await supabase.from("added_notifications_programs").insert({user_id :session?.user.id, program_id : programId})
       setProgramInNotifications(true)
     }
+ 
     Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Success
     )
   }
    return(
-    <Pressable onPress={handlePress}>
-      {programInNotfications ?  <Icon source={"bell-check"} color='#007AFF' size={30}/> : <Icon source={"bell-outline"} color='#007AFF' size={30}/> }
+    <Pressable onPress={handlePress} className='w-[30] h-[35] items-center justify-center'>
+       {programInNotfications ?  <Icon source={"bell-check"} color='#007AFF' size={30}/> : <Icon source={"bell-outline"} color='#007AFF' size={30}/> }
     </Pressable>
    )
   }

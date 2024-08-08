@@ -4,6 +4,7 @@ import { gettingPrayerData } from '../types';
 import { format } from 'date-fns';
 import moment from 'moment';
 import { Link } from 'expo-router';
+import { Icon } from 'react-native-paper';
 type salahDisplayWidgetProp = {
     prayer : gettingPrayerData,
     nextPrayer: gettingPrayerData
@@ -138,30 +139,31 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     }, [])
   return (
     <View>
-    <Link href={"/prayersTable"} asChild>  
-    <Pressable>
-    <ImageBackground 
-        source={require("@/assets/images/salahPictures/DJI_0049.jpg")}
-        style={{height: "100%", width: "100%",}}
-    >
-      <View className='flex-row mt-4 items-center'>
-        <Text className='text-white px-5 font-bold text-lg' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
-        <Text className='text-gray-100 ml-[23%] font-bold text-lg ' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Athan</Text>
-      </View>
-      <View className='flex-row mt-9'>
-        <Text className='text-white px-5 font-bold text-4xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >{currentSalah.salah}</Text>
-        <Text className='text-gray-100 font-bold text-3xl' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }, {marginLeft : currentSalah.salah == "Maghrib" || currentSalah.salah == "Dhuhr" ? "25%" : "40%" }]}>{currentSalah.athan}</Text>
-      </View>
-      <View className='flex-row mt-12'>
-        <Text className='text-white pl-4 pr-1 font-bold text-xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Next Iqamah in</Text>
-        <Text className='text-white font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{timeToNextPrayer}</Text>
-      </View>
-      {/*<Text className='text-white'>Current Salah : {currentSalah.salah}</Text>
-      <Text className='text-white'>Current Salah iqamah : {currentSalah.iqamah}</Text>
-  <Text className='text-white'>Current Time : {currentTime} {"\n"}Time to next Prayer : {timeToNextPrayer}</Text>*/}
-    </ImageBackground>
-    </Pressable>
-    </Link>      
+        <Link href={"/prayersTable"} asChild>  
+        <Pressable>
+        <ImageBackground 
+            source={require("@/assets/images/salahPictures/DJI_0049.jpg")}
+            style={{height: "100%", width: "100%" }}
+        >
+        <View className='flex-row mt-4 items-center'>
+            <Text className='text-white px-5 font-bold text-lg' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
+            <Text className='text-gray-100 ml-[23%] font-bold text-lg ' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Athan</Text>
+        </View>
+        <View className='flex-row mt-9'>
+            <Text className='text-white px-5 font-bold text-4xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >{currentSalah.salah}</Text>
+            <Text className='text-gray-100 font-bold text-3xl' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }, {marginLeft : currentSalah.salah == "Maghrib" || currentSalah.salah == "Dhuhr" ? "25%" : "40%" }]}>{currentSalah.athan}</Text>
+        </View>
+        <View className='flex-row mt-12 items-center'>
+            <Text className='text-white pl-4 pr-1 font-bold text-xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Next Iqamah in</Text>
+            <Text className='text-white font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{timeToNextPrayer}</Text>
+        </View>
+        <View className='items-center flex-row justify-end'>
+            <Text className='text-right text-gray-300' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 2 }, textShadowRadius: 1 }}>Full Prayer Schedule</Text>
+            <Icon source={'chevron-right'} size={20} color='#D3D3D3'/>
+        </View>
+        </ImageBackground>
+        </Pressable>
+        </Link>      
     </View>
   )
 }

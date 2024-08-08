@@ -68,7 +68,7 @@ const EventInfoDisplay = ({ event_img, event_speaker, event_name, event_desc} : 
       } 
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
-    <Stack.Screen options={ { title : "", headerTransparent: true, headerLeft: () => <Button onPress={() => router.back()} style={{justifyContent: "flex-start"}}><Icon source={"less-than"} color='black' size={15}/><Text className='text-black'>Back</Text></Button> }}  />
+    <Stack.Screen options={ { title : "Detail", headerTransparent: true } }/>
      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
          
          <Animated.Image 

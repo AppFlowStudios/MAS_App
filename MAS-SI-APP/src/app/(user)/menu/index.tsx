@@ -14,6 +14,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
 import { Button } from 'react-native-paper';
 import { Link } from 'expo-router';
+import LinkToDonationModal from '@/src/components/LinkToDonationModal';
 export default function homeScreen() {
   
   const { onSetPrayerTimesWeek } = usePrayer()
@@ -136,7 +137,13 @@ export default function homeScreen() {
               <View className='pt-3' style={{height: 250}}>
                 <ProgramsCircularCarousel />
               </View>
-            <View className='flex-row pl-3 pt-10'>
+              <View className='pl-3 flex-row pt-10'>
+                  <Text className='text-[#0D509D] font-bold text-2xl'>Donate</Text>
+              </View>
+              <View>
+                <LinkToDonationModal />
+              </View>
+            <View className='flex-row pl-3 pt-5'>
               <Text className='text-[#0D509D] font-bold text-2xl' style={{textShadowColor: "#light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Volunteers</Text>
             </View>
             <View className='pt-2'>
