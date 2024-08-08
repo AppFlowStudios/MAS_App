@@ -18,7 +18,7 @@ export default function ProgramsCircularCarousel(  ) {
     const windowWidth = Dimensions.get("window").width;
     const flatListRef = useRef<FlatList>(null);
     const [active, setActive] = useState(0);
-    const [ programsData, setProgramsData ] = useState<Program[] | null>()
+    const [ programsData, setProgramsData ] = useState<Program[]>()
     const indexRef = useRef(active);
     indexRef.current = active;
 
@@ -49,6 +49,7 @@ export default function ProgramsCircularCarousel(  ) {
       })}
     </ScrollView> */}
      useEffect(() => {
+      if( programsData && programsData?.length > 0){
       let interval =  setInterval(() =>{
         if (active < Number(endOfList) - 1) {
           flatListRef.current?.scrollToIndex({
@@ -63,8 +64,9 @@ export default function ProgramsCircularCarousel(  ) {
         })
       }
       }, 5000);
-  
+      
       return () => clearInterval(interval);
+    }
     });
   
   
