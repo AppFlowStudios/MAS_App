@@ -8,7 +8,8 @@ import { supabase } from '@/src/lib/supabase';
 import { Program } from '@/src/types';
 import { Button, Icon } from 'react-native-paper';
 import { useAuth } from '@/src/providers/AuthProvider';
-
+import { initializePaymentSheet } from '@/src/lib/stripe'
+import { openPaymentSheet } from '@/src/lib/stripe';
 const ProgramInfo = () => {
     const { program_id } = useLocalSearchParams()
     const { session } = useAuth()
@@ -43,6 +44,11 @@ const ProgramInfo = () => {
         if( data ) {
             setProgram(data)
         }
+    }
+
+    const handleBuyNow = async () => {
+      await initializePaymentSheet(Math.floor(program?.program_price! * 100))
+      await openPaymentSheet()
     }
 
     useEffect(() => {
@@ -91,7 +97,7 @@ const ProgramInfo = () => {
          <View className='flex-row'> 
              <Button mode='contained' style={{ backgroundColor : "gray" }} icon={ () => <Icon source={"cart-outline"} size={20}/>}>Add to Cart</Button>
          </View>
-         <Button mode='contained' style={{ backgroundColor : '#57BA47' }}>Buy Now</Button>
+         <Button mode='contained' style={{ backgroundColor : '#57BA47' }} onPress={handleBuyNow}>Buy Now</Button>
         </View>
      </Animated.ScrollView>
      </View>

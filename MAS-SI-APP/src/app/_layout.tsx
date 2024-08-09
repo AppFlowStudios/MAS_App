@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
 import { MenuProvider } from "react-native-popup-menu"
 import AuthProvider from '../providers/AuthProvider';// Prevent the splash screen from auto-hiding before asset loading is complete.
+import { StripeProvider } from '@stripe/stripe-react-native'
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -33,23 +34,25 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <AuthProvider>
-        <PrayerTimesProvider>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <BottomSheetModalProvider>
-              <MenuProvider>
-                <PaperProvider>
-                  <Stack>
-                    <Stack.Screen name="(user)" options={{ headerShown : false }} />
-                    <Stack.Screen name="(auth)" options={{ headerShown : false }}/>
-                    <Stack.Screen name="+not-found" />
-                    </Stack>
-                </PaperProvider>
-              </MenuProvider>
-            </BottomSheetModalProvider>
-          </ThemeProvider>
-        </PrayerTimesProvider>
-      </AuthProvider>
+      <StripeProvider publishableKey={process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY!}>
+        <AuthProvider>
+          <PrayerTimesProvider>
+            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+              <BottomSheetModalProvider>
+                <MenuProvider>
+                  <PaperProvider>
+                    <Stack>
+                      <Stack.Screen name="(user)" options={{ headerShown : false }} />
+                      <Stack.Screen name="(auth)" options={{ headerShown : false }}/>
+                      <Stack.Screen name="+not-found" />
+                      </Stack>
+                  </PaperProvider>
+                </MenuProvider>
+              </BottomSheetModalProvider>
+            </ThemeProvider>
+          </PrayerTimesProvider>
+        </AuthProvider>
+      </StripeProvider>
     </GestureHandlerRootView>
   );
 }
