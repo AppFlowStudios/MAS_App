@@ -1,27 +1,37 @@
 import { View, Text, Dimensions, Pressable, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import Animated, { interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset } from 'react-native-reanimated';
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { supabase } from '@/src/lib/supabase';
-import { Program } from '@/src/types';
-import { Button, Icon } from 'react-native-paper';
+import { Program, ProgramFormType } from '@/src/types';
+import { Button, Icon, TextInput } from 'react-native-paper';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { initializePaymentSheet } from '@/src/lib/stripe'
 import { openPaymentSheet } from '@/src/lib/stripe';
+import AddToCartProgramSheet from '@/src/components/ShopComponets/AddToCartSheet';
+import { BottomSheetModal } from '@gorhom/bottom-sheet';
+import TextInputForm from '@/src/components/ShopComponets/TextInputForm';
+import RadioButtonForm from '@/src/components/ShopComponets/RadioButtonForm';
 const ProgramInfo = () => {
     const { program_id } = useLocalSearchParams()
     const { session } = useAuth()
     const [ program, setProgram ] = useState<Program>()
+    const [ programForm, setProgramForm ] = useState<ProgramFormType[]>()
     const [ visible, setVisible ] = useState(false);
+    const bottomSheetRef = useRef<BottomSheetModal>(null);
+    const handlePresentModalPress = () => bottomSheetRef.current?.present();
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-    const Tab = useBottomTabBarHeight()
-  
+    const Tab = useBottomTabBarHeight() + 80
+    const [ isReady, setIsReady ] = useState<number[]>([])
     const { width } = Dimensions.get("window")
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
+    const [ buttonOn, setButtonOn ] = useState(false)
     const scrollOffset = useScrollViewOffset(scrollRef)
+    const tabBarHeight = useBottomTabBarHeight() + 80
+    const height = Dimensions.get('screen').height - Tab
     const imageAnimatedStyle = useAnimatedStyle(() => {
       return{
         transform: [
@@ -41,8 +51,12 @@ const ProgramInfo = () => {
 
     const getInfo = async () => {
         const { data , error } = await supabase.from("programs").select("*").eq("program_id", program_id).single()
+        const { data : programForms, error : programFormError} = await supabase.from('program_forms').select('*').eq('program_id', program_id)
         if( data ) {
             setProgram(data)
+        }
+        if( programForms ){
+          setProgramForm( programForms )
         }
     }
 
@@ -51,9 +65,19 @@ const ProgramInfo = () => {
       await openPaymentSheet()
     }
 
+    const addToCart = async () => {
+      const { error } = await supabase.from('user_cart').insert({ user_id : session?.user.id, program_id: program?.program_id, produt_quantity : 1 })
+    }
     useEffect(() => {
         getInfo()
     }, [])
+    useEffect(() => {
+      if( isReady.length == programForm?.length){
+        setButtonOn(true)
+      }else{
+        setButtonOn(false)
+      }
+    }, [isReady])
   return (
     <View className='flex-1 bg-white pt-[15%]' style={{flexGrow: 1}}>
     <Stack.Screen options={ { title : "Details", headerTransparent: true, headerRight : () => (
@@ -67,7 +91,7 @@ const ProgramInfo = () => {
          
          <Animated.Image 
            source={ { uri: program?.program_img || defaultProgramImage } }
-           style={ [{width: width / 1.2, height: 300, borderRadius: 8 }, imageAnimatedStyle] }
+           style={ [{width: width / 2, height: 200, borderRadius: 8 }, imageAnimatedStyle] }
            resizeMode='stretch'
          />
         
@@ -75,31 +99,27 @@ const ProgramInfo = () => {
             <Text className='text-black font-bold text-xl w-[50%]'>{program?.program_name}</Text>
             <Text className='text-[#57BA47] font-bold text-lg w-[50%] text-center'>${program?.program_price}<Text className='text-black text-md'> / Month</Text> </Text>
         </View>
-        
-        <ScrollView className='mt-5 w-[100%] bg-white' contentContainerStyle={{ alignItems : 'center' }}>
-            <View className='w-[90%] h-[150] bg-black' style={{ shadowColor : "black", shadowOffset : { width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 2}}>
-
-            </View>
-        </ScrollView>
-        
-        <View className='flex-row justify-between px-3 w-[100%]'>
-            <View className='flex-col'>
-                <Text>Meeting Days</Text>
-
-            </View>
-
-            <View className='flex-col'>
-                <Text>Time</Text>
-            </View>
+        <View className='flex-1 ' style={{ height : height }}>
+          <ScrollView className='pt-5 w-[100%]  bg-white' contentContainerStyle={{ alignItems : 'center' }} >
+                { programForm ? programForm.map((item, index) => {
+                  if( item.question_type == 'text_input' ) {
+                    return <View><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
+                  }
+                  else if( item.question_type == 'radio_button' ){
+                    return <RadioButtonForm item={item} index={index} setIsReady={setIsReady} isReady={isReady} />
+                  }
+                }) : <></>}
+                <View className='flex-row justify-between px-3 w-[100%]'>
+                  <View className='flex-row'> 
+                      <Button mode='contained' style={{ backgroundColor : "gray" }} icon={ () => <Icon source={"cart-outline"} size={20}/>} onPress={handlePresentModalPress} disabled={!buttonOn}>Add to Cart</Button>
+                  </View>
+                  <Button mode='contained' style={{ backgroundColor : '#57BA47' }} onPress={handleBuyNow}>Buy Now</Button>
+                </View>
+          </ScrollView>
         </View>
-
-        <View className='flex-row justify-between px-3 w-[100%]'>
-         <View className='flex-row'> 
-             <Button mode='contained' style={{ backgroundColor : "gray" }} icon={ () => <Icon source={"cart-outline"} size={20}/>}>Add to Cart</Button>
-         </View>
-         <Button mode='contained' style={{ backgroundColor : '#57BA47' }} onPress={handleBuyNow}>Buy Now</Button>
-        </View>
+        <View style={{ height : Tab }}></View>
      </Animated.ScrollView>
+     <AddToCartProgramSheet ref={bottomSheetRef} program_id={program?.program_id!} program_img={program?.program_img!} program_price={program?.program_price!}  program_name={program?.program_name!} program_speaker={program?.program_speaker!} />
      </View>
   )
 }

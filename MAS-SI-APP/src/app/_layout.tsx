@@ -20,6 +20,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
+    'Oleo' : require('../../assets/fonts/OleoScript-Regular.ttf'),
   });
 
   useEffect(() => {

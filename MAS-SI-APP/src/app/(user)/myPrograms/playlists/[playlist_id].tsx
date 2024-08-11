@@ -94,9 +94,10 @@ const UserPlayListLectures = () => {
     .on(
         "postgres_changes",
         {
-            event: "*",
+            event: "UPDATE",
             schema : 'public',
-            table: "user_playlist_lectures"
+            table: "user_playlist_lectures",
+            filter: `playlist_id=eq.${playlist_id}`
         },
         (payload) => getUserPlaylistLectures()
     )

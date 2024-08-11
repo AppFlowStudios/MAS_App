@@ -20,6 +20,10 @@ export type Program = {
     has_lectures : boolean,
     program_is_paid : boolean,
     program_price : number
+    is_paid : boolean
+    is_kids : boolean
+    is_fourteen_plus : boolean
+    is_education : boolean
 }
 
 export type salahData = {
@@ -107,6 +111,11 @@ export type EventsType = {
     event_desc : string,
     event_img: string,
     has_lecture : boolean
+    event_price : number,
+    is_paid : boolean
+    is_kids : boolean
+    is_fourteen_plus : boolean
+    is_education : boolean
 }
 
 export type EventLectureType = {
@@ -132,4 +141,11 @@ export type UserPlaylistLectureType = {
     playlist_id : string
     program_lecture_id : string | null
     event_lecture_id : string | null
+}
+
+export type ProgramFormType = {
+    program_id : string
+    question_type : string
+    question : string
+    radio_button_prompts : [string]
 }

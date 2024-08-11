@@ -11,12 +11,12 @@ import BottomSheet, { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { JummahBottomSheetProp } from '@/src/types';
 import LinkToVolunteersModal from '@/src/components/linkToVolunteersModal';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler } from 'react-native-reanimated';
+import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler, withTiming, Easing } from 'react-native-reanimated';
 import { Button } from 'react-native-paper';
 import { Link } from 'expo-router';
 import LinkToDonationModal from '@/src/components/LinkToDonationModal';
+import LottieView from 'lottie-react-native';
 export default function homeScreen() {
-  
   const { onSetPrayerTimesWeek } = usePrayer()
   const [prayerTimes, setPrayerTimes] = useState<prayerTimesType>(
     {"status" : "fail",
@@ -29,7 +29,7 @@ export default function homeScreen() {
     const [loading, setLoading] = useState(true)
     const tabBarHeight = useBottomTabBarHeight();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
-    
+    const animation = useRef<LottieView>(null);
     const getCurrDate = new Date();
     const getWeekDate = new Date();
     const currDate = format(getCurrDate, "yyyy-MM-dd");
@@ -44,9 +44,9 @@ export default function homeScreen() {
       .finally( () => setLoading(false) )
       console.log("getPrayer Called")
     }
-
     const { width } = Dimensions.get("window")
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
+    const opacity = useSharedValue(1)
     const scrollOffset = useSharedValue(0)
     const scrollHandler = useAnimatedScrollHandler(event => {
       scrollOffset.value = event.contentOffset.y;
@@ -68,6 +68,11 @@ export default function homeScreen() {
       }
     })
 
+    const playMASAnimation = useAnimatedStyle(() => {
+      return{
+        opacity : withTiming(0, {duration : 7000, easing: Easing.out(Easing.quad)})
+      }
+    })
     useEffect( () => {
       getMasjidalApi();
     }, [])
@@ -121,6 +126,19 @@ export default function homeScreen() {
 
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
+{ /*           <Animated.View style={[{ zIndex : 1, position : 'absolute', width : '100%', height : '100%'  }]}>
+                <LottieView
+                    autoPlay
+                    ref={animation}
+                    style={{
+                      width: '100%',
+                      height: '50%',
+                      backgroundColor: 'white'
+                    }}
+                    // Find more Lottie files at https://lottiefiles.com/featured
+                    source={require('@/assets/lottie/MASLogoAnimation3.json')}
+                />
+            </Animated.View>  */}
             <StatusBar barStyle={"dark-content"}/>
             <View className='justify-center items-center mt-[12%] '>
               <Animated.Image source={require("@/assets/images/massiLogo2.png")} style={[{width: width / 2, height: 75, justifyContent: "center" }, imageAnimatedStyle]} />

@@ -14,7 +14,7 @@ type CreatePlaylistBottomSheetProp = {
     playlist_name : string
 }
 type Ref = BottomSheetModal
-const CreatePlaylistBottomSheet = forwardRef<Ref, {}>((props, ref) =>{
+const CreatePlaylistBottomSheet = forwardRef<Ref, {}>((props, ref) => {
     const [ playlistImg, setPlaylistImg ] = useState<ImagePicker.ImagePickerAsset>()
     const [ playlistName, setPlaylistName ] = useState<string>()
     const [ isReady, setIsReady ] = useState(false)
