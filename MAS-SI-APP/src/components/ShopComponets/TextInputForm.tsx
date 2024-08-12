@@ -27,13 +27,13 @@ const TextInputForm = ({item, setIsReady, isReady, index} : TextInputFormProp) =
     }
    }
   return (
-    <View className='items-center'>
-        <Text numberOfLines={1}>{item.question}?</Text>
+    <View>
+        <Text className='text-left'>{item.question}?</Text>
         <TextInput
             onEndEditing={onTouchEnd}
             mode='outlined'
-            theme={{ roundness : 50 }}
-            style={{ width: 300, backgroundColor: "#e8e8e8", height: 45 }}
+            theme={{ roundness : 10 }}
+            style={{ width: '100%', backgroundColor: "#e8e8e8", height: 45 }}
             activeOutlineColor='#0D509D'
             value={value.trim()}
             onChangeText={setValue}    

@@ -1,17 +1,31 @@
 import { View, Text, ScrollView, useWindowDimensions, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import LottieView from 'lottie-react-native'
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
-import { Icon } from 'react-native-paper'
+import { Button, Icon } from 'react-native-paper'
 import { Link } from 'expo-router'
+import { Profile } from '@/src/types'
+import { useAuth } from '@/src/providers/AuthProvider'
+import { supabase } from '@/src/lib/supabase'
 
 const Index = () => {
+  const [ profile, setProfile ] = useState<Profile>()
+  const { session } = useAuth()
   const width = useWindowDimensions().width
   const height = useWindowDimensions().height
   const tabBarHeight = useBottomTabBarHeight() + 60
+  const getProfile = async () => {
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
+    if( data ){
+      setProfile(data)
+    }
+  }
+  useEffect(() => {
+    getProfile()
+  }, [])
   return (
-    <ScrollView className='bg-gray-200 pt-[15%] h-[100%]'>
+    <ScrollView className='bg-white pt-[18%] h-[100%]'>
       <View className='w-[100%] items-center justify-center' style={{ height : height / 4 }}>
         <View style={{  shadowColor : "black", shadowOffset : {width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 5  }}>
           <Image 
@@ -19,74 +33,162 @@ const Index = () => {
             style={{ width : 100, height : 100, borderRadius : 50, borderColor : "yellow", borderWidth : 2 }}
           />
         </View>
+        <View className='flex-col mt-1'>
+            <View className='bg-white p-1 rounded-xl border-2'>
+              <Text>{profile?.first_name}</Text>
+            </View>
+            <View className='bg-white p-1 rounded-xl border-2 mt-3'>
+              <Text>{profile?.profile_email}</Text>
+            </View>
+            <View className='pt-2'>
+              <Button mode='contained' buttonColor='#0D509D' textColor='white' className='w-[150]'>Edit Profile</Button>
+            </View>
+          </View>
       </View>
       <View className='items-center' style={{ paddingBottom : tabBarHeight }}>
-          <View className='flex-1 flex-col items-center pb-10 w-[95%]' style={{ borderRadius : 20, shadowColor : 'black', shadowOffset : { width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 2  }}>
-            <Pressable className='w-[85%] bg-gray-400 mt-8 items-center flex-col px-5' style={{ borderRadius  : 10, shadowColor : '#57BA47', shadowOffset : { width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 2 }}>
-              <View className='flex-row items-center justify-between px-1 w-[100%]'>
-                <Text className='font-bold text-gray-300'>Your Account</Text>
-                <Icon source={'chevron-right'} size={25} color='white'/>
-              </View>
-              <View className='flex-row w-[100%]'>
-                  <View style={{ borderWidth : 2, borderColor : 'white', borderRadius : 10 ,backgroundColor : 'white'}}>
-                    <Icon source={"cog-outline"} size={40} color='black'/>
-                  </View>
-                  <Text className='text-3xl  text-white font-bold'> Settings</Text>
-              </View>
-              <View className='w-[100%]'>
-                <Text className='font-bold text-gray-300'>Password, Security, Personal Details</Text>
-              </View>
-            </Pressable>
+          <View className='flex-1 flex-col items-center pb-10 w-[95%]' style={{ borderRadius : 20, shadowColor : 'black', shadowOffset : { width : 0, height : 0.5}, shadowOpacity : 1, shadowRadius : 1  }}>
 
             <Link href={"/more/MasShop"} asChild>
-            <Pressable className='w-[85%] bg-gray-400 mt-8 items-center flex-col px-5' style={{ borderRadius  : 10, shadowColor : '#57BA47', shadowOffset : { width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 2 }}>
+            <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
               <View className='flex-row items-center justify-between px-1 w-[100%]'>
-                <Text className='font-bold text-gray-300'>Join Programs</Text>
-                <Icon source={'chevron-right'} size={25} color='white'/>
+                <Text className='text-gray-400'>Join Programs</Text>
               </View>
-              <View className='flex-row w-[100%]'>
-                  <View style={{ borderWidth : 2, borderColor : 'white', borderRadius : 10 ,backgroundColor : 'white'}}>
-                    <Icon source={"shopping-outline"} size={40} color='#0D509D'/>
+              <View className='flex-row w-[100%] justify-between items-center pt-1'>
+                  <View className='flex-row items-center'>
+                    <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0'}}>
+                      <Icon source={"shopping-outline"} size={25} color='#BDBDBD'/>
+                    </View>
+                    <Text className='text-2xl ml-1'>MAS Shop</Text>
                   </View>
-                  <Text className='text-3xl  text-white font-bold ml-1'>MAS Shop</Text>
+                  <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
               </View>
               <View className='w-[100%]'>
-                <Text className='font-bold text-gray-300'>Cart, Payment, Orders</Text>
+                <Text className=' text-gray-400'>Cart, Payment, Orders</Text>
               </View>
               </Pressable>
             </Link>
 
             <Link href={"/more/Donation"} asChild>
-              <Pressable className='w-[85%] bg-gray-400 mt-8 items-center flex-col px-5' style={{ borderRadius  : 10, shadowColor : '#57BA47', shadowOffset : { width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 2 }}>
+              <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
                 <View className='flex-row items-center justify-between px-1 w-[100%]'>
-                  <Text className='font-bold text-gray-300'>Support Your Community</Text>
-                  <Icon source={'chevron-right'} size={25} color='white'/>
+                  <Text className=' text-gray-400'>Support Your Community</Text>
                 </View>
-                <View className='flex-row w-[100%]'>
-                    <View style={{ borderWidth : 2, borderColor : 'white', borderRadius : 10 ,backgroundColor : 'white'}}>
-                      <Icon source={"cards-heart-outline"} size={40} color='red'/>
+                <View className='flex-row w-[100%] items-center justify-between pt-1'>
+                  <View className='flex-row items-center'>
+                    <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0'}}>
+                      <Icon source={"cards-heart-outline"} size={25} color='#BDBDBD'/>
                     </View>
-                    <Text className='text-3xl  text-white font-bold ml-1'>Donate</Text>
+                    <Text className='text-2xl ml-1'>Donate</Text>
+                  </View>
+                  <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
                 </View>
                 <View className='w-[100%]'>
-                  <Text className='font-bold text-gray-300'>Payment, Graph, Phase 2</Text>
+                  <Text className=' text-gray-400'>Payment, Graph, Phase 2</Text>
                 </View>
                 </Pressable>
             </Link>
-              <Pressable className='w-[85%] bg-gray-400 mt-8 items-center flex-col px-5' style={{ borderRadius  : 10, shadowColor : '#57BA47', shadowOffset : { width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 2 }}>
+
+            <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
                   <View className='flex-row items-center justify-between px-1 w-[100%]'>
-                    <Text className='font-bold text-gray-300'>Show Your Business</Text>
-                    <Icon source={'chevron-right'} size={25} color='white'/>
+                    <Text className=' text-gray-400'>How To Edit Alerts</Text>
                   </View>
-                  <View className='flex-row w-[100%]'>
-                      <View style={{ borderWidth : 2, borderColor : 'white', borderRadius : 10 ,backgroundColor : 'white'}}>
-                        <Icon source={"thumb-up-outline"} size={40} color='black'/>
+                  <View className='flex-row w-[100%] items-center justify-between pt-1'>
+                    <View  className='flex-row items-center'>
+                      <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
+                        <Icon source={"bell-outline"} size={25} color='#BDBDBD'/>
                       </View>
-                      <Text className='text-3xl  text-white font-bold ml-1'>Sponser</Text>
+                      <Text className='text-2xl font-semibold ml-1'>Notification</Text>
+                   </View>
                   </View>
-                  <View className='w-[100%]'>
-                    <Text className='font-bold text-gray-300'>Payment, Graph, Phase 2</Text>
+                  <View className='w-[100%] flex-col'>
+                    <Pressable className='p-1 flex-row items-center justify-between pt-1'>
+                      <Text className=' text-gray-400'>Athan</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Iqamah</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+
+                    <Pressable className='p-1 flex-row items-center justify-between pt-1'>
+                      <Text className=' text-gray-400'>Weekly Programs</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Events</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Masjid Alerts</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+          
                   </View>
+              </Pressable>
+
+              <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
+                  <View className='flex-row items-center justify-between px-1 w-[100%]'>
+                    <Text className=' text-gray-400'>Want To Stay Connected</Text>
+                  </View>
+                  <View className='flex-row w-[100%] items-center justify-between pt-1'>
+                    <View  className='flex-row items-center'>
+                      <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
+                        <Icon source={"star-outline"} size={25} color='#BDBDBD'/>
+                      </View>
+                      <Text className='text-2xl font-semibold ml-1'>Upcoming</Text>
+                   </View>
+                  </View>
+                  <View className='w-[100%] flex-col'>
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Programs</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Events</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>  
+
+                     <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>P.A.C.E</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>    
+
+                     <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Kids Programs</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>                
+    
+                  </View>
+              </Pressable>
+
+              <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
+                  <View className='flex-row items-center justify-between px-1 w-[100%]'>
+                    <Text className=' text-gray-400'>Want Marketing</Text>
+                  </View>
+                  <View className='flex-row w-[100%] items-center justify-between pt-1'>
+                    <View  className='flex-row items-center'>
+                      <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
+                        <Icon source={"thumb-up-outline"} size={25} color='#BDBDBD'/>
+                      </View>
+                      <Text className='text-2xl font-semibold ml-1'>Business Ad</Text>
+                   </View>
+                      <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
+
+                  </View>
+                  <View className='w-[100%] flex-col'>
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Application</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+                    <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Text className=' text-gray-400'>Status</Text>
+                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                    </Pressable>
+                    </View>
                 </Pressable>
 
 

@@ -22,7 +22,9 @@ const LinkToVolunteersModal = () => {
             <View className='flex-col pl-4 '>
               <Text className='text-white font-bold '>Lets Grow Together!</Text>
               <Text className='text-white font-bold text-xl mt-1'>Join Your Community</Text>
-              <Button icon={"account-heart"} mode='contained' style={{width: 150, alignItems: "center", backgroundColor: "#57BA47", marginTop: 30}}>Volunteer Now</Button>
+              <View style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 1}, shadowOpacity : 1, shadowRadius : 2}}>
+                <Button icon={"account-heart"} mode='contained' style={{width: 150, alignItems: "center", backgroundColor: "#57BA47", marginTop: 30}}>Volunteer Now</Button>
+              </View>
             </View>
             <View style={{width: "40%", height: 120 ,shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, alignItems: "center"}}>
               <Image source={VolunteerImages[1].image}  style={{width: 115, height: 120, borderRadius: 20, marginLeft: 15}} />

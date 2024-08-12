@@ -8,7 +8,7 @@ import * as ImagePicker from "expo-image-picker"
 import * as FileSystem from 'expo-file-system';
 import { Icon, TextInput } from 'react-native-paper';
 import { decode } from 'base64-arraybuffer';
-
+import { BlurView } from 'expo-blur';
 type CreatePlaylistBottomSheetProp = {
     playlist_img : string
     playlist_name : string
@@ -86,30 +86,41 @@ const CreatePlaylistBottomSheet = forwardRef<Ref, {}>((props, ref) => {
         index={1}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
-        backgroundStyle={{backgroundColor: "#0D509D"}}
-        handleIndicatorStyle={{backgroundColor: "white"}}
+        backgroundStyle={{backgroundColor: "white"}}
         backdropComponent={renderBackDrop}
         {...props}
         >
             <View className='flex-row justify-between items-center px-5'> 
                 <Button title='Cancel' onPress={handleClose} />
-                <Text className='text-xl font-bold text-white'> New Playlist </Text>
+                <Text className='text-xl font-semibold'> New Playlist </Text>
                 <Button title='Create' disabled={!isReady} onPress={uploadImage}/>
             </View>
             
-            <View className='border items-center'>
-                <Pressable className='h-[140] w-[150] border items-center justify-center rounded-xl bg-white' onPress={onSelectImage}>
-                    {playlistImg ? <Image source={{ uri : playlistImg.uri || undefined}} style={{width: "100%", height:"100%", objectFit: "contain"}} /> : <Icon source={"camera"} size={60} color='red'/>}
+            <View className='items-center pt-[10%]'>
+                <Pressable className='h-[140] w-[150] items-center justify-center bg-white' onPress={onSelectImage} style={{ borderRadius : 20 }}>
+                    {playlistImg ? <Image source={{ uri : playlistImg.uri || undefined}} style={{width: "100%", height:"100%", objectFit: "contain"}} /> : (
+                        <View className=' overflow-hidden w-[100%] h-[100%]' style={{ borderRadius : 20 }}>
+                            <BlurView intensity={50} style={{ backgroundColor : '#E0E0E0' , height : '100%', width : '100%', borderRadius : 20, alignItems : 'center', justifyContent : 'center'}} >
+                                <View className='p-2 rounded-full bg-gray-50' >
+                                    <Icon source={"camera"} size={60} color='#007AFF'/>
+                                </View>
+                            </BlurView>
+                        </View>
+                        )}
                 </Pressable>
 
-
-                <TextInput
-                    placeholder='Playlist Title'
-                    style={{ width : "95%", height: 50 }}
-                    outlineStyle={{ borderWidth: 0 }}
-                    value={playlistName}
-                    onChangeText={setPlaylistName}
-                />
+                <View className='pt-[5%] w-[90%] items-center'>
+                    <TextInput
+                        placeholder='Playlist Title'
+                        style={{ width : "100%", height: 50, textAlign : 'center' }}
+                        value={playlistName}
+                        onChangeText={setPlaylistName}
+                        selectionColor='red'
+                        underlineColor='gray'
+                        activeUnderlineColor='gray'
+                        contentStyle={{ backgroundColor : 'white'}}
+                    />
+                </View>
             </View>
 
         </BottomSheetModal>

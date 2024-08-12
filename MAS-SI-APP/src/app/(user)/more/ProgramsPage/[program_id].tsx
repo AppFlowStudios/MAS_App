@@ -30,7 +30,7 @@ const ProgramInfo = () => {
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
     const [ buttonOn, setButtonOn ] = useState(false)
     const scrollOffset = useScrollViewOffset(scrollRef)
-    const tabBarHeight = useBottomTabBarHeight() + 80
+    const tabBarHeight = useBottomTabBarHeight() + 30
     const height = Dimensions.get('screen').height - Tab
     const imageAnimatedStyle = useAnimatedStyle(() => {
       return{
@@ -55,8 +55,11 @@ const ProgramInfo = () => {
         if( data ) {
             setProgram(data)
         }
-        if( programForms ){
+        if( programForms && programForms.length > 0 ){
           setProgramForm( programForms )
+        }
+        else if( programForms?.length == 0 ){
+          setButtonOn(true)
         }
     }
 
@@ -86,8 +89,8 @@ const ProgramInfo = () => {
                     <Icon source={"cart-outline"} size={25}/> 
             </Pressable>
         </Link>
-        )}}  />
-     <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} >
+        ), headerBackTitleVisible : false }} />
+     <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} showsVerticalScrollIndicator={false} >
          
          <Animated.Image 
            source={ { uri: program?.program_img || defaultProgramImage } }
@@ -96,28 +99,36 @@ const ProgramInfo = () => {
          />
         
         <View className='flex-row justify-between w-[100%] px-5 bg-white'>
-            <Text className='text-black font-bold text-xl w-[50%]'>{program?.program_name}</Text>
-            <Text className='text-[#57BA47] font-bold text-lg w-[50%] text-center'>${program?.program_price}<Text className='text-black text-md'> / Month</Text> </Text>
+            <Text className='text-black font-bold text-xl w-[50%]' allowFontScaling adjustsFontSizeToFit numberOfLines={1}>{program?.program_name}</Text>
+            <Text className='text-[#57BA47] font-bold text-lg w-[50%] text-center' allowFontScaling adjustsFontSizeToFit numberOfLines={1}>${program?.program_price}<Text className='text-black text-md'> / Month</Text> </Text>
         </View>
-        <View className='flex-1 ' style={{ height : height }}>
-          <ScrollView className='pt-5 w-[100%]  bg-white' contentContainerStyle={{ alignItems : 'center' }} >
+        
+        <View className='flex-1 '>
+          <View className='bg-white'>
+            <Text className='text-left text-2xl font-bold text-black ml-4'>Description: </Text>
+          </View>
+          <View className='items-center justify-center'>
+            <View className='w-[95%] bg-white px-3 flex-wrap h-[300] py-2' style={{ borderRadius : 15, shadowColor : "gray", shadowOffset : { width : 0, height :0}, shadowOpacity : 2, shadowRadius : 1}}>
+              <ScrollView><Text>{program?.program_desc}</Text></ScrollView>
+            </View>
+          </View>
+          <View className='bg-white'>
+            <Text className='text-left text-2xl font-bold text-black ml-4'>Form: </Text>
+          </View>
+          <ScrollView className='mt-5 w-[100%]  bg-white flex-col gap-y-2' contentContainerStyle={{ alignItems : 'center' , paddingBottom : Tab }} bounces={false}>
                 { programForm ? programForm.map((item, index) => {
                   if( item.question_type == 'text_input' ) {
-                    return <View><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
+                    return <View className='w-[95%]'><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
                   }
-                  else if( item.question_type == 'radio_button' ){
-                    return <RadioButtonForm item={item} index={index} setIsReady={setIsReady} isReady={isReady} />
+                  else if( item.question_type == 'radio_button'){
+                    return <View className='w-[95%]'><RadioButtonForm item={item} isReady={isReady} setIsReady={setIsReady} index={index}/></View>
                   }
                 }) : <></>}
-                <View className='flex-row justify-between px-3 w-[100%]'>
-                  <View className='flex-row'> 
-                      <Button mode='contained' style={{ backgroundColor : "gray" }} icon={ () => <Icon source={"cart-outline"} size={20}/>} onPress={handlePresentModalPress} disabled={!buttonOn}>Add to Cart</Button>
-                  </View>
-                  <Button mode='contained' style={{ backgroundColor : '#57BA47' }} onPress={handleBuyNow}>Buy Now</Button>
+                <View className='px-3 w-[100%] pt-3'>
+                    <Button mode='contained' style={{ backgroundColor : "#57BA47", }} icon={ () => <Icon source={"cart-outline"} size={20} color={ buttonOn ? 'white' : 'gray'} />} onPress={handlePresentModalPress} disabled={!buttonOn} >Add to Cart</Button>
                 </View>
           </ScrollView>
         </View>
-        <View style={{ height : Tab }}></View>
      </Animated.ScrollView>
      <AddToCartProgramSheet ref={bottomSheetRef} program_id={program?.program_id!} program_img={program?.program_img!} program_price={program?.program_price!}  program_name={program?.program_name!} program_speaker={program?.program_speaker!} />
      </View>

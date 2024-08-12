@@ -149,3 +149,10 @@ export type ProgramFormType = {
     question : string
     radio_button_prompts : [string]
 }
+
+export type Profile = {
+    id : string
+    first_name : string
+    last_name : string
+    profile_email : string
+}

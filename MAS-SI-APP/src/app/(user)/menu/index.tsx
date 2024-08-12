@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions, ImageBackground, StatusBar } from 'react-native';
 import React, { useState, useEffect, useRef, useContext, useCallback} from 'react';
-import { gettingPrayerData, prayerTimesType } from '@/src/types';
+import { gettingPrayerData, prayerTimesType, Profile } from '@/src/types';
 import { format } from 'date-fns';
 import { ThePrayerData} from '@/src/components/getPrayerData';
 import { usePrayer } from '@/src/providers/prayerTimesProvider';
@@ -12,12 +12,20 @@ import { JummahBottomSheetProp } from '@/src/types';
 import LinkToVolunteersModal from '@/src/components/linkToVolunteersModal';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler, withTiming, Easing } from 'react-native-reanimated';
-import { Button } from 'react-native-paper';
+import { Button, TextInput, Portal, Modal  } from 'react-native-paper';
 import { Link } from 'expo-router';
 import LinkToDonationModal from '@/src/components/LinkToDonationModal';
 import LottieView from 'lottie-react-native';
+import { supabase } from '@/src/lib/supabase';
+import { useAuth } from '@/src/providers/AuthProvider';
 export default function homeScreen() {
   const { onSetPrayerTimesWeek } = usePrayer()
+  const { session } = useAuth()
+  const [ profile, setProfile ] = useState<Profile>()
+  const [ profileFirstName , setProfileFirstName ] = useState('')
+  const [ profileLastName , setProfileLastName ] = useState('')
+  const [ profileEmail, setProfileEmail ] = useState('')
+  const [ confirmProfile, setConfirmProfile ] = useState(false)
   const [prayerTimes, setPrayerTimes] = useState<prayerTimesType>(
     {"status" : "fail",
     "data" : {
@@ -27,6 +35,9 @@ export default function homeScreen() {
     "message" : ""
      } )
     const [loading, setLoading] = useState(true)
+    const [visible, setVisible] = React.useState(false);
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
     const tabBarHeight = useBottomTabBarHeight();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const animation = useRef<LottieView>(null);
@@ -68,12 +79,30 @@ export default function homeScreen() {
       }
     })
 
-    const playMASAnimation = useAnimatedStyle(() => {
-      return{
-        opacity : withTiming(0, {duration : 7000, easing: Easing.out(Easing.quad)})
+    const getProfile = async () => {
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
+      if( data ){
+        if ( !data?.first_name || !data?.last_name || !data?.profile_email ){
+          setVisible(true)
+        }
+        setProfile(data)
       }
-    })
+    }
+    const onConfirmButton = async () => {
+      console.log(profileFirstName, profileLastName, profileEmail)
+      const { data, error } = await supabase.from('profiles').upsert({first_name : profileFirstName, last_name : profileLastName, profile_email : profileEmail, id : session?.user.id}).eq('id' , session?.user.id).select()
+      if( data ){
+        console.log(data)
+      }
+      if( error ){
+        console.log(error)
+      }
+      else{
+      setVisible(false)
+      }
+    }
     useEffect( () => {
+      getProfile();
       getMasjidalApi();
     }, [])
 
@@ -85,6 +114,14 @@ export default function homeScreen() {
       
     }, [prayerTimes])
 
+    useEffect(() => {
+      if( profileFirstName && profileLastName && profileEmail ){
+        setConfirmProfile(true)
+      }
+      else{
+        setConfirmProfile(false)
+      }
+    }, [profileFirstName, profileLastName, profileEmail])
     if (loading){
       return(
         <View className='justify-center items-center'>
@@ -176,6 +213,53 @@ export default function homeScreen() {
               </ImageBackground>
             </View>
             <View style={[{paddingBottom : tabBarHeight}]}></View>
+            <Portal>
+              <Modal dismissable={false} visible={visible} onDismiss={hideModal} contentContainerStyle={{ height : '70%', width : '95%', borderRadius : 10, backgroundColor : 'white', alignSelf : 'center', alignItems : 'center' }}>
+                <View className='flex-col'>
+                  <View>
+                    <Text className='text-center font-bold text-3xl'>Welcome</Text>
+                  </View>
+                  <View className='items-center'>
+                    <Text>Enter Your First Name</Text>
+                    <TextInput
+                    mode='outlined'
+                    theme={{ roundness : 50 }}
+                    style={{ width: 300, backgroundColor: "#e8e8e8", height: 45 }}
+                    activeOutlineColor='#0D509D'
+                    value={profileFirstName}
+                    onChangeText={setProfileFirstName}
+                    placeholder="First Name"
+                    textColor='black'
+                    />
+                    <Text>Enter Your Last Name</Text>
+                  <TextInput
+                    mode='outlined'
+                    theme={{ roundness : 50 }}
+                    style={{ width: 300, backgroundColor: "#e8e8e8", height: 45 }}
+                    activeOutlineColor='#0D509D'
+                    value={profileLastName}
+                    onChangeText={setProfileLastName}
+                    placeholder="Last Name"
+                    textColor='black'
+                    />
+                  <Text>Enter Your Email</Text>
+                  <TextInput
+                    mode='outlined'
+                    theme={{ roundness : 50 }}
+                    style={{ width: 300, backgroundColor: "#e8e8e8", height: 45 }}
+                    activeOutlineColor='#0D509D'
+                    value={profileEmail}
+                    onChangeText={setProfileEmail}
+                    placeholder="Email"
+                    textColor='black'
+                    />
+                  </View>
+                  <View className='self-center'>
+                    <Button  disabled={!confirmProfile} mode='contained' buttonColor='#57BA47' textColor='white' className='w-[150]' onPress={onConfirmButton}>Confirm</Button>
+                  </View>
+                  </View>
+              </Modal>
+            </Portal>
       </Animated.ScrollView>
     )
     

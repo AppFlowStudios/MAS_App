@@ -44,6 +44,7 @@ const AddToCartProgramSheet = forwardRef<Ref, AddtoCartProgramProp>(({program_id
                 ref.current.dismiss();
             }
     }
+
     return(
         <BottomSheetModal
         ref={ref}
@@ -53,6 +54,7 @@ const AddToCartProgramSheet = forwardRef<Ref, AddtoCartProgramProp>(({program_id
         backgroundStyle={{backgroundColor: "white"}}
         handleIndicatorStyle={{backgroundColor: "gray"}}
         backdropComponent={renderBackDrop}
+        onDismiss={() => setQuantity(1)}
         >
             <View className='flex-col w-[100%] px-1'>
                 <View className='flex-row'>
@@ -64,14 +66,14 @@ const AddToCartProgramSheet = forwardRef<Ref, AddtoCartProgramProp>(({program_id
                         <Text className='font-bold text-gray-400 text-xl text-center' numberOfLines={1}>{program_speaker}</Text>
                     </View>
                 </View>
-                <View className='flex-row '>
-                    <View className='items-center flex-row flex-1 border justify-center'>
-                        <Pressable className='bg-gray-600' style={{ borderTopLeftRadius : 10, borderBottomLeftRadius : 10}} onPress={() => setQuantity(quantity => Math.max(1, quantity - 1))}><Icon source={'minus'} size={50} color='white'/></Pressable>
-                        <View className='w-[60] justify-center items-center bg-gray-600 h-[50]'><Text className='text-white'>{quantity}</Text></View>
-                        <Pressable  className='bg-gray-600' style={{ borderTopRightRadius : 10, borderBottomRightRadius : 10 }} onPress={() => setQuantity(quantity + 1)}><Icon source={'plus'} size={50} color='white'/></Pressable>
+                <View className='flex-row mt-4'>
+                    <View className='items-center flex-row flex-1 justify-center'>
+                        <Pressable className='bg-gray-400' style={{ borderTopLeftRadius : 10, borderBottomLeftRadius : 10}} onPress={() => setQuantity(quantity => Math.max(1, quantity - 1))}><Icon source={'minus'} size={50} color='white'/></Pressable>
+                        <View className='w-[60] justify-center items-center bg-gray-400 h-[50]'><View className='p-3 bg-white rounded-lg'><Text className='font-bold'>{quantity}</Text></View></View>
+                        <Pressable  className='bg-gray-400' style={{ borderTopRightRadius : 10, borderBottomRightRadius : 10 }} onPress={() => setQuantity(quantity + 1)}><Icon source={'plus'} size={50} color='#57BA47'/></Pressable>
                     </View>
                 </View>
-                <View className='mt-3 w-[100%] border'>
+                <View className='mt-1 w-[100%]'>
                         <Button mode='contained' style={{ backgroundColor : "gray" }} icon={ () => <Icon source={"cart-outline"} size={20}/>} onPress={addToCart}>Add to Cart</Button>
                 </View>
             </View>

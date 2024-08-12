@@ -13,7 +13,7 @@ const LinkToDonationModal = () => {
                         style={{ width: '95%', height : '100%', borderRadius : 20, alignSelf : 'center', justifyContent : 'flex-end'}}
                         imageStyle={{ width : '100%', height : '100%', borderRadius : 20, alignSelf : 'center', objectFit : 'cover' }}
                     >
-                        <View className='w-[50%] h-[40] bg-white self-center mb-10 justify-center items-center' style={{ borderRadius : 20, shadowColor: "black", shadowOffset : {width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 4 }}>
+                        <View className='w-[50%] h-[40] bg-white self-center mb-10 justify-center items-center' style={{ borderRadius : 20, shadowColor: "black", shadowOffset : {width : 0, height : 0.5}, shadowOpacity : 1, shadowRadius : 2}}>
                             <Text className='text-3xl font-bold text-[#57BA47]' style={{ fontFamily : 'Oleo'}}>Donate Now</Text>
                         </View>
                     </ImageBackground>

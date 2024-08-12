@@ -1,6 +1,6 @@
 import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions, Easing, Alert, StatusBar, } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
-import { useLocalSearchParams, Stack, router, useRouter } from 'expo-router';
+import { useLocalSearchParams, Stack, router, useRouter, Link } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import LecturesListLecture from '@/src/components/LectureListLecture';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
@@ -208,6 +208,7 @@ async function getUserPlaylists(){
                       </Animated.View>
                     )
                   }) : (
+
                     <View className=''> 
                       <View>
                         <Text className='text-left text-2xl font-bold text-black ml-4'>Description: </Text>
@@ -225,7 +226,9 @@ async function getUserPlaylists(){
                     {
                       program?.program_is_paid ? 
                       (
-                        <Button icon={() => <Icon source={"cart-variant"} size={20} color='white'/>} mode='elevated' style={{ backgroundColor : "#57BA47", marginTop : 10, width: "90%"}}><Text className='text-white'>Add to Cart</Text></Button>
+                        <Link href={`more/ProgramsPage/${program.program_id}`} asChild>
+                        <Button icon={() => <Icon source={"cart-variant"} size={20} color='white'/>} mode='elevated' style={{ backgroundColor : "#57BA47", marginTop : 10, width: "90%"}}><Text className='text-white'>Sign Up Now</Text></Button>
+                        </Link>
                       ) : <></>
                     }
                 </View>
@@ -255,7 +258,7 @@ async function getUserPlaylists(){
                     }
                   </ScrollView>
                   <Divider />
-                  <Button textColor='#007AFF' style={{ paddingHorizontal : 1}} onPress={onDonePress}><Icon source={"check-bold"} color='#007AFF' size={20}/><Text className='text-xl'>Done</Text></Button>
+                    <Button textColor='#007AFF' style={{ paddingHorizontal : 1}} onPress={onDonePress}><Icon source={"check-bold"} color='#007AFF' size={20}/><Text className='text-xl'>Done</Text></Button>
                   </View>
                   :
                   ( 
