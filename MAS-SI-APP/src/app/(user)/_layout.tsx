@@ -1,63 +1,82 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs, Redirect } from "expo-router";
+import { Tabs, Redirect, Link } from "expo-router";
 import * as Animatable from 'react-native-animatable';
-import { TouchableOpacity } from "react-native";
+import { Pressable, TouchableOpacity } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import TabArray from './tabArray';
-import { TabArrayType } from '@/src/types';
+import { addProgramToNotificationsToastProp, Program, TabArrayType } from '@/src/types';
 import { Icon } from "react-native-paper";
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { useAuth } from "@/src/providers/AuthProvider";
 import LottieView from 'lottie-react-native';
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming, runOnJS } from 'react-native-reanimated';
+import Toast from 'react-native-toast-message'
+import { View, Text, Image } from 'react-native'
+import { defaultProgramImage } from '@/src/components/ProgramsListProgram';
+import { BlurView } from 'expo-blur';
 
-function TabBarIcon(props: { source: string; color: string; }) {
-  return <Icon size={20} {...props} />;
+const toastConfig = {
+  addProgramToNotificationsToast : ( {props} : any ) => (
+    <Pressable className='rounded-xl overflow-hidden' onPress={props.onPress}>
+        <BlurView intensity={40} className='flex-row w-[80%] bg-white items-center justify-between px-4 h-[60] border rounded-xl'>
+          <View>
+              <Image source={{ uri : props.props.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
+          </View>
+          <View className='flex-col'>
+            <View>
+              <Text>1 Program Added To Notifications</Text>
+            </View>
+            <View className='flex-row'>
+              <Text>{props.props.program_name}</Text>
+              <Icon source={'chevron-right'} size={20} />
+            </View>
+          </View>
+        </BlurView>
+      </Pressable>
+  ),
+  programRemovedFromNotifications : ( {props} : any ) => (
+    <Pressable className='rounded-xl overflow-hidden'>
+        <BlurView intensity={40} className='flex-row w-[80%] bg-white items-center justify-between px-4 h-[60] border rounded-xl'>
+          <View>
+              <Image source={{ uri : props.props.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
+          </View>
+          <View className='flex-col'>
+            <View>
+              <Text>1 Program Removed From Notifications</Text>
+            </View>
+            <View className='flex-row'>
+              <Text>{props.props.program_name}</Text>
+              <Icon source={'chevron-right'} size={20} />
+            </View>
+          </View>
+        </BlurView>
+      </Pressable>
+  ),
+  LectureAddedToPlaylist : ( {props} : any) => (
+    <Pressable className='rounded-xl overflow-hidden' onPress={props.onPress}>
+        <BlurView intensity={40} className='flex-row w-[80%] bg-white items-center justify-between px-4 h-[60] border rounded-xl'>
+          <View>
+              <Image source={{ uri : props.props.playlist_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
+          </View>
+          <View className='flex-col'>
+            <View>
+              <Text numberOfLines={1} allowFontScaling adjustsFontSizeToFit >1 lecture added</Text>
+            </View>
+            <View className='flex-row'>
+              <Text>{props.props.playlist_name}</Text>
+              <Icon source={'chevron-right'} size={20} />
+            </View>
+          </View>
+        </BlurView>
+      </Pressable>
+  )
 }
-
 const animate1 = { 0: { scale: 0.5, translateY: 0 }, 1: { scale: 1.2, translateY: -5 } };
 const animate2 = { 0: { scale: 1.2, translateY: 0 }, 1: { scale: 1, translateY: 20 } };
 
 type TabButtonProps = {
   props: BottomTabBarButtonProps,
   items: TabArrayType
-}
-
-type LoadingAnimationProps = {
-  onAnimationEnd: () => void
-}
-
-const LoadingAnimation = ({ onAnimationEnd }: LoadingAnimationProps) => {
-  const animation = useRef<LottieView>(null);
-  const opacity = useSharedValue(1);
-
-  const playMASAnimation = useAnimatedStyle(() => {
-    return {
-      opacity: opacity.value,
-    };
-  });
-
-  useEffect(() => {
-    opacity.value = withTiming(0, { duration: 1000, easing: Easing.out(Easing.quad) }, () => {
-      runOnJS(onAnimationEnd)(); // Ensures that the callback runs on the JavaScript thread
-    });
-  }, []);
-
-  return (
-    <Animated.View style={[{ zIndex: 1, position: 'absolute', width: '100%', height: '100%' }, playMASAnimation]}>
-      <LottieView
-        autoPlay
-        loop={false}
-        ref={animation}
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'white',
-        }}
-        source={require('@/assets/lottie/MASLogoAnimation3.json')}
-      />
-    </Animated.View>
-  );
 }
 
 const TabButton = ({ props, items }: TabButtonProps) => {
@@ -177,6 +196,7 @@ export default function TabLayout() {
           />
         ))}
       </Tabs>
+      <Toast config={toastConfig}/>
     </>
   );
 }

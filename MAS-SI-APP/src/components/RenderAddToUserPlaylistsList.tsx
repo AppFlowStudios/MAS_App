@@ -31,19 +31,14 @@ const RenderAddToUserPlaylistsListProgram = ( { playlist, lectureToBeAdded, setA
         setPlaylistAddingTo(setPlaylist)
       }
     }
-    else if( playListAddingTo){
-    setPlaylistAddingTo([...playListAddingTo, playlist.playlist_id])
-    }
     else{
       setPlaylistAddingTo([playlist.playlist_id])
     }
-    setStatus(status === 'checked' ? 'unchecked' : 'checked');
   };
   return (
     <TouchableOpacity className='flex-row items-center' onPress={onButtonToggle}>
-      { status  == "unchecked" ? <Icon source={"checkbox-blank-circle-outline"}  color='gray' size={25}/> : <Icon source={"checkbox-marked-circle"} color='#007AFF' size={25} />}
         <View className=' ml-2'>
-           <Image source={{ uri : playlist.playlist_img || defaultProgramImage}} style={{width : 60, height : 60, objectFit: "contain", borderRadius: 10}}/>
+           <Image source={{ uri : playlist.playlist_img || defaultProgramImage}} style={{width : 60, height : 60, objectFit: "fill", borderRadius: 10}}/>
         </View>
         <Text className='text-xl font-bold'> {playlist.playlist_name} </Text>
     </TouchableOpacity>
@@ -67,19 +62,14 @@ export const RenderAddToUserPlaylistsListEvent = ( { playlist, lectureToBeAdded,
         setPlaylistAddingTo(setPlaylist)
       }
     }
-    else if( playListAddingTo ){
-    setPlaylistAddingTo([...playListAddingTo, playlist.playlist_id])
-    }
     else{
-      setPlaylistAddingTo([playlist.playlist_id])
+      setPlaylistAddingTo([playlist.playlist_id])       
     }
-    setStatus(status === 'checked' ? 'unchecked' : 'checked');
   };
   return (
     <TouchableOpacity className='flex-row items-center' onPress={onButtonToggle}>
-        { status  == "unchecked" ? <Icon source={"checkbox-blank-circle-outline"}  color='gray' size={25}/> : <Icon source={"checkbox-marked-circle"} color='#007AFF' size={25} />}  
         <View className=' ml-2'>
-           <Image source={{ uri : playlist.playlist_img || defaultProgramImage}} style={{width : 60, height : 60, objectFit: "contain", borderRadius: 10}}/>
+           <Image source={{ uri : playlist.playlist_img || defaultProgramImage}} style={{width : 60, height : 60, objectFit: "fill", borderRadius: 10}}/>
         </View>
         <Text className='text-xl font-bold'> {playlist.playlist_name} </Text>
     </TouchableOpacity>

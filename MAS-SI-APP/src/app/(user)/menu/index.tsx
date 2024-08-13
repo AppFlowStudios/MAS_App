@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions, ImageBackground, StatusBar } from 'react-native';
+import { Image, StyleSheet, View, Text, FlatList, ScrollView, Dimensions, useWindowDimensions, ImageBackground, StatusBar, Pressable } from 'react-native';
 import React, { useState, useEffect, useRef, useContext, useCallback} from 'react';
 import { gettingPrayerData, prayerTimesType, Profile } from '@/src/types';
 import { format } from 'date-fns';
@@ -12,8 +12,8 @@ import { JummahBottomSheetProp } from '@/src/types';
 import LinkToVolunteersModal from '@/src/components/linkToVolunteersModal';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler, withTiming, Easing } from 'react-native-reanimated';
-import { Button, TextInput, Portal, Modal  } from 'react-native-paper';
-import { Link } from 'expo-router';
+import { Button, TextInput, Portal, Modal, Icon  } from 'react-native-paper';
+import { Link, useNavigation } from 'expo-router';
 import LinkToDonationModal from '@/src/components/LinkToDonationModal';
 import LottieView from 'lottie-react-native';
 import { supabase } from '@/src/lib/supabase';
@@ -21,6 +21,7 @@ import { useAuth } from '@/src/providers/AuthProvider';
 export default function homeScreen() {
   const { onSetPrayerTimesWeek } = usePrayer()
   const { session } = useAuth()
+  const navigation = useNavigation<any>()
   const [ profile, setProfile ] = useState<Profile>()
   const [ profileFirstName , setProfileFirstName ] = useState('')
   const [ profileLastName , setProfileLastName ] = useState('')
@@ -185,8 +186,12 @@ export default function homeScreen() {
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
             
-              <View className='pt-7 justify-center'>
-                <Text className='font-bold text-2xl text-[#0D509D] pl-3 ' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>
+              <View className='pt-7 flex-row justify-between w-[100%] px-3'>
+                <Text className='font-bold text-2xl text-[#0D509D]' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>
+                <View className='flex-row items-center'>
+                  <Text className='text-gray-300'>View All</Text>
+                  <Icon source={'chevron-right'} size={20}/>
+                </View>
               </View>
 
               <View className='pt-3' style={{height: 250}}>

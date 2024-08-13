@@ -54,9 +54,8 @@ const ClassesAndLecturesSettings = () => {
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
      <StatusBar barStyle={"dark-content"}/>
-     <Stack.Screen options={{ title : ''}}/>
-      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%", paddingBottom : tabBarHeight }} >
-          
+     <Stack.Screen options={{ title : '', headerBackTitleVisible : false}}/>
+      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%", paddingBottom : tabBarHeight }}  >
           <View>
             <Animated.Image 
               source={ { uri: program?.program_img || defaultProgramImage }}

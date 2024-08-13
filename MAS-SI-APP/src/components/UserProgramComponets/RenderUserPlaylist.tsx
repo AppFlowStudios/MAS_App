@@ -18,7 +18,7 @@ const RenderUserPlaylist = ({ playlist } : RenderUserPlaylistProp) => {
                                 />
                     </View>
                     <View className='items-center justify-center w-[70%]'>
-                        <Text className='text-xl font-bold' numberOfLines={1}> {playlist.playlist_name} </Text>
+                        <Text className='text-xl font-bold' numberOfLines={1} allowFontScaling adjustsFontSizeToFit> {playlist.playlist_name} </Text>
                     </View>
                 </View>
                 

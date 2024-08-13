@@ -145,19 +145,19 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
             source={require("@/assets/images/salahPictures/DJI_0049.jpg")}
             style={{height: "100%", width: "100%" }}
         >
-        <View className='flex-row mt-4 items-center'>
-            <Text className='text-white px-5 font-bold text-lg' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
-            <Text className='text-gray-100 ml-[23%] font-bold text-lg ' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Athan</Text>
+        <View className='flex-row mt-4 items-center w-[100%]'>
+            <Text className='text-white px-5 font-bold text-lg w-[50%]' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
+            <Text className='text-gray-100 ml-[23%] font-bold text-lg w-[50%]' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Athan</Text>
         </View>
-        <View className='flex-row mt-9'>
-            <Text className='text-white px-5 font-bold text-4xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >{currentSalah.salah}</Text>
-            <Text className='text-gray-100 font-bold text-3xl' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }, {marginLeft : currentSalah.salah == "Maghrib" || currentSalah.salah == "Dhuhr" ? "25%" : "40%" }]}>{currentSalah.athan}</Text>
+        <View className='flex-row mt-9 w-[100%]'>
+            <Text className='text-white px-5 font-bold text-4xl w-[50%] text-left' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1}} >{currentSalah.salah}</Text>
+            <Text className='text-gray-100 font-bold text-3xl w-[50%] text-center' style={[{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }]}>{currentSalah.athan}</Text>
         </View>
-        <View className='flex-row mt-12 items-center'>
-            <Text className='text-white pl-4 pr-1 font-bold text-xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Next Iqamah in</Text>
-            <Text className='text-white font-bold text-2xl' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{timeToNextPrayer}</Text>
+        <View className='flex-row mt-12 items-center w-[100%]'>
+            <Text className='text-white pl-4 pr-1 font-bold text-xl w-[50%] text-left' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Next Iqamah in</Text>
+            <Text className='text-white font-bold text-2xl w-[50%] text-center' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{timeToNextPrayer}</Text>
         </View>
-        <View className='items-center flex-row justify-end'>
+        <View className='items-center flex-row justify-end w-[100%] mt-3'>
             <Text className='text-right text-gray-300' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 2 }, textShadowRadius: 1 }}>Full Prayer Schedule</Text>
             <Icon source={'chevron-right'} size={20} color='#D3D3D3'/>
         </View>

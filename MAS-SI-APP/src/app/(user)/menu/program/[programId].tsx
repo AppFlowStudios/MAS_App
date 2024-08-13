@@ -1,13 +1,12 @@
 import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions, Easing, Alert, StatusBar, } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
-import { useLocalSearchParams, Stack, router, useRouter, Link } from 'expo-router';
+import { useLocalSearchParams, Stack, useRouter, Link, useNavigation } from 'expo-router';
 import programsData from '@/assets/data/programsData';
 import LecturesListLecture from '@/src/components/LectureListLecture';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
 import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
 import SheikData from "@/assets/data/sheikData";
 import { Lectures, SheikDataType, Program } from '@/src/types';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ FadeInLeft, interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, withSequence, withTiming } from 'react-native-reanimated';
@@ -22,6 +21,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import CreatePlaylistBottomSheet from '@/src/components/UserProgramComponets/CreatePlaylistBottomSheet';
 import * as Haptics from "expo-haptics"
 import LottieView from 'lottie-react-native';
+import Toast from 'react-native-toast-message';
 const ProgramLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
@@ -39,9 +39,8 @@ const ProgramLectures = () => {
   const [ usersPlaylists, setUsersPlaylists ] = useState<UserPlaylistType[]>()
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
-
   const hideAddToPlaylist = () => setAddToPlaylistVisible(false)
-  const router = useRouter()
+  const navigation = useNavigation<any>()
   const Tab = useBottomTabBarHeight()
   const { width } = Dimensions.get("window")
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
@@ -97,11 +96,27 @@ async function getUserPlaylists(){
     getProgram()
     getProgramLectures()
     getUserPlaylists()
+    const listenForUserPlaylistChanges = supabase
+    .channel('listen for user playlist adds')
+    .on(
+     'postgres_changes',
+    {
+      event: '*',
+      schema: 'public',
+      table: "user_playlist",
+      filter: `user_id=eq.${session?.user.id}`
+    },
+    (payload) => getUserPlaylists()
+    )
+    .subscribe()
+
+    return () => { supabase.removeChannel( listenForUserPlaylistChanges )}
   }, [])
 
   useEffect(() => {
     setPlaylistAddingTo([])
   }, [!addToPlaylistVisible])
+
   const GetSheikData = () => {
     const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.program_speaker)
     return( 
@@ -124,18 +139,40 @@ async function getUserPlaylists(){
       </View>
     )
   } 
+
   const NotificationBell = () => {
   const notificationAnimation = useRef<LottieView>(null)
+  const addedToNoti = () => {
+    const goToProgram = () => {
+      navigation.navigate('myPrograms', { screen : 'notifications/ClassesAndLectures/[program_id]', params : { program_id : programId}, initial: false  })
+    }
+    Toast.show({
+      type : 'addProgramToNotificationsToast',
+      props : { props : program, onPress : goToProgram },
+      position : 'top',
+      topOffset : 50,
+    })
+  }
+
+  const removedFromNoti = () => {
+    Toast.show({
+      type : 'programRemovedFromNotifications',
+      props : { props : program },
+      position : 'top',
+      topOffset : 50,
+    })
+  }
    const handlePress = async () => {
     if( programInNotfications ) {
       const { error } = await supabase.from("added_notifications_programs").delete().eq("user_id" , session?.user.id).eq("program_id", programId)
       setProgramInNotifications(false)
+      removedFromNoti()
     }
     else{
       const { error } = await supabase.from("added_notifications_programs").insert({user_id :session?.user.id, program_id : programId})
       setProgramInNotifications(true)
+      addedToNoti()
     }
- 
     Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Success
     )
@@ -146,13 +183,12 @@ async function getUserPlaylists(){
     </Pressable>
    )
   }
+  
   const onDonePress = async () => {
-    if(playlistAddingTo && playlistAddingTo.length > 0){
+    if( playlistAddingTo && playlistAddingTo.length > 0 ){
       playlistAddingTo.map( async (item) => {
-          const { data : checkDupe , error : checkDupeError } = await supabase.from("user_playlist_lectures").select("*").eq("user_id ", session?.user.id).eq( "playlist_id" ,item).eq( "event_lecture_id", lectureToBeAddedToPlaylist).single()  
-            if( checkDupeError ) {
-              console.log( checkDupeError )
-            }
+          const { data : checkDupe , error : checkDupeError } = await supabase.from("user_playlist_lectures").select("*").eq("user_id ", session?.user.id).eq( "playlist_id" ,item).eq( "program_lecture_id", lectureToBeAddedToPlaylist).single()  
+          console.log(checkDupe, checkDupeError)
             if( checkDupe ){
               const { data : dupePlaylistName, error  } = await supabase.from("user_playlist").select("playlist_name").eq("playlist_id", checkDupe.playlist_id).single()
               Alert.alert(`Lecture already found in ${dupePlaylistName?.playlist_name}`, "", [
@@ -168,17 +204,28 @@ async function getUserPlaylists(){
             )
             }
             else{
-              const { error } = await supabase.from("user_playlist_lectures").insert({user_id : session?.user.id, playlist_id : item, event_lecture_id : lectureToBeAddedToPlaylist })
-              if( error ) {
-                console.log( error )
+              const { error } = await supabase.from("user_playlist_lectures").insert({user_id : session?.user.id, playlist_id : item, program_lecture_id : lectureToBeAddedToPlaylist })
+              const getPlaylistAddedTo = usersPlaylists?.filter(playlist => playlist.playlist_id == playlistAddingTo[0])
+              const goToPlaylist = () => { navigation.navigate('myPrograms', { screen : 'playlists/[playlist_id]', params: { playlist_id : playlistAddingTo }}) }
+              if( getPlaylistAddedTo && getPlaylistAddedTo[0] ){
+                Toast.show({
+                  type : 'LectureAddedToPlaylist',
+                  props: { props : getPlaylistAddedTo[0], onPress : goToPlaylist},
+                  position : 'bottom',
+                  bottomOffset : Tab * 2
+                })
               }
           }})
-      setAddToPlaylistVisible(false)
-    }
+        setAddToPlaylistVisible(false)
+      }
     else{
       setAddToPlaylistVisible(false)
     }
   }
+  useEffect(() => {
+    onDonePress()
+    setAddToPlaylistVisible(false)
+  }, [playlistAddingTo.length > 0])
 
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
@@ -253,12 +300,11 @@ async function getUserPlaylists(){
                   <View className='flex-1'>
                     <ScrollView className='mt-2'>
                     {usersPlaylists.map(( item, index) => {
-                        return( <RenderAddToUserPlaylistsListProgram playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible} setPlaylistAddingTo={setPlaylistAddingTo} playListAddingTo={playlistAddingTo}/>)
+                        return(<View className='mt-2'><RenderAddToUserPlaylistsListProgram playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible} setPlaylistAddingTo={setPlaylistAddingTo} playListAddingTo={playlistAddingTo}/></View>)
                       })
                     }
                   </ScrollView>
                   <Divider />
-                    <Button textColor='#007AFF' style={{ paddingHorizontal : 1}} onPress={onDonePress}><Icon source={"check-bold"} color='#007AFF' size={20}/><Text className='text-xl'>Done</Text></Button>
                   </View>
                   :
                   ( 

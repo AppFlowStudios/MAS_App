@@ -44,6 +44,7 @@ const PlaylistIndex = () => {
 
   return (
     <ScrollView className=' bg-white flex-1'>
+          <Stack.Screen options={{ title : '', headerBackTitleVisible : false}}/>
             <Pressable className='flex-row items-center ml-2' onPress={handlePresentModalPress}>
                 <Icon source={"plus-box-outline"} size={40} color='red'/>
                 <Text className='text-xl font-bold px-[13]'>Create New Playlist...</Text>

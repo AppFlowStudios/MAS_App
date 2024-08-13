@@ -156,3 +156,7 @@ export type Profile = {
     last_name : string
     profile_email : string
 }
+
+export type addProgramToNotificationsToastProp = {
+    props : Program
+}

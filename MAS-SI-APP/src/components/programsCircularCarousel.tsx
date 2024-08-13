@@ -54,7 +54,9 @@ export default function ProgramsCircularCarousel(  ) {
         if (active < Number(endOfList) - 1) {
           flatListRef.current?.scrollToIndex({
             index : active + 1,
-            animated : true
+            animated : true,
+            viewOffset : -7,
+            
           })
           setActive(active + 1);
       } else {
@@ -92,7 +94,6 @@ export default function ProgramsCircularCarousel(  ) {
     
     <View>
     <Animated.View className='' style={{height: 300}}>
-
       <Animated.FlatList 
                 data={programsData}
                 renderItem={({item, index}) =>  <ProgramsCircularCarouselCard scrollX={scrollX} listItemWidth={listItemWidth} program={item} index={index} itemSpacer={SIDE_CARD_LENGTH} spacing={SPACEING} lastIndex={endOfList}/>}
@@ -111,7 +112,6 @@ export default function ProgramsCircularCarousel(  ) {
                 getItemLayout={getItemLayout}
                 ref={flatListRef}
        />
-       
     </Animated.View>
     </View>
 

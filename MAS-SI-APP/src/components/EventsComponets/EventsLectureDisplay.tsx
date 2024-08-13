@@ -18,6 +18,7 @@ import { UserPlaylistType } from '@/src/types';
 import { RenderAddToUserPlaylistsListEvent } from '../RenderAddToUserPlaylistsList';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import CreatePlaylistBottomSheet from '../UserProgramComponets/CreatePlaylistBottomSheet';
+import Toast from 'react-native-toast-message';
 
 type EventsLectureDisplayProp = {
     event_id : string
@@ -105,9 +106,6 @@ const EventsLectureDisplay = ( {event_id, event_img, event_speaker, event_name} 
       if(playlistAddingTo && playlistAddingTo.length > 0){
         playlistAddingTo.map( async (item) => {
             const { data : checkDupe , error : checkDupeError } = await supabase.from("user_playlist_lectures").select("*").eq("user_id ", session?.user.id).eq( "playlist_id" ,item).eq( "event_lecture_id", lectureToBeAddedToPlaylist).single()  
-              if( checkDupeError ) {
-                console.log( checkDupeError )
-              }
               if( checkDupe ){
                 const { data : dupePlaylistName, error  } = await supabase.from("user_playlist").select("playlist_name").eq("playlist_id", checkDupe.playlist_id).single()
                 Alert.alert(`Lecture already found in ${dupePlaylistName?.playlist_name}`, "", [
@@ -124,8 +122,14 @@ const EventsLectureDisplay = ( {event_id, event_img, event_speaker, event_name} 
               }
               else{
                 const { error } = await supabase.from("user_playlist_lectures").insert({user_id : session?.user.id, playlist_id : item, event_lecture_id : lectureToBeAddedToPlaylist })
-                if( error ) {
-                  console.log( error )
+                const getPlaylistAddedTo = usersPlaylists?.filter(playlist => playlist.playlist_id == playlistAddingTo[0])
+                if( getPlaylistAddedTo && getPlaylistAddedTo[0] ){
+                  Toast.show({
+                    type : 'LectureAddedToPlaylist',
+                    props: { props : getPlaylistAddedTo[0]},
+                    position : 'bottom',
+                    bottomOffset : Tab * 2
+                  })
                 }
             }})
         setAddToPlaylistVisible(false)
@@ -137,11 +141,31 @@ const EventsLectureDisplay = ( {event_id, event_img, event_speaker, event_name} 
     useEffect(() => {
         fetchEventLectures()
         getUserPlaylists()
+        const listenForUserPlaylistChanges = supabase
+        .channel('listen for user playlist event adds')
+        .on(
+         'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: "user_playlist",
+          filter: `user_id=eq.${session?.user.id}`
+        },
+        (payload) => getUserPlaylists()
+        )
+        .subscribe()
+    
+        return () => { supabase.removeChannel( listenForUserPlaylistChanges )}
     }, [])
 
     useEffect(() => {
       setPlaylistAddingTo([])
     }, [!addToPlaylistVisible])
+
+    useEffect(() => {
+      onDonePress()
+      setAddToPlaylistVisible(false)
+    }, [playlistAddingTo.length > 0])
       return (
         <View className='flex-1 bg-white' style={{flexGrow: 1}}>
           <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%" }} >
@@ -160,8 +184,8 @@ const EventsLectureDisplay = ( {event_id, event_img, event_speaker, event_name} 
                         eventLectures ? eventLectures.map((item, index) => {
                             return (
                             <Animated.View key={index} entering={FadeInLeft.duration(400).delay(100)}> 
-                            <RenderEventLectures lecture={item} index={index} speaker={item.event_lecture_speaker} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
-                            <Divider style={{width: "95%", marginLeft: 8}}/>
+                              <RenderEventLectures lecture={item} index={index} speaker={item.event_lecture_speaker} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
+                              <Divider style={{width: "95%", marginLeft: 8}}/>
                             </Animated.View>
                             )
                         }) : <></>
@@ -186,12 +210,11 @@ const EventsLectureDisplay = ( {event_id, event_img, event_speaker, event_name} 
                       <View className='flex-1'>
                         <ScrollView className='mt-2'>
                           { usersPlaylists.map(( item, index) => {
-                              return( <RenderAddToUserPlaylistsListEvent playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible} setPlaylistAddingTo={setPlaylistAddingTo} playListAddingTo={playlistAddingTo}/>)
+                              return( <View className='mt-1'><RenderAddToUserPlaylistsListEvent playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible} setPlaylistAddingTo={setPlaylistAddingTo} playListAddingTo={playlistAddingTo}/></View>)
                             }) }
                         </ScrollView>
 
                       <Divider />
-                      <Button textColor='#007AFF' style={{ paddingHorizontal : 1}} onPress={onDonePress}><Icon source={"check-bold"} color='#007AFF' size={20}/><Text className='text-xl'>Done</Text></Button>
                       </View>
                       :( 
                       <View className=' items-center justify-center '> 
