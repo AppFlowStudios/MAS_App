@@ -18,7 +18,7 @@ import { BlurView } from 'expo-blur';
 const toastConfig = {
   addProgramToNotificationsToast : ( {props} : any ) => (
     <Pressable className='rounded-xl overflow-hidden' onPress={props.onPress}>
-        <BlurView intensity={40} className='flex-row w-[80%] bg-white items-center justify-between px-4 h-[60] border rounded-xl'>
+        <BlurView intensity={40} className='flex-row w-[80%] items-center justify-between px-4 h-[60] rounded-xl'>
           <View>
               <Image source={{ uri : props.props.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
           </View>
@@ -36,9 +36,9 @@ const toastConfig = {
   ),
   programRemovedFromNotifications : ( {props} : any ) => (
     <Pressable className='rounded-xl overflow-hidden'>
-        <BlurView intensity={40} className='flex-row w-[80%] bg-white items-center justify-between px-4 h-[60] border rounded-xl'>
+        <BlurView intensity={40} className='flex-row w-[80%] items-center justify-between px-4 h-[60] rounded-xl'>
           <View>
-              <Image source={{ uri : props.props.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
+              <Image source={{ uri : props.props?.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
           </View>
           <View className='flex-col'>
             <View>
@@ -54,16 +54,16 @@ const toastConfig = {
   ),
   LectureAddedToPlaylist : ( {props} : any) => (
     <Pressable className='rounded-xl overflow-hidden' onPress={props.onPress}>
-        <BlurView intensity={40} className='flex-row w-[80%] bg-white items-center justify-between px-4 h-[60] border rounded-xl'>
+        <BlurView intensity={40} className='flex-row w-[80%] items-center justify-between px-4 h-[60] rounded-xl'>
           <View>
-              <Image source={{ uri : props.props.playlist_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
+              <Image source={{ uri : props.props?.playlist_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
           </View>
           <View className='flex-col'>
             <View>
               <Text numberOfLines={1} allowFontScaling adjustsFontSizeToFit >1 lecture added</Text>
             </View>
             <View className='flex-row'>
-              <Text>{props.props.playlist_name}</Text>
+              <Text>{props.props?.playlist_name}</Text>
               <Icon source={'chevron-right'} size={20} />
             </View>
           </View>

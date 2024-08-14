@@ -13,7 +13,7 @@ type CartProgramItemsProp = {
 }
 const CartProgramItems = ({program_id, product_quantity, setTotal, total} : CartProgramItemsProp) => {
   const [ program, setProgram ] = useState<Program>()
-  const [ quantity, setQuantity ] = useState(1)
+  const [ quantity, setQuantity ] = useState(product_quantity)
   const getProgram = async () => {
     const { data, error } = await supabase.from('programs').select('*').eq('program_id', program_id).single()
     if( data ){
@@ -26,9 +26,13 @@ const CartProgramItems = ({program_id, product_quantity, setTotal, total} : Cart
   useEffect(() => {
     getProgram()
   },[])
+
   useEffect(() => {
-    setTotal(total + (program?.program_price! * product_quantity))
-  }, [program!])
+    const calculatePrice = program?.program_price! * quantity
+    console.log(calculatePrice)
+    setTotal(total + calculatePrice)
+  }, [quantity])
+  console.log(total)
   return (
     <View style={{ width: "95%", height: 120, backgroundColor : '#E5E4E2', alignItems : 'center', alignSelf : 'center', borderRadius : 10 }} className='mt-2'>
         <View style={{flexDirection: "row",alignItems : 'center', justifyContent: "center", height  : '100%', paddingHorizontal : 10, width : '100%'}} >
@@ -48,8 +52,8 @@ const CartProgramItems = ({program_id, product_quantity, setTotal, total} : Cart
                         <View className='flex-row '>
                             <View className='items-center flex-row justify-center'>
                                 <Pressable className='bg-white' style={{ borderTopLeftRadius : 10, borderBottomLeftRadius : 10}} onPress={() => setQuantity(quantity => Math.max(1, quantity - 1))}><Icon source={'minus'} size={20} color='black'/></Pressable>
-                                <View className='w-[60] justify-center items-center  h-[20]'><Text className='text-black'>{product_quantity}</Text></View>
-                                <Pressable  className='bg-[#57BA47]' style={{ borderTopRightRadius : 10, borderBottomRightRadius : 10 }} onPress={() => setQuantity(quantity + 1)}><Icon source={'plus'} size={20} color='white'/></Pressable>
+                                    <View className='w-[60] justify-center items-center h-[20]'><Text className='text-black'>{quantity}</Text></View>
+                                <Pressable className='bg-[#57BA47]' style={{ borderTopRightRadius : 10, borderBottomRightRadius : 10 }} onPress={() => setQuantity(quantity => quantity + 1)}><Icon source={'plus'} size={20} color='white'/></Pressable>
                             </View>
                         </View>
                 </View>

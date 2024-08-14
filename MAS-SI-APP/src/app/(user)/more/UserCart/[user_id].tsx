@@ -53,7 +53,7 @@ const Cart = () => {
     )
     .subscribe();
     setLoading(false)
-    return () =>  {supabase.removeChannel(cart) }
+    return () =>  { supabase.removeChannel(cart) }
   }, [])
   if( loading ){
     return(
@@ -62,7 +62,7 @@ const Cart = () => {
         </ScrollView>
     )
   }
-  
+  console.log(total)
   return (
     <View className='flex-1 bg-white' style={{ paddingBottom : tabBarHeight }}>
     <ScrollView className='bg-white'>

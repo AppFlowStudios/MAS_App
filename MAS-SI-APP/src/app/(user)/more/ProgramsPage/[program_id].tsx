@@ -103,7 +103,7 @@ const ProgramInfo = () => {
             <Text className='text-[#57BA47] font-bold text-lg w-[50%] text-center' allowFontScaling adjustsFontSizeToFit numberOfLines={1}>${program?.program_price}<Text className='text-black text-md'> / Month</Text> </Text>
         </View>
         
-        <View className='flex-1 '>
+        <View className='flex-1 w-[100%]'>
           <View className='bg-white'>
             <Text className='text-left text-2xl font-bold text-black ml-4'>Description: </Text>
           </View>
@@ -112,22 +112,31 @@ const ProgramInfo = () => {
               <ScrollView><Text>{program?.program_desc}</Text></ScrollView>
             </View>
           </View>
+          {programForm &&programForm?.length > 0 ? ( 
+          <>
           <View className='bg-white'>
-            <Text className='text-left text-2xl font-bold text-black ml-4'>Form: </Text>
+              <Text className='text-left text-2xl font-bold text-black ml-4'>Form: </Text>
+            </View>
+            <ScrollView className='pt-5 w-[100%]  bg-white flex-col gap-y-2' contentContainerStyle={{ alignItems : 'center' , paddingBottom : Tab }} bounces={false}>
+                  { programForm ? programForm.map((item, index) => {
+                    if( item.question_type == 'text_input' ) {
+                      return <View className='w-[95%]'><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
+                    }
+                    else if( item.question_type == 'radio_button'){
+                      return <View className='w-[95%]'><RadioButtonForm item={item} isReady={isReady} setIsReady={setIsReady} index={index}/></View>
+                    }
+                  }) : <></>}
+                  <View className='px-3 w-[100%] pt-3'>
+                      <Button mode='contained' style={{ backgroundColor : "#57BA47", }} icon={ () => <Icon source={"cart-outline"} size={20} color={ buttonOn ? 'white' : 'gray'} />} onPress={handlePresentModalPress} disabled={!buttonOn} >Add to Cart</Button>
+                  </View>
+            </ScrollView>
+          </>
+          ) : (
+           <View className='px-3 w-[100%] pt-3'>
+            <Button mode='contained' style={{ backgroundColor : "#57BA47", }} icon={ () => <Icon source={"cart-outline"} size={20} color={ buttonOn ? 'white' : 'gray'} />} onPress={handlePresentModalPress} disabled={!buttonOn} >Add to Cart</Button>
           </View>
-          <ScrollView className='mt-5 w-[100%]  bg-white flex-col gap-y-2' contentContainerStyle={{ alignItems : 'center' , paddingBottom : Tab }} bounces={false}>
-                { programForm ? programForm.map((item, index) => {
-                  if( item.question_type == 'text_input' ) {
-                    return <View className='w-[95%]'><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
-                  }
-                  else if( item.question_type == 'radio_button'){
-                    return <View className='w-[95%]'><RadioButtonForm item={item} isReady={isReady} setIsReady={setIsReady} index={index}/></View>
-                  }
-                }) : <></>}
-                <View className='px-3 w-[100%] pt-3'>
-                    <Button mode='contained' style={{ backgroundColor : "#57BA47", }} icon={ () => <Icon source={"cart-outline"} size={20} color={ buttonOn ? 'white' : 'gray'} />} onPress={handlePresentModalPress} disabled={!buttonOn} >Add to Cart</Button>
-                </View>
-          </ScrollView>
+          )
+          }
         </View>
      </Animated.ScrollView>
      <AddToCartProgramSheet ref={bottomSheetRef} program_id={program?.program_id!} program_img={program?.program_img!} program_price={program?.program_price!}  program_name={program?.program_name!} program_speaker={program?.program_speaker!} />

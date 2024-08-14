@@ -18,6 +18,7 @@ import LinkToDonationModal from '@/src/components/LinkToDonationModal';
 import LottieView from 'lottie-react-native';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
+import Toast from 'react-native-toast-message';
 export default function homeScreen() {
   const { onSetPrayerTimesWeek } = usePrayer()
   const { session } = useAuth()
@@ -161,7 +162,13 @@ export default function homeScreen() {
         jummahDesc: "How to increase your iman and stand for Palestine"
       }
   ]
-
+  const testToast = () => {
+    Toast.show({
+      type : 'LectureAddedToPlaylist',
+      position : 'top',
+      topOffset : 50,
+    })
+  }
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
 { /*           <Animated.View style={[{ zIndex : 1, position : 'absolute', width : '100%', height : '100%'  }]}>
@@ -185,7 +192,6 @@ export default function homeScreen() {
             <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderEndStartRadius: 30 ,borderEndEndRadius: 30}} className=''>
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
-            
               <View className='pt-7 flex-row justify-between w-[100%] px-3'>
                 <Text className='font-bold text-2xl text-[#0D509D]' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>
                 <View className='flex-row items-center'>

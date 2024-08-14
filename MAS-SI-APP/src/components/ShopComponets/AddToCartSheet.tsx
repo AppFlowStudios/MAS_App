@@ -31,9 +31,6 @@ const AddToCartProgramSheet = forwardRef<Ref, AddtoCartProgramProp>(({program_id
             const newQurantity = currQurantity.product_quantity + quantity
             console.log(newQurantity)
             const { data, error } = await supabase.from('user_cart').update({product_quantity : newQurantity }).eq("user_id", session?.user.id).eq("program_id", program_id)
-            console.log(error)
-            console.log(data)
-            
             }
         }
         else{
