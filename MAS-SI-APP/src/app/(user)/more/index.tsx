@@ -8,6 +8,7 @@ import { Link } from 'expo-router'
 import { Profile } from '@/src/types'
 import { useAuth } from '@/src/providers/AuthProvider'
 import { supabase } from '@/src/lib/supabase'
+import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 const Index = () => {
   const [ profile, setProfile ] = useState<Profile>()
@@ -15,6 +16,17 @@ const Index = () => {
   const width = useWindowDimensions().width
   const height = useWindowDimensions().height
   const tabBarHeight = useBottomTabBarHeight() + 60
+  const spin = useSharedValue(0)
+  const flip = useAnimatedStyle(() => {
+    const spinVal = interpolate(spin.value, [0, 1], [0, 360])
+    return{
+      transform: [
+        {
+          rotateY: withTiming(`${spinVal}deg`, { duration: 500 }),
+        },
+      ],
+    }
+  })
   const getProfile = async () => {
     const { data, error } = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
     if( data ){
@@ -26,13 +38,16 @@ const Index = () => {
   }, [])
   return (
     <ScrollView className='bg-white pt-[18%] h-[100%]'>
-      <View className='w-[100%] items-center justify-center' style={{ height : height / 4 }}>
-        <View style={{  shadowColor : "black", shadowOffset : {width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 5  }}>
-          <Image 
+      <View className='w-[100%] items-center justify-center' style={{ height : height / 3 }}>
+        <Pressable className='w-[100%] px-10' onPress={async () =>  await supabase.auth.signOut()}>
+          <Text className='text-right text-gray-400'>Logout</Text>
+        </Pressable>
+        <Pressable style={{  shadowColor : "black", shadowOffset : {width : 0, height : 0}, shadowOpacity : 1, shadowRadius : 5  }} onPress={() => (spin.value = spin.value ? 0 : 1)}>
+          <Animated.Image 
             source={{ uri : defaultProgramImage }}
-            style={{ width : 100, height : 100, borderRadius : 50, borderColor : "yellow", borderWidth : 2 }}
+            style={[{ width : 100, height : 100, borderRadius : 50, borderColor : "yellow", borderWidth : 2 }, flip]}
           />
-        </View>
+        </Pressable>
         <View className='flex-col mt-1'>
             <View className='bg-white p-1 rounded-xl border-2'>
               <Text>{profile?.first_name}</Text>
@@ -41,11 +56,11 @@ const Index = () => {
               <Text>{profile?.profile_email}</Text>
             </View>
             <View className='pt-2'>
-              <Button mode='contained' buttonColor='#0D509D' textColor='white' className='w-[150]'>Edit Profile</Button>
+              <Button mode='contained' buttonColor='#007AFF' textColor='white' className='w-[150]'>Edit Profile</Button>
             </View>
           </View>
       </View>
-      <View className='items-center' style={{ paddingBottom : tabBarHeight }}>
+      <View className='items-center flex-1' style={{ paddingBottom : tabBarHeight }}>
           <View className='flex-1 flex-col items-center pb-10 w-[95%]' style={{ borderRadius : 20, shadowColor : 'black', shadowOffset : { width : 0, height : 0.5}, shadowOpacity : 1, shadowRadius : 1  }}>
 
             <Link href={"/more/MasShop"} asChild>
@@ -164,7 +179,7 @@ const Index = () => {
     
                   </View>
               </Pressable>
-
+              <Link href={'/more/BusinessAds'} asChild>
               <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
                   <View className='flex-row items-center justify-between px-1 w-[100%]'>
                     <Text className=' text-gray-400'>Want Marketing</Text>
@@ -190,7 +205,7 @@ const Index = () => {
                     </Pressable>
                     </View>
                 </Pressable>
-
+                </Link>
 
             <View className='w-[95%] bg-white mt-8 items-center justify-center p-4' style={{ borderRadius : 10}}>
               <Text adjustsFontSizeToFit allowFontScaling numberOfLines={1}  className='text-gray-400'>Created By: App Flow Creations (appflowcreations@gmail.com)</Text>

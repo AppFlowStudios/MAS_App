@@ -17,7 +17,7 @@ const onPress = () => Linking.canOpenURL("https://chat.whatsapp.com/EJZZgYlIGuR4
 const LinkToVolunteersModal = () => {
   return (
     <View style={{width: "100%", height: 200, justifyContent :"center", alignItems : 'center',shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6 }} >
-        <Pressable className='bg-[#0D509D] w-[95%] h-[90%]' style={{borderRadius: 30, justifyContent : "center"}} onPress={onPress}>
+        <Pressable className='bg-[#0D509D] w-[95%] h-[95%]' style={{borderRadius: 30, justifyContent : "center"}} onPress={onPress}>
           <View className='flex-row '>
             <View className='flex-col pl-4 '>
               <Text className='text-white font-bold '>Lets Grow Together!</Text>

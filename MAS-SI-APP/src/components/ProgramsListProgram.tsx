@@ -15,6 +15,7 @@ import { SharedElement } from "react-navigation-shared-element"
 import Animated, { Easing, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { SharedTransition } from 'react-native-reanimated';
 import { useNavigation, } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 type ProgramsListProgramProps = {
     program : Program,
 }
@@ -22,6 +23,7 @@ type ProgramsListProgramProps = {
 
 export default function ProgramsListProgram( {program} : ProgramsListProgramProps){
     const { session } = useAuth()
+    const [ programImg, setProgramImg ] = useState('')
     const [ isSwiped, setIsSwiped ] = useState(false);
     const swipeableRef = useRef<Swipeable>(null);
    
@@ -118,6 +120,22 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
           ),
         };
       });
+      const getData = async (key : string) => {
+        try {
+          const value = await AsyncStorage.getItem(key);
+          if (value !== null) {
+            // Data found
+            const img = JSON.parse(value)
+            return img.program_img
+          } else {
+            // No data found
+            console.log('No data found for key:', key);
+            return
+          }
+        } catch (error) {
+          console.error('Error retrieving data:', error);
+        }
+      };
     
     return(
         <View style={{ width: "100%", height: 120, marginHorizontal: 5}}>

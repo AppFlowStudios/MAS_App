@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, useWindowDimensions, Pressable, Image } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import DonationChart from '@/src/components/DonationChart'
 import { format } from 'date-fns'
 import { SharedValue, useDerivedValue, useSharedValue } from 'react-native-reanimated'
@@ -11,6 +11,9 @@ import YoutubePlayer from "react-native-youtube-iframe"
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { Divider, Icon } from 'react-native-paper'
 import { Stack } from 'expo-router'
+import { initializePaymentSheet, openPaymentSheet } from '@/src/lib/stripe'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import OtherAmountDonationSheet from '@/src/components/ShopComponets/OtherAmountDonationSheet'
 type DonationGoalType = {
     date : string
     amount : number
@@ -31,7 +34,12 @@ const Donation = () => {
   const togglePlaying = useCallback(() => {
     setPlaying((prev) => !prev);
   }, []);
-
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
+  const handlePresentModalPress = () => bottomSheetRef.current?.present();
+  const callForDonationAmount = async (amount : number) => {
+    await initializePaymentSheet(Math.floor(amount * 100))
+    await openPaymentSheet()
+  }
   const selectedValue = useSharedValue(0)
   const DONATIONGOAL : DonationGoalType[] = [
         {date : "2017-02-01T05:00:00.000Z", amount : 0, amountGiven : 0},
@@ -76,14 +84,14 @@ const Donation = () => {
             <DonationChart CHART_HEIGHT={layoutHeight / 3} CHART_WIDTH={layout * .89}  DONATION_GOAL={DONATIONGOAL} CHART_MARGIN={layoutMargin} CURR_DONATIONS={currDonations} setSelectedDate={setSelectedDate} selectedValue={selectedValue}/>
         </View> 
         <View style={{ width : layout, height : layoutHeight / 5, backgroundColor : 'white', flexWrap : "wrap", flexDirection : 'row', columnGap : 5, justifyContent : 'center', marginTop : "10%", rowGap : 5 }}>
-            {DonationButtonBoxs.map((item) => (
-                 <Pressable style={{ width : layout / 2.2, height : 50 }}>
-                 <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center"}}>
-                     <Text className='text-white text-xl font-bold text-center'>${item}</Text>
-                 </LinearGradient>
-             </Pressable>
+            {DonationButtonBoxs.map((item, index) => (
+                  <Pressable style={{ width : layout / 2.2, height : 50 }} onPress={ () =>  callForDonationAmount(DonationButtonBoxs[index])}>
+                      <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center"}}>
+                          <Text className='text-white text-xl font-bold text-center'>${item}</Text>
+                      </LinearGradient>
+                  </Pressable>
             ))}
-             <Pressable style={{ width : layout / 2.2, height : 50 }}>
+             <Pressable style={{ width : layout / 2.2, height : 50 }} onPress={handlePresentModalPress}>
                  <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center"}}>
                      <Text className='text-white text-xl font-bold text-center'>Other Amount...</Text>
                  </LinearGradient>
@@ -100,6 +108,7 @@ const Donation = () => {
                 onChangeState={onStateChange}
             />
         </View>
+        <OtherAmountDonationSheet ref={bottomSheetRef} />
     </ScrollView>
   )
 }

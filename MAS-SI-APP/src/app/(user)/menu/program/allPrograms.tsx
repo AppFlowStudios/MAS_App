@@ -1,7 +1,6 @@
 import { StyleSheet, View, FlatList, Button} from 'react-native';
 import { Stack } from "expo-router";
 import ProgramsListProgram from "../../../../components/ProgramsListProgram"
-import programsData from '@/assets/data/programsData';
 import { Divider, Searchbar } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { Program } from "@/src/types"
@@ -27,6 +26,7 @@ export default function ProgramsScreen(){
       }
 
       if(data){
+        
         setShownData(data)
         console.log
       }
@@ -45,10 +45,6 @@ export default function ProgramsScreen(){
   const tabBarHeight = useBottomTabBarHeight() + 35;
   const filterTestFunc = (searchParam : string) => {
     setSearchBarInput(searchParam)
-    const filterTest = programsData.filter((program) => {
-      return program.program_name.includes(searchParam)
-    })
-    setShownData(filterTest)
   }
 
   const seperator = () =>{

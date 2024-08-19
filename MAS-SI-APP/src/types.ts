@@ -98,9 +98,9 @@ export type TabArrayType = {
 }
 
 export type SheikDataType = {
-    name: string,
-    creds : string[],
-    image : string
+    speaker_name: string,
+    speaker_creds : string[],
+    speaker_img : string
 }
 
 export type EventsType = {

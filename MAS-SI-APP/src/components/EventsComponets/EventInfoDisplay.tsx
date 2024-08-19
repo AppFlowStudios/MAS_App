@@ -7,7 +7,6 @@ import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
 import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
-import SheikData from "@/assets/data/sheikData";
 import { Lectures, SheikDataType, Program } from '@/src/types';
 import { EventsType } from '@/src/types';
 import { EventLectureType } from '@/src/types';
@@ -46,24 +45,8 @@ const EventInfoDisplay = ({ event_img, event_speaker, event_name, event_desc} : 
     })
 
     const GetSheikData = (  ) => {
-        const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == event_speaker)
-        return( 
-          <View>
-            <View className=' flex-row'>
-              <Image source={{uri : sheik[0].image || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
-              <View className='flex-col px-5'>
-                <Text className='text-xl font-bold'>Name: </Text>
-                <Text className='pt-2 font-semibold'> {sheik[0].name} </Text>
-              </View>
-            </View>
-      
-            <View className='flex-col py-3'>
-              { sheik[0].name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 
-              { sheik[0].creds.map( (cred, i) => {
-                return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} </Text>
-              })}
-            </View>
-          </View>
+        return(
+          <View></View>
         )
       } 
   return (

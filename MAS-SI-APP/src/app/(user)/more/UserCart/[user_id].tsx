@@ -1,11 +1,14 @@
 import { View, Text, ScrollView, Pressable } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { supabase } from '@/src/lib/supabase'
-import { ActivityIndicator, Button, Icon, TextInput } from 'react-native-paper'
+import { ActivityIndicator, Button, Divider, Icon, TextInput } from 'react-native-paper'
 import CartProgramItems, { CartEventItems } from '@/src/components/ShopComponets/CartItems'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
+import { initializePaymentSheet, openPaymentSheet } from '@/src/lib/stripe'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import CheckoutSheet from '@/src/components/ShopComponets/CheckoutSheet'
 type CartProp = {
     user_id : string
     program_id : string | null
@@ -17,7 +20,8 @@ const Cart = () => {
   const [ cartContent, setCartContent ] = useState<CartProp[]>()
   const [ loading, setLoading ] = useState(true)
   const [ promo, setPromo ] = useState('')
-  const [ total, setTotal ] = useState(0)
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
+  const handlePresentModalPress = () => bottomSheetRef.current?.present()
   const tabBarHeight = useBottomTabBarHeight() + 30
   const [ opened, setOpened ] = useState(false)
   const onItemPress = () => {
@@ -36,7 +40,10 @@ const Cart = () => {
         setCartContent(data)
     }
   }
-
+  const callForDonationAmount = async (amount : number) => {
+    await initializePaymentSheet(Math.floor(amount * 100))
+    await openPaymentSheet()
+  }
   useEffect(() => {
     getCart()
 
@@ -44,7 +51,7 @@ const Cart = () => {
     .on(
       'postgres_changes',
       {
-        event: 'UPDATE',
+        event: '*',
         schema: 'public',
         table: 'user_cart',
         filter: `user_id=eq.${user_id}`,
@@ -62,18 +69,17 @@ const Cart = () => {
         </ScrollView>
     )
   }
-  console.log(total)
   return (
     <View className='flex-1 bg-white' style={{ paddingBottom : tabBarHeight }}>
-    <ScrollView className='bg-white'>
-        <Stack.Screen options={{ title : "My Cart", headerBackTitleVisible : false }}/>
+      <Stack.Screen options={{ title : "My Cart", headerBackTitleVisible : false }}/>
+    <ScrollView className='bg-white flex-1'>
         {
             cartContent && cartContent.length > 0 ? cartContent.map(( item, index ) => {
               if( item.program_id ){
-                return <CartProgramItems program_id={item.program_id} product_quantity={item.product_quantity} setTotal={setTotal} total={total}/>
+                return <CartProgramItems program_id={item.program_id} product_quantity={item.product_quantity}/>
               }
               else if( item.event_id) {
-                return  <CartEventItems event_id={item.event_id} product_quantity={item.product_quantity} setTotal={setTotal} total={total}/>
+                return  <CartEventItems event_id={item.event_id} product_quantity={item.product_quantity}/>
               }
             }) : <View><Text> Your Cart Is Empty! </Text></View>
         }
@@ -86,24 +92,17 @@ const Cart = () => {
             activeOutlineColor='#0D509D'
             value={promo}
             onChangeText={setPromo}
-            placeholder="PromoCode"
-            secureTextEntry
+            placeholder="Promo Code"
             textColor='black'
-            right={<TextInput.Affix text="Apply" textStyle={{ color : 'black' }}/>}
+            right={<TextInput.Affix text='Apply' textStyle={{color: "#0D509D"}}/>}
           />
     </View>
-    <View className='w-[90%] self-center'>
-      <Pressable  style={{ backgroundColor : '#57BA47', flexDirection : 'column', justifyContent : 'center', alignItems : 'center', borderRadius : 20}} onPress={onItemPress} >
-        <View style={{ transform : opened ? [{rotate : '180deg'}]  : "" }}>
-                <Icon source={"chevron-up"} color='white' size={20} />
-        </View>
+    <View className='w-[70%] self-center'>
+      <Pressable  style={{ backgroundColor : '#57BA47', flexDirection : 'column', justifyContent : 'center', alignItems : 'center', borderRadius : 20, height: 40}} onPress={handlePresentModalPress} >
         <Text className='text-white font-bold text-xl'>Checkout</Text>
       </Pressable>
-      <Animated.View style={[animatedStyle]} className='bg-black'>
-            <Text>
-            </Text>
-        </Animated.View>
     </View>
+      <CheckoutSheet ref={bottomSheetRef} promo={promo}/>
     </View>
   )
 }

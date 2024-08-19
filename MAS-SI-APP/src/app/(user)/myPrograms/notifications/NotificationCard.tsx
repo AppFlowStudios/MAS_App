@@ -50,7 +50,6 @@ const NotificationCard = ({height , width, index, scrollY, setSelectedNotificati
                 <Text>NotificationCard</Text>
               </View>
             </Pressable>
-
         </Animated.View>
   )
 }

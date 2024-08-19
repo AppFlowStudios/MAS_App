@@ -36,6 +36,7 @@ export default function homeScreen() {
     },
     "message" : ""
      } )
+    
     const [loading, setLoading] = useState(true)
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
@@ -134,7 +135,7 @@ export default function homeScreen() {
    
     const jummahData : JummahBottomSheetProp[] = [
       {
-        jummahSpeaker : "Sh Abdelrahman Badawy",
+        jummahSpeaker : "Sh.Abdelrahman Badawy",
         jummahSpeakerImg : "",
         jummahTopic : "United Hope",
         jummahNum: "12:15 PM",
@@ -171,19 +172,6 @@ export default function homeScreen() {
   }
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
-{ /*           <Animated.View style={[{ zIndex : 1, position : 'absolute', width : '100%', height : '100%'  }]}>
-                <LottieView
-                    autoPlay
-                    ref={animation}
-                    style={{
-                      width: '100%',
-                      height: '50%',
-                      backgroundColor: 'white'
-                    }}
-                    // Find more Lottie files at https://lottiefiles.com/featured
-                    source={require('@/assets/lottie/MASLogoAnimation3.json')}
-                />
-            </Animated.View>  */}
             <StatusBar barStyle={"dark-content"}/>
             <View className='justify-center items-center mt-[12%] '>
               <Animated.Image source={require("@/assets/images/massiLogo2.png")} style={[{width: width / 2, height: 75, justifyContent: "center" }, imageAnimatedStyle]} />
@@ -206,7 +194,7 @@ export default function homeScreen() {
               <View className='pl-3 flex-row pt-10'>
                   <Text className='text-[#0D509D] font-bold text-2xl'>Donate</Text>
               </View>
-              <View>
+              <View className='pt-2'>
                 <LinkToDonationModal />
               </View>
             <View className='flex-row pl-3 pt-5'>

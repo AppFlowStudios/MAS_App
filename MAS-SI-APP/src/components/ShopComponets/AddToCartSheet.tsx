@@ -29,12 +29,14 @@ const AddToCartProgramSheet = forwardRef<Ref, AddtoCartProgramProp>(({program_id
             const { data : currQurantity, error } = await supabase.from('user_cart').select('product_quantity').eq('user_id', session?.user.id).eq('program_id', program_id).single()
             if( currQurantity ){
             const newQurantity = currQurantity.product_quantity + quantity
-            console.log(newQurantity)
-            const { data, error } = await supabase.from('user_cart').update({product_quantity : newQurantity }).eq("user_id", session?.user.id).eq("program_id", program_id)
+            const cartSum = program_price * newQurantity
+            console.log(cartSum)
+            const { data, error } = await supabase.from('user_cart').update({product_quantity : newQurantity, product_price : cartSum }).eq("user_id", session?.user.id).eq("program_id", program_id)
             }
         }
         else{
-        const { error } = await supabase.from('user_cart').insert({ user_id : session?.user.id, program_id: program_id, product_quantity : quantity })
+            const cartSum = program_price * quantity
+            const { error } = await supabase.from('user_cart').insert({ user_id : session?.user.id, program_id: program_id, product_quantity : quantity, product_price : cartSum })
         }
             if (ref && 'current' in ref && ref.current) {
                 setQuantity(1)

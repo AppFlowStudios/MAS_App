@@ -5,6 +5,7 @@ import { initPaymentSheet, presentPaymentSheet } from "@stripe/stripe-react-nati
 const fetchPaymentSheetParam = async ( amount : number ) => {
     const { data, error } = await supabase.functions.invoke('payment-sheet', { body : { amount } })
     if( data ){
+        console.log(data)
         return data
     }
    if( error ){
@@ -16,12 +17,14 @@ const fetchPaymentSheetParam = async ( amount : number ) => {
 
 export const initializePaymentSheet = async ( amount : number ) => {
     console.log('Payment Sheet Amount', amount)
-    const { paymentIntent, publishableKey } = await fetchPaymentSheetParam(amount)
+    const { paymentIntent, publishableKey, customer, ephemeralKey } = await fetchPaymentSheetParam(amount)
     if( !paymentIntent || !publishableKey ) return
 
     const { error } = await initPaymentSheet({
         merchantDisplayName : 'MAS Staten Island',
         paymentIntentClientSecret : paymentIntent,
+        customerId : customer,
+        customerEphemeralKeySecret : ephemeralKey,
         defaultBillingDetails : {
             name : 'Jane Doe'
         }

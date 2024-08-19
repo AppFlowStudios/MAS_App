@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack, router } from 'expo-router';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
 import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
-import SheikData from "@/assets/data/sheikData";
 import { Lectures, SheikDataType, Program, UserPlaylistType } from '@/src/types';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, withSpring, withTiming, withRepeat, runOnJS } from 'react-native-reanimated';
@@ -113,30 +112,6 @@ const programLectures = () => {
     getUserPlaylists()
   }, [])
 
-
-
-  const GetSheikData = () => {
-    const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.program_speaker)
-    return( 
-      <View>
-        <View className=' flex-row'>
-          <Image source={{uri : sheik[0].image || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
-          <View className='flex-col px-5'>
-            <Text className='text-xl font-bold'>Name: </Text>
-            <Text className='pt-2 font-semibold'> {sheik[0].name} </Text>
-          </View>
-        </View>
-  
-        <View className='flex-col py-3'>
-          { sheik[0].name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 
-          { sheik[0].creds.map( (cred, i) => {
-            return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} </Text>
-          })}
-        </View>
-      </View>
-    )
-  } 
-
   const HeaderRight = () => {
     const removeFromLibrary = async () => {
       const { error } = await supabase.from("added_programs").delete().eq("user_id", session?.user.id).eq("program_id", programId)
@@ -205,7 +180,7 @@ const programLectures = () => {
           </View>
           <Portal>
             <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "35%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
-              <GetSheikData />
+              <View></View>
             </Modal>
           </Portal>
          { playAnimation ? 
@@ -229,7 +204,7 @@ const programLectures = () => {
             <Modal visible={addToPlaylistVisible} onDismiss={hideAddToPlaylist} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "50%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
               <ScrollView>
                   { usersPlaylists ? usersPlaylists.map(( item, index) => {
-                    return( <RenderAddToUserPlaylistsListProgram playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible}/>)
+                    return( <RenderAddToUserPlaylistsListProgram playlist={item} lectureToBeAdded={lectureToBeAddedToPlaylist} setAddToPlaylistVisible={setAddToPlaylistVisible} />)
                   })
                   :( 
                   <View className=' items-center justify-center '> 

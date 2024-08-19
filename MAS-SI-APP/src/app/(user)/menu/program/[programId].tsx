@@ -1,11 +1,9 @@
 import { View, Text, Pressable, FlatList, Image, TouchableOpacity, Dimensions, Easing, Alert, StatusBar, } from 'react-native'
 import React, { useEffect, useState, useRef } from 'react'
 import { useLocalSearchParams, Stack, useRouter, Link, useNavigation } from 'expo-router';
-import programsData from '@/assets/data/programsData';
 import LecturesListLecture from '@/src/components/LectureListLecture';
 import { defaultProgramImage }  from '@/src/components/ProgramsListProgram';
 import { Divider, Portal, Modal, IconButton, Icon, Button } from 'react-native-paper';
-import SheikData from "@/assets/data/sheikData";
 import { Lectures, SheikDataType, Program } from '@/src/types';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -34,6 +32,7 @@ const ProgramLectures = () => {
   const [ addToPlaylistVisible, setAddToPlaylistVisible ] = useState(false)
   const [ lectureToBeAddedToPlaylist, setLectureToBeAddedToPlaylist ] = useState<string>("")
   const [ playlistAddingTo, setPlaylistAddingTo ] = useState<string[]>([])
+  const [ speakerData, setSpeakerData ] = useState<SheikDataType>()
   const [ playAnimation , setPlayAnimation ] = useState( false )
   const [ lectureInfoAnimation, setLectureInfoAnimation ] = useState<Lectures>()
   const [ usersPlaylists, setUsersPlaylists ] = useState<UserPlaylistType[]>()
@@ -117,25 +116,33 @@ async function getUserPlaylists(){
     setPlaylistAddingTo([])
   }, [!addToPlaylistVisible])
 
-  const GetSheikData = () => {
-    const sheik : SheikDataType[]  = SheikData.filter(sheik => sheik.name == program?.program_speaker)
+  const GetSheikData =  () => {
+    const getInfo = async () => {
+      const {data : speakerInfo, error} = await supabase.from('speaker_data').select('*').eq('speaker_name', program?.program_speaker).single()
+      if ( speakerInfo ){
+        setSpeakerData(speakerInfo)
+      }
+    
+    }
+    useEffect(() => {
+      getInfo()
+    }, [])
     return( 
-      <View>
-        <Stack.Screen options={{ headerBackVisible : true }}/>
+      <View className='flex-1'>
         <View className=' flex-row'>
-          <Image source={{uri : sheik[0].image || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
+          <Image source={{uri : speakerData?.speaker_img || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
           <View className='flex-col px-5'>
             <Text className='text-xl font-bold'>Name: </Text>
-            <Text className='pt-2 font-semibold'> {sheik[0].name} </Text>
+            <Text className='pt-2 font-semibold'> {speakerData?.speaker_name} </Text>
           </View>
         </View>
   
-        <View className='flex-col py-3'>
-          { sheik[0].name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 
-          { sheik[0].creds.map( (cred, i) => {
-            return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} </Text>
+        <ScrollView className='flex-col py-3' contentContainerStyle={{ flex : 1 }}>
+          { speakerData?.speaker_name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 
+          { speakerData?.speaker_creds.map( (cred, i) => {
+            return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} {'\n'}</Text>
           })}
-        </View>
+        </ScrollView>
       </View>
     )
   } 
@@ -283,7 +290,7 @@ async function getUserPlaylists(){
           </View>
           
           <Portal>
-            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "35%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
+            <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{backgroundColor: 'white', padding: 20, height: "55%", width: "90%", borderRadius: 35, alignSelf: "center"}} >
               <GetSheikData />
             </Modal>
           </Portal>
