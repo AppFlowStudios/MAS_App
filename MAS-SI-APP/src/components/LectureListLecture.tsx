@@ -1,7 +1,6 @@
 import { View, Text, Pressable, FlatList, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, Stack } from 'expo-router';
-import programsData from '@/assets/data/programsData';
 import { Lectures, Program } from '@/src/types';
 import { Link } from "expo-router";
 import { defaultProgramImage } from './ProgramsListProgram';

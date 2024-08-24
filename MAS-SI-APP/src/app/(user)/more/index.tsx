@@ -206,7 +206,6 @@ const Index = () => {
                     </View>
                 </Pressable>
                 </Link>
-
             <View className='w-[95%] bg-white mt-8 items-center justify-center p-4' style={{ borderRadius : 10}}>
               <Text adjustsFontSizeToFit allowFontScaling numberOfLines={1}  className='text-gray-400'>Created By: App Flow Creations (appflowcreations@gmail.com)</Text>
             </View>

@@ -38,18 +38,18 @@ const CreatePlaylistBottomSheet = forwardRef<Ref, {}>((props, ref) => {
     
     const uploadImage = async () => {
         if( playlistImg ){
-        const base64 = await FileSystem.readAsStringAsync(playlistImg.uri, { encoding: 'base64' });
-        const filePath = `${session?.user.id}/${new Date().getTime()}.${playlistImg.type === 'image' ? 'png' : 'mp4'}`;
-        const contentType = playlistImg.type === 'image' ? 'image/png' : 'video/mp4';
-        const { data : image, error :image_upload_error } = await supabase.storage.from('user_playlist_img').upload(filePath, decode(base64));
+            const base64 = await FileSystem.readAsStringAsync(playlistImg.uri, { encoding: 'base64' });
+            const filePath = `${session?.user.id}/${new Date().getTime()}.${playlistImg.type === 'image' ? 'png' : 'mp4'}`;
+            const contentType = playlistImg.type === 'image' ? 'image/png' : 'video/mp4';
+            const { data : image, error :image_upload_error } = await supabase.storage.from('user_playlist_img').upload(filePath, decode(base64));
 
-        if( image ){
-            const { data : playlist_img_url} = await supabase.storage.from('user_playlist_img').getPublicUrl(image?.path)
-            if( playlist_img_url ) {
-                const { error } = await supabase.from("user_playlist").insert({ user_id : session?.user.id, playlist_name : playlistName, playlist_img: playlist_img_url.publicUrl})
+            if( image ){
+                const { data : playlist_img_url} = await supabase.storage.from('user_playlist_img').getPublicUrl(image?.path)
+                if( playlist_img_url ) {
+                    const { error } = await supabase.from("user_playlist").insert({ user_id : session?.user.id, playlist_name : playlistName, playlist_img: playlist_img_url.publicUrl})
+                }
             }
-        }
-        handleClose()
+            handleClose()
         }
     }
 
