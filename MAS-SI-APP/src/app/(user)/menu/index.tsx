@@ -83,6 +83,9 @@ export default function homeScreen() {
     })
 
     const getProfile = async () => {
+      if( session?.user.is_anonymous){
+        return
+      }
       const { data, error } = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
       if( data ){
         if ( !data?.first_name || !data?.last_name || !data?.profile_email ){
@@ -163,13 +166,6 @@ export default function homeScreen() {
         jummahDesc: "How to increase your iman and stand for Palestine"
       }
   ]
-  const testToast = () => {
-    Toast.show({
-      type : 'LectureAddedToPlaylist',
-      position : 'top',
-      topOffset : 50,
-    })
-  }
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
             <StatusBar barStyle={"dark-content"}/>

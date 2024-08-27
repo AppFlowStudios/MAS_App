@@ -160,3 +160,18 @@ export type Profile = {
 export type addProgramToNotificationsToastProp = {
     props : Program
 }
+
+export type BusinessSubmissionsProp = {
+    personal_full_name : string
+    personal_phone_number : string
+    personal_email : string
+    business_name : string
+    business_address : string
+    business_phone_number : string
+    business_flyer_duration : string
+    business_flyer_location : string
+    business_flyer_img : string
+    user_id : string
+    status : string 
+    created_at : string
+}

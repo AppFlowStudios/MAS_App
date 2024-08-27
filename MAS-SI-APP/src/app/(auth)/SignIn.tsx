@@ -40,6 +40,12 @@ const SignIn = () => {
       setLoading(false);
     }  
 
+    const guestSignIn = async () => {
+      const { data, error } = await supabase.auth.signInAnonymously()
+      if( error ){
+        console.log( error )
+      }
+    }
     useEffect(() => {
       logoMountAnimeFunc()
     }, [])
@@ -55,7 +61,7 @@ const SignIn = () => {
         <View className='w-[85%]  items-center h-[550]  bg-white' style={{shadowColor: "black", shadowOffset: {width: 0, height: 0}, shadowOpacity: 3, shadowRadius: 3, borderRadius: 8}}>
           <Text className='font-bold text-[#0D509D] text-3xl mt-[10%]'>LOGIN</Text>
 
-        <View className='mt-2 items-center'>
+        <View className='mt-2 items-center w-[100%]'>
           <TextInput
             mode='outlined'
             theme={{ roundness : 50 }}
@@ -82,7 +88,7 @@ const SignIn = () => {
             secureTextEntry
             textColor='black'
           />
-
+    
           <View className=' flex-row mt-2 items-center'>
                 <Divider className=' w-[100]' bold/>
                 <Text className='font-semi text-black text-lg' > OR </Text>
@@ -96,21 +102,23 @@ const SignIn = () => {
             <Image source={require("@/assets/images/apple-signinbutton-560.png")} style={{ width : 300, height: 50, objectFit: 'cover'}} className='mb-1'/>
           </View>
 
-
-
-
-
         </View>
         <View className='mt-5'/>
           <Button  mode='contained' onPress={signInWithEmail} disabled={loading} buttonColor='#57BA47' textColor='white' className='w-[150]'>LOGIN</Button>
 
           <Link href="/SignUp" asChild>
             <Pressable className='flex-row justify-center mt-[8%]'>
-          <Text>Don't have an account?  </Text>
-          
-          <Text className='text-[#0D509D]'>Sign Up</Text>
+              <Text>Don't have an account?  </Text>
+              
+              <Text className='text-[#0D509D]'>Sign Up</Text>
             </Pressable>
           </Link>
+
+            <Pressable className='flex-row justify-center mt-[5%]' onPress={guestSignIn}>
+              <Text>Sign in as </Text>
+              
+              <Text className='text-[#0D509D]'>Guest</Text>
+            </Pressable>
         </View>
       </View>
       

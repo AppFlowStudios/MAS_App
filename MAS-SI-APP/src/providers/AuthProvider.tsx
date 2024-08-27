@@ -39,8 +39,7 @@ type AuthData = {
   
       fetchSession();
       supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-        console.log(session)
+        fetchSession()
       });
     }, []);
   

@@ -14,6 +14,7 @@ import Toast from 'react-native-toast-message'
 import { View, Text, Image } from 'react-native'
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram';
 import { BlurView } from 'expo-blur';
+import { supabase } from '@/src/lib/supabase';
 
 const toastConfig = {
   addProgramToNotificationsToast : ( {props} : any ) => (
@@ -140,7 +141,6 @@ export default function TabLayout() {
   if (!session) {
     return <Redirect href={'/sign-in'} />;
   }
-
   return (
     <>
       {loading && (

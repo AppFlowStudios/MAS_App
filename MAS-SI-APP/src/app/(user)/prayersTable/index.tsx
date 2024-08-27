@@ -10,6 +10,9 @@ import { Link } from 'expo-router';
 
 export default function Index() {
   const { prayerTimesWeek } = usePrayer();
+  if( prayerTimesWeek.length == 0 ){
+    return
+  }
   const tableWidth = Dimensions.get('screen').width * .95
   const [ tableIndex, setTableIndex ] = useState(0)
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;

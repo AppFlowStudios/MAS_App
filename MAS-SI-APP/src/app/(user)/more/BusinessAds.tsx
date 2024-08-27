@@ -125,7 +125,7 @@ const BusinessAds = () => {
         if( image ){
             const { data : business_flyer_url } = await supabase.storage.from('business_flyers').getPublicUrl(image?.path)
             if( business_flyer_url ) {
-                const { data, error } = await supabase.from('business_ads_submissions').insert({'personal_full_name' : personalFullName, 'personal_phone_number' : personalPhoneNumber, 'personal_email' : personalEmail, 'business_name': businessName, 'business_address' : businessAddress, 'business_phone_number': businessPhoneNumber, 'business_email' : businessEmail, 'business_flyer_location' : selectedLocation[0], 'business_flyer_duration' : selectedDuration[0], 'business_flyer_img' : business_flyer_url.publicUrl })
+                const { data, error } = await supabase.from('business_ads_submissions').insert({'personal_full_name' : personalFullName, 'personal_phone_number' : personalPhoneNumber, 'personal_email' : personalEmail, 'business_name': businessName, 'business_address' : businessAddress, 'business_phone_number': businessPhoneNumber, 'business_email' : businessEmail, 'business_flyer_location' : selectedLocation[0], 'business_flyer_duration' : selectedDuration[0], 'business_flyer_img' : business_flyer_url.publicUrl, user_id : session?.user.id })
                 if( error ){
                     console.log(error)
                 }else{

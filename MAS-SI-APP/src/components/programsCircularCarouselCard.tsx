@@ -13,10 +13,11 @@ type ProgramsCircularCarouselCardProp = {
     lastIndex: number | undefined,
     scrollX : number,
     spacing : number
+    disabled : boolean
 }
 
 
-export default function ProgramsCircularCarouselCard( {program, index, listItemWidth, scrollX, itemSpacer, spacing, lastIndex}: ProgramsCircularCarouselCardProp) {
+export default function ProgramsCircularCarouselCard( {program, index, listItemWidth, scrollX, itemSpacer, spacing, lastIndex, disabled}: ProgramsCircularCarouselCardProp) {
     const {width : windowWidth} = useWindowDimensions();
     const size = useSharedValue(0.6);
 
@@ -45,7 +46,7 @@ export default function ProgramsCircularCarouselCard( {program, index, listItemW
   return (
     <Animated.View style={[{width: listItemWidth, marginLeft: spacing, marginRight: spacing}, cardStyle, {marginLeft : index == 0 ? itemSpacer : spacing, marginRight : index == lastIndex - 1 ? itemSpacer : spacing}]} className=''>
       <Link href={"../menu/program/programsAndEventsScreen/"} asChild>
-        <Pressable style={{justifyContent: "center" , alignItems : "center"}}>
+        <Pressable style={{justifyContent: "center" , alignItems : "center"}} disabled={!disabled}>
         <View style={{width: listItemWidth , height: 200, shadowColor: "black", shadowOffset: { width: 0, height: 0},shadowOpacity: 0.6, justifyContent: "center", alignItems: "center", borderRadius: 20}} >
           <Image 
           source={{ uri: program.program_img || defaultProgramImage}}

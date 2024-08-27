@@ -9,12 +9,15 @@ import { Profile } from '@/src/types'
 import { useAuth } from '@/src/providers/AuthProvider'
 import { supabase } from '@/src/lib/supabase'
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
+import SignInAnonModal from '@/src/components/SignInAnonModal'
 
 const Index = () => {
   const [ profile, setProfile ] = useState<Profile>()
   const { session } = useAuth()
   const width = useWindowDimensions().width
   const height = useWindowDimensions().height
+  const [ visible, setVisible ] = useState(false)
+  const [ anonStatus, setAnonStatus ] = useState(true)
   const tabBarHeight = useBottomTabBarHeight() + 60
   const spin = useSharedValue(0)
   const flip = useAnimatedStyle(() => {
@@ -33,9 +36,27 @@ const Index = () => {
       setProfile(data)
     }
   }
+  const checkIfAnon = async () => {
+    if( session?.user.is_anonymous ){
+      setAnonStatus(true)
+    }
+    else{
+      setAnonStatus(false)
+    }
+  }
+  const SignInModalCheck = () => {
+    if( anonStatus ){
+      setVisible(true)
+    }else{
+      return
+    }
+  }
   useEffect(() => {
     getProfile()
   }, [])
+  useEffect(() => {
+    checkIfAnon()
+  }, [session])
   return (
     <ScrollView className='bg-white pt-[18%] h-[100%]'>
       <View className='w-[100%] items-center justify-center' style={{ height : height / 3 }}>
@@ -62,28 +83,28 @@ const Index = () => {
       </View>
       <View className='items-center flex-1' style={{ paddingBottom : tabBarHeight }}>
           <View className='flex-1 flex-col items-center pb-10 w-[95%]' style={{ borderRadius : 20, shadowColor : 'black', shadowOffset : { width : 0, height : 0.5}, shadowOpacity : 1, shadowRadius : 1  }}>
-
-            <Link href={"/more/MasShop"} asChild>
-            <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
-              <View className='flex-row items-center justify-between px-1 w-[100%]'>
-                <Text className='text-gray-400'>Join Programs</Text>
-              </View>
-              <View className='flex-row w-[100%] justify-between items-center pt-1'>
-                  <View className='flex-row items-center'>
-                    <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0'}}>
-                      <Icon source={"shopping-outline"} size={25} color='#BDBDBD'/>
+          <Pressable onPress={SignInModalCheck} className=' w-[100%] mt-5'>
+            <Link href={"/more/MasShop"} asChild disabled={anonStatus}>
+              <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
+                <View className='flex-row items-center justify-between px-1 w-[100%]'>
+                  <Text className='text-gray-400'>Join Programs</Text>
+                </View>
+                <View className='flex-row w-[100%] justify-between items-center pt-1'>
+                    <View className='flex-row items-center'>
+                      <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0'}}>
+                        <Icon source={"shopping-outline"} size={25} color='#BDBDBD'/>
+                      </View>
+                      <Text className='text-2xl ml-1'>MAS Shop</Text>
                     </View>
-                    <Text className='text-2xl ml-1'>MAS Shop</Text>
-                  </View>
-                  <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
-              </View>
-              <View className='w-[100%]'>
-                <Text className=' text-gray-400'>Cart, Payment, Orders</Text>
-              </View>
-              </Pressable>
-            </Link>
-
-            <Link href={"/more/Donation"} asChild>
+                    <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
+                </View>
+                <View className='w-[100%]'>
+                  <Text className=' text-gray-400'>Cart, Payment, Orders</Text>
+                </View>
+                </Pressable>
+              </Link>
+            </Pressable>
+            <Link href={"/more/Donation"} asChild disabled={anonStatus}>
               <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
                 <View className='flex-row items-center justify-between px-1 w-[100%]'>
                   <Text className=' text-gray-400'>Support Your Community</Text>
@@ -176,43 +197,49 @@ const Index = () => {
                       <Text className=' text-gray-400'>Kids Programs</Text>
                       <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
                     </Pressable>                
-    
                   </View>
               </Pressable>
-              <Link href={'/more/BusinessAds'} asChild>
-              <Pressable className='w-[100%] bg-gray-50  mt-5 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
-                  <View className='flex-row items-center justify-between px-1 w-[100%]'>
-                    <Text className=' text-gray-400'>Want Marketing</Text>
-                  </View>
-                  <View className='flex-row w-[100%] items-center justify-between pt-1'>
-                    <View  className='flex-row items-center'>
-                      <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
-                        <Icon source={"thumb-up-outline"} size={25} color='#BDBDBD'/>
-                      </View>
-                      <Text className='text-2xl font-semibold ml-1'>Business Ad</Text>
-                   </View>
-                      <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
 
-                  </View>
-                  <View className='w-[100%] flex-col'>
-                    <Pressable className='p-1 flex-row items-center justify-between'>
-                      <Text className=' text-gray-400'>Application</Text>
-                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
-                    </Pressable>
-                    <Pressable className='p-1 flex-row items-center justify-between'>
-                      <Text className=' text-gray-400'>Status</Text>
-                      <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
-                    </Pressable>
+              <Pressable onPress={SignInModalCheck} className=' w-[100%] mt-5 bg-gray-50 rounded-xl'>
+                <Link href={'/more/BusinessAds'} asChild disabled={anonStatus} className='border'>
+                <Pressable className='w-[100%] bg-gray-50 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
+                    <View className='flex-row  px-1 w-[100%]'>
+                        <Text className=' text-gray-400'>Want Marketing</Text>
                     </View>
-                </Pressable>
-                </Link>
+                      <View className='flex-row w-[100%] items-center justify-between pt-1'>
+                        <View  className='flex-row items-center'>
+                          <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
+                            <Icon source={"thumb-up-outline"} size={25} color='#BDBDBD'/>
+                          </View>
+                          <Text className='text-2xl font-semibold ml-1'>Business Ad</Text>
+                      </View>
+                          <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
+                      </View>
+                  </Pressable>  
+                  </Link>
+                    <View>
+                      <View className='w-[100%] flex-col'>
+                      <Link href={'/more/BusinessAds'} asChild disabled={anonStatus}>
+                      <Pressable className='p-1 flex-row items-center justify-between'>
+                          <Text className=' text-gray-400'>Application</Text>
+                          <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                        </Pressable>
+                      </Link>
+                        <Link href={`/more/BusinessSubmissions/${session?.user.id}`} asChild disabled={anonStatus}>
+                          <Pressable className='p-1 flex-row items-center justify-between'>
+                            <Text className=' text-gray-400'>Status</Text>
+                            <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
+                          </Pressable>
+                        </Link>
+                        </View>
+                      </View>
+                  </Pressable>
             <View className='w-[95%] bg-white mt-8 items-center justify-center p-4' style={{ borderRadius : 10}}>
               <Text adjustsFontSizeToFit allowFontScaling numberOfLines={1}  className='text-gray-400'>Created By: App Flow Creations (appflowcreations@gmail.com)</Text>
             </View>
           </View>
       </View>
-
-
+      <SignInAnonModal visible={visible} setVisible={setVisible}/>
     </ScrollView>
   )
 }

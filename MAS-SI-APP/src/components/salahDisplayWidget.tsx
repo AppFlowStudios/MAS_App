@@ -18,7 +18,9 @@ type currentSalahProp = {
     iqamah: string
 }
 export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplayWidgetProp ) {
-    
+    if ( !prayer ){
+        return
+    }
     const salahArray = ["fajr", "dhuhr", "asr", "maghrib", "isha", "nextDayFajr"];
     const [liveTime, setLiveTime] = useState(new Date());
     const [salahIndex, setCurrentSalahIndex] = useState(0);

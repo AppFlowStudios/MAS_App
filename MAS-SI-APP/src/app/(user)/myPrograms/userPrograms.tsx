@@ -1,10 +1,10 @@
-import { View, Text, FlatList, Pressable, ScrollView, StatusBar, Image } from 'react-native'
+import { View, Text, FlatList, Pressable, ScrollView, StatusBar, Image, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import RenderMyLibraryProgram from '@/src/components/UserProgramComponets/renderMyLibraryProgram';
 import { useAuth } from '@/src/providers/AuthProvider';
 import { supabase } from '@/src/lib/supabase';
 import { Program, UserPlaylistType } from '@/src/types';
-import { Button, Divider, Icon } from 'react-native-paper';
+import { Button, Divider, Icon, TextInput } from 'react-native-paper';
 import { Link } from 'expo-router';
 import RenderLikedLectures from '@/src/components/UserProgramComponets/RenderLikedLectures';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -12,16 +12,33 @@ import { UserPlaylistFliers } from '@/src/components/UpcomingFliers';
 import LottieView from 'lottie-react-native';
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram';
 import { EventsType } from '@/src/types';
+import SignInAnonModal from '@/src/components/SignInAnonModal';
+import { Blur } from '@shopify/react-native-skia';
+import { BlurView } from 'expo-blur';
 export default function userPrograms() {
   const { session } = useAuth()
   type program_id  = {
     program_id : string
   }
+  const { height, width } = Dimensions.get('screen')
+  const [ email, setEmail ] = useState('')
+  const [ password, setPassword] = useState("")
+  const [ loading, setLoading ] = useState(false)
+
   const [ userPrograms, setUserPrograms ] = useState<program_id[]>()
   const [ userPlaylists, setUserPlaylists ] = useState<UserPlaylistType[]>()
   const [ latestFlier, setLatestFlier ] = useState<Program>()
+  const [ anonStatus, setAnonStatus ] = useState(true)
   const [ latestFlierEvent, setLatestFlierEvent ] = useState<EventsType>()
   const [ userNotis, setUserNotis ] = useState()
+  const checkIfAnon = async () => {
+    if( session?.user.is_anonymous ){
+      setAnonStatus(true)
+    }
+    else{
+      setAnonStatus(false)
+    }
+  }
   async function getUserProgramLibrary(){
     const {data, error} = await supabase.from("added_programs").select("program_id").eq("user_id", session?.user.id)
     if(error){
@@ -56,6 +73,9 @@ export default function userPrograms() {
       }
     }
   }
+  useEffect(() => {
+    checkIfAnon()
+  }, [ session ])
 
   useEffect(() => {
     getLatestAddedFlier()
@@ -85,9 +105,81 @@ export default function userPrograms() {
 
     return() => { supabase.removeChannel(channel); supabase.removeChannel(channel2) }
   }, [])
+  async function signInWithEmail() {
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+  
+    if (error) alert(error.message);
+    setLoading(false);
+  }  
   const tabBarHeight = useBottomTabBarHeight() + 35
+
   return (
     <ScrollView className='bg-white flex-1 w-[100%]' >
+      { anonStatus &&( 
+        <BlurView style={{ height : height, zIndex : 1, position : 'absolute', width : width, justifyContent : 'center', alignItems : 'center' }} intensity={50} className=''>
+        <View className=' justify-center items-center flex-2 mt-5'>
+        <View className='w-[85%]  items-center h-[550]  bg-white p-2' style={{shadowColor: "black", shadowOffset: {width: 0, height: 0}, shadowOpacity: 3, shadowRadius: 3, borderRadius: 8}}>
+        <Text className='font-bold text-[#0D509D] text-3xl mt-[10%]'>LOGIN</Text>
+
+        <View className='mt-2 items-center w-[100%]'>
+        <TextInput
+            mode='outlined'
+            theme={{ roundness : 50 }}
+            style={{ width: 250, backgroundColor: "#e8e8e8", height: 45 }}
+            activeOutlineColor='#0D509D'
+            value={email}
+            onChangeText={setEmail}
+            left={<TextInput.Icon icon="email-outline" color="#b7b7b7"/>}
+            placeholder="Email"
+            textColor='black'
+        />
+
+        <View className='h-[20]'/>
+    
+        <TextInput
+            mode='outlined'
+            theme={{ roundness : 50 }}
+            style={{ width: 250, backgroundColor: "#e8e8e8", height: 45}}
+            activeOutlineColor='#0D509D'
+            value={password}
+            onChangeText={setPassword}
+            left={<TextInput.Icon icon="key-outline" color="#b7b7b7"/>}
+            placeholder="Password"
+            secureTextEntry
+            textColor='black'
+        />
+    
+        <View className=' flex-row mt-2 items-center'>
+                <Divider className=' w-[100]' bold/>
+                <Text className='font-semi text-black text-lg' > OR </Text>
+                <Divider className=' w-[100]' bold/>
+
+        </View>
+
+
+            <View className='flex-col mt-4 justify-center items-center px-3'>
+            <Image source={require("@/assets/images/googlelog2.png")} style={{ width : 250, height: 55, objectFit: 'fill'}} className='mb-1'/>
+                <Image source={require("@/assets/images/apple-signinbutton-560.png")} style={{ width : 300, height: 50, objectFit: 'cover'}} className='mb-1'/>
+            </View>
+
+            </View>
+            <View className='mt-5'/>
+            <Button  mode='contained' onPress={signInWithEmail} disabled={loading} buttonColor='#57BA47' textColor='white' className='w-[150]'>LOGIN</Button>
+
+            <Link href="/SignUp" asChild>
+                <Pressable className='flex-row justify-center mt-[8%]'>
+                <Text>Don't have an account?  </Text>
+                
+                <Text className='text-[#0D509D]'>Sign Up</Text>
+                </Pressable>
+            </Link>
+        </View>
+        </View>
+        </BlurView>)}
       <StatusBar barStyle={"dark-content"}/>
       <View className='ml-2 mt-[15%]'>
         <Text className='text-3xl font-bold'>My Library</Text>
@@ -173,7 +265,6 @@ export default function userPrograms() {
           )
         }) : <></>}
       </View>
-
     </ScrollView>
   )
 }
