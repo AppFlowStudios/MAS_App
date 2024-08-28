@@ -201,32 +201,32 @@ const Index = () => {
               </Pressable>
 
               <Pressable onPress={SignInModalCheck} className=' w-[100%] mt-5 bg-gray-50 rounded-xl'>
-                <Link href={'/more/BusinessAds'} asChild disabled={anonStatus} className='border'>
-                <Pressable className='w-[100%] bg-gray-50 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
-                    <View className='flex-row  px-1 w-[100%]'>
-                        <Text className=' text-gray-400'>Want Marketing</Text>
-                    </View>
-                      <View className='flex-row w-[100%] items-center justify-between pt-1'>
-                        <View  className='flex-row items-center'>
-                          <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
-                            <Icon source={"thumb-up-outline"} size={25} color='#BDBDBD'/>
-                          </View>
-                          <Text className='text-2xl font-semibold ml-1'>Business Ad</Text>
+                <Link href={'/more/BusinessSponsersScreen'} asChild disabled={anonStatus} className='border'>
+                  <Pressable className='w-[100%] bg-gray-50 items-center flex-col px-3 py-2' style={{ borderRadius  : 10 }}>
+                      <View className='flex-row  px-1 w-[100%]'>
+                          <Text className=' text-gray-400'>Want Marketing</Text>
                       </View>
-                          <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
-                      </View>
-                  </Pressable>  
+                        <View className='flex-row w-[100%] items-center justify-between pt-1'>
+                          <View  className='flex-row items-center'>
+                            <View style={{ borderWidth : 3, borderColor : '#E0E0E0', borderRadius : 50 ,backgroundColor : '#E0E0E0' }}>
+                              <Icon source={"thumb-up-outline"} size={25} color='#BDBDBD'/>
+                            </View>
+                            <Text className='text-2xl font-semibold ml-1'>Business Ad</Text>
+                        </View>
+                            <Icon source={'chevron-right'} size={25} color='#BDBDBD'/>
+                        </View>
+                    </Pressable>  
                   </Link>
                     <View>
-                      <View className='w-[100%] flex-col'>
+                      <View className='w-[100%] flex-col px-3'>
                       <Link href={'/more/BusinessAds'} asChild disabled={anonStatus}>
-                      <Pressable className='p-1 flex-row items-center justify-between'>
+                      <Pressable className='p-1 flex-row items-center justify-between '>
                           <Text className=' text-gray-400'>Application</Text>
                           <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
                         </Pressable>
                       </Link>
                         <Link href={`/more/BusinessSubmissions/${session?.user.id}`} asChild disabled={anonStatus}>
-                          <Pressable className='p-1 flex-row items-center justify-between'>
+                          <Pressable className='p-1 flex-row items-center justify-between py-2'>
                             <Text className=' text-gray-400'>Status</Text>
                             <Icon source={'chevron-right'} size={20} color='#BDBDBD' />
                           </Pressable>

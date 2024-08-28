@@ -1,4 +1,4 @@
-import { View, Text, Animated, FlatList, Image, FlatListProps, Pressable, StatusBar, Dimensions } from 'react-native';
+import { View, Text, Animated, FlatList, Image, FlatListProps, Pressable, StatusBar, Dimensions, ImageBackground } from 'react-native';
 import Paginator from '@/src/components/paginator';
 import Table from "@/src/components/prayerTimeTable";
 import React, {useEffect, useRef, useState } from 'react';
@@ -13,6 +13,7 @@ export default function Index() {
   if( prayerTimesWeek.length == 0 ){
     return
   }
+  const { height } = Dimensions.get('window')
   const tableWidth = Dimensions.get('screen').width * .95
   const [ tableIndex, setTableIndex ] = useState(0)
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold : 50}).current;
@@ -32,23 +33,26 @@ export default function Index() {
     <View className='h-full  bg-white'>
           <StatusBar barStyle={"dark-content"} />
           <View className='items-center justify-center '>
-            <View className='mt-[15%] h-[400] items-center justify-center '>
+          <ImageBackground
+            source={require('@/assets/images/PrayerTimesHeader.jpg')}
+            style={{ height : height, justifyContent :'center' }}
+            imageStyle={{ height : height / 3, opacity : 0.9}}
+          >
+            <View className=' h-[400] items-center justify-center '>
               <FlatList 
                 data={prayerTimesWeek}
-                renderItem={({item}) => <Table prayerData={item} setTableIndex={setTableIndex} tableIndex={tableIndex} />}
+                renderItem={({item, index}) => <Table prayerData={item} setTableIndex={setTableIndex} tableIndex={tableIndex} index={index}/>}
                 horizontal
                 bounces={false}
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled
-                onScroll={(event) => {
-                  handleScroll(event)
-                }}
                 scrollEventThrottle={32}
                 viewabilityConfig={viewConfig}
                 contentContainerStyle={{justifyContent: "center", alignItems: "center"}}
                 ref={flatlistRef}
               />
             </View>
+            </ImageBackground>
           </View>
     </View>
   )

@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import moment from 'moment';
 import { Link } from 'expo-router';
 import { Icon } from 'react-native-paper';
+import { usePrayer } from '../providers/prayerTimesProvider';
 type salahDisplayWidgetProp = {
     prayer : gettingPrayerData,
     nextPrayer: gettingPrayerData
@@ -21,6 +22,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
     if ( !prayer ){
         return
     }
+    const { onSetCurrentPrayer } = usePrayer()
     const salahArray = ["fajr", "dhuhr", "asr", "maghrib", "isha", "nextDayFajr"];
     const [liveTime, setLiveTime] = useState(new Date());
     const [salahIndex, setCurrentSalahIndex] = useState(0);
@@ -40,6 +42,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 iqamah: prayer.iqa_fajr
             }
             setCurrentSalah(fajrSalah)
+            onSetCurrentPrayer('Fajr')
         }
         else if(salahArray[salahIndex] == "dhuhr"){
             const dhuhrSalah = {
@@ -48,6 +51,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 iqamah: prayer.iqa_zuhr
             }
             setCurrentSalah(dhuhrSalah)
+            onSetCurrentPrayer('Dhuhr')
+
         }
         else if(salahArray[salahIndex] == "asr"){
             const asrSalah = {
@@ -56,6 +61,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 iqamah: prayer.iqa_asr
             }
             setCurrentSalah(asrSalah)
+            onSetCurrentPrayer('Asr')
+
         }
         else if(salahArray[salahIndex] == "maghrib"){
             const maghribSalah = {
@@ -64,6 +71,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 iqamah: prayer.iqa_maghrib
             }
             setCurrentSalah(maghribSalah)
+            onSetCurrentPrayer('Maghrib')
+
         }
         else if(salahArray[salahIndex] == "isha"){
             const ishaSalah = {
@@ -72,6 +81,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 iqamah: prayer.iqa_isha
             }
             setCurrentSalah(ishaSalah)
+            onSetCurrentPrayer('Fajr')
+
         }
         else if(salahArray[salahIndex] == "nextDayFajr"){
             const nextDayFajrSalah = {
@@ -80,6 +91,8 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
                 iqamah: nextPrayer.iqa_fajr
             }
             setCurrentSalah(nextDayFajrSalah)
+            onSetCurrentPrayer('Isha')
+
         }
     }
 

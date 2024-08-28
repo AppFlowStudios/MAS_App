@@ -186,7 +186,7 @@ const BusinessAds = () => {
                 <View className='flex-1 flex-col gap-y-3 mt-5'> 
                     {businessStageQuestions.map((item, index) => {
                         return(
-                            <View className='w-[90%] self-center flex-2'>
+                            <View className='w-[90%] self-center flex-2' key={index}>
                                 <TextInput 
                                     mode='outlined'
                                     label={businessStageQuestions[index]}
@@ -215,7 +215,7 @@ const BusinessAds = () => {
                     <View className='items-center flex-col gap-y-2'>
                         {
                             ADDURATIONOPTIONS.map((item, index) => (
-                                <View>
+                                <View key={index}>
                                     <BusinessAdsDurationCard height={height / 15} width={width * .8} selectedDuration={selectedDuration} setDuration={setSelectedDuration} duration={item} index={index} />
                                 </View>
                             ))
@@ -228,7 +228,7 @@ const BusinessAds = () => {
                     <View className='items-center flex-col gap-y-2'>
                         {
                             LOCATIONOPTIONS.map((item, index) => (
-                                <View>
+                                <View key={index}>
                                     <BusinessAdsLocationCard height={height / 15} width={width * .8} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLoction} location={item} index={index} />
                                 </View>
                             ))
