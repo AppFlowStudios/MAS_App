@@ -11,7 +11,7 @@ const index = () => {
    }
    
    if (!session) {
-    return <Redirect href={"/SignIn"} />
+    return <Redirect href={"/GreetingScreen"} />
    }
 
   return (

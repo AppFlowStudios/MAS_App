@@ -26,14 +26,8 @@ export default function ProgramsCircularCarousel(  ) {
     const [ programsData, setProgramsData ] = useState<Program[]>()
     const indexRef = useRef(active);
     indexRef.current = active;
-    const saveData = async (key : string, value : string) => {
-      try {
-        await AsyncStorage.setItem(key, JSON.stringify(value));
-        console.log('Data saved successfully');
-      } catch (error) {
-        console.error('Error saving data:', error);
-      }
-    };
+
+
     const fetchProgramsData = async () => {
       const { data, error } = await supabase.from("programs").select("*").range(0, 7)
       if( error ){
@@ -41,7 +35,6 @@ export default function ProgramsCircularCarousel(  ) {
       }
       if( data ){
         setProgramsData(data)
-       
       }
     }
     const checkIfAnon = async () => {
@@ -60,7 +53,8 @@ export default function ProgramsCircularCarousel(  ) {
         return
       }
     }
-    
+   
+
     useEffect(() => {
       fetchProgramsData()
       checkIfAnon()

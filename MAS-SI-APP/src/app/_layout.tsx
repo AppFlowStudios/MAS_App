@@ -14,6 +14,7 @@ import { PaperProvider } from 'react-native-paper';
 import { MenuProvider } from "react-native-popup-menu"
 import AuthProvider from '../providers/AuthProvider';// Prevent the splash screen from auto-hiding before asset loading is complete.
 import { StripeProvider } from '@stripe/stripe-react-native'
+
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {

@@ -6,6 +6,7 @@ import { Program } from '@/src/types'
 import { Searchbar, Divider } from 'react-native-paper'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import ProgramsListProgram from '@/src/components/ProgramsListProgram'
+import Animated from 'react-native-reanimated'
 
 const Kids = () => {
   const { session } = useAuth()
@@ -22,9 +23,7 @@ const Kids = () => {
   }
 
   const tabBarHeight = useBottomTabBarHeight()
-  const filterTestFunc = () => {
-    
-  }
+  const filterTestFunc = () => {}
   useEffect(() => {
     getKidsPrograms()
   }, [])

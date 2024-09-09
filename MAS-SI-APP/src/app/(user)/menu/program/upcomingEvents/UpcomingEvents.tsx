@@ -68,7 +68,7 @@ const UpcomingEvents = ({  navigation } : any) => {
       {
         event: "*",
         schema : "public",
-        table: "events",
+        table: "programs",
       },
       (payload) => getUpcomingPrograms()
     )
@@ -93,7 +93,7 @@ const UpcomingEvents = ({  navigation } : any) => {
             <Pressable onPress={() => navigation.jumpTo("Kids")} className='flex-row items-center justify-between'><Text className='text-3xl font-bold text-black'> Upcoming Kids Programs</Text><Icon source={"chevron-right"} color='gray' size={25}/><View className=''/></Pressable>
             <FlatList 
               data={kidsUpcoming}
-              renderItem={( {item} ) => <View className=' px-3'><UpcomingKidsFliers kids={item}/></View>}
+              renderItem={( {item} ) => <View className='px-3'><UpcomingKidsFliers kids={item}/></View>}
               contentContainerStyle={{ paddingHorizontal : 10, paddingVertical : 2 }}
               horizontal
               showsHorizontalScrollIndicator={false}

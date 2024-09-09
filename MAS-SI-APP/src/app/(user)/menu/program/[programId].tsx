@@ -14,12 +14,12 @@ import { UserPlaylistType } from '@/src/types';
 import RenderAddToUserPlaylistsListProgram from '@/src/components/RenderAddToUserPlaylistsList';
 import { SharedTransition, withSpring } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
-import { SharedElement } from 'react-navigation-shared-element';
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import CreatePlaylistBottomSheet from '@/src/components/UserProgramComponets/CreatePlaylistBottomSheet';
 import * as Haptics from "expo-haptics"
 import LottieView from 'lottie-react-native';
 import Toast from 'react-native-toast-message';
+
 const ProgramLectures = () => {
   const { session } = useAuth()
   const { programId } = useLocalSearchParams();
@@ -129,13 +129,13 @@ async function getUserPlaylists(){
     }, [])
     return( 
       <View className='flex-1'>
-        <View className=' flex-row'>
-          <Image source={{uri : speakerData?.speaker_img || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
+        <Animated.View className=' flex-row'>
+              <Image source={{uri : speakerData?.speaker_img || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
           <View className='flex-col px-5'>
             <Text className='text-xl font-bold'>Name: </Text>
             <Text className='pt-2 font-semibold'> {speakerData?.speaker_name} </Text>
           </View>
-        </View>
+        </Animated.View>
   
         <ScrollView className='flex-col py-3' contentContainerStyle={{ flex : 1 }}>
           { speakerData?.speaker_name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 

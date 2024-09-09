@@ -31,12 +31,12 @@ export default function Index() {
   }, [tableIndex])
   return (
     <View className='h-full  bg-white'>
-          <StatusBar barStyle={"dark-content"} />
+          <StatusBar barStyle={"light-content"} />
           <View className='items-center justify-center '>
           <ImageBackground
             source={require('@/assets/images/PrayerTimesHeader.jpg')}
             style={{ height : height, justifyContent :'center' }}
-            imageStyle={{ height : height / 3, opacity : 0.9}}
+            imageStyle={{ height : height / 2.7, opacity : 0.9, borderBottomLeftRadius : 10, borderBottomRightRadius : 10}}
           >
             <View className=' h-[400] items-center justify-center '>
               <FlatList 

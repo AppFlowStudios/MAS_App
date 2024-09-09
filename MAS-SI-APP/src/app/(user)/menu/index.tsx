@@ -166,6 +166,7 @@ export default function homeScreen() {
         jummahDesc: "How to increase your iman and stand for Palestine"
       }
   ]
+  
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
             <StatusBar barStyle={"dark-content"}/>

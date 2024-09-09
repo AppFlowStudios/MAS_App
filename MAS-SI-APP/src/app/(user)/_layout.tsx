@@ -18,35 +18,17 @@ import { supabase } from '@/src/lib/supabase';
 
 const toastConfig = {
   addProgramToNotificationsToast : ( {props} : any ) => (
-    <Pressable className='rounded-xl overflow-hidden' onPress={props.onPress}>
-        <BlurView intensity={40} className='flex-row w-[80%] items-center justify-between px-4 h-[60] rounded-xl'>
+    <Pressable className='rounded-xl overflow-hidden ' onPress={props.onPress}>
+        <BlurView intensity={40} className='flex-row items-center justify-between px-4 rounded-xl p-1 max-w-[85%] max-h-[60]' >
           <View>
               <Image source={{ uri : props.props.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
           </View>
-          <View className='flex-col'>
+          <View className='flex-col pl-2'>
             <View>
               <Text>1 Program Added To Notifications</Text>
             </View>
             <View className='flex-row'>
-              <Text>{props.props.program_name}</Text>
-              <Icon source={'chevron-right'} size={20} />
-            </View>
-          </View>
-        </BlurView>
-      </Pressable>
-  ),
-  programRemovedFromNotifications : ( {props} : any ) => (
-    <Pressable className='rounded-xl overflow-hidden'>
-        <BlurView intensity={40} className='flex-row w-[80%] items-center justify-between px-4 h-[60] rounded-xl'>
-          <View>
-              <Image source={{ uri : props.props?.program_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
-          </View>
-          <View className='flex-col'>
-            <View>
-              <Text>1 Program Removed From Notifications</Text>
-            </View>
-            <View className='flex-row'>
-              <Text>{props.props.program_name}</Text>
+              <Text className='text-sm'>{props.props.program_name}</Text>
               <Icon source={'chevron-right'} size={20} />
             </View>
           </View>
@@ -55,11 +37,11 @@ const toastConfig = {
   ),
   LectureAddedToPlaylist : ( {props} : any) => (
     <Pressable className='rounded-xl overflow-hidden' onPress={props.onPress}>
-        <BlurView intensity={40} className='flex-row w-[80%] items-center justify-between px-4 h-[60] rounded-xl'>
-          <View>
+        <BlurView intensity={40} className='flex-row items-center justify-between px-3 p-1 max-w-[85%] max-h-[60]'>
+          <View className=''>
               <Image source={{ uri : props.props?.playlist_img || defaultProgramImage }} style={{ width : 50, height : 50 , objectFit : 'fill', borderRadius : 10 }}/>
           </View>
-          <View className='flex-col'>
+          <View className='flex-col pl-2'>
             <View>
               <Text numberOfLines={1} allowFontScaling adjustsFontSizeToFit >1 lecture added</Text>
             </View>
@@ -139,11 +121,11 @@ export default function TabLayout() {
   }
 
   if (!session) {
-    return <Redirect href={'/sign-in'} />;
+    return <Redirect href={'/GreetingScreen'} />;
   }
   return (
     <>
-      {loading && (
+      { loading && (
         <Animated.View style={[{ zIndex: 1, position: 'absolute', width: '100%', height: '100%' }, playMASAnimation]}>
           <LottieView
             autoPlay
@@ -159,7 +141,7 @@ export default function TabLayout() {
             }}
           />
         </Animated.View>
-      )}
+      ) }
       <Tabs
         screenOptions={{
           tabBarStyle: {

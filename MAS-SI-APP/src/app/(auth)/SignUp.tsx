@@ -1,6 +1,6 @@
-import { View, Text, Image, Dimensions } from 'react-native'
+import { View, Text, Image, Dimensions, StatusBar } from 'react-native'
 import React, { useState } from 'react'
-import { Button, TextInput } from 'react-native-paper'
+import { Button, Divider, Icon, TextInput } from 'react-native-paper'
 import { Link, Stack } from "expo-router"
 import { supabase } from '@/src/lib/supabase'
 const SignUp = () => {
@@ -25,31 +25,49 @@ const SignUp = () => {
   }
 
   return (
-    <View className='border w-full h-full'>
-      <View className='justify-center items-center'>
-         <Image source={require("@/assets/images/massiLogo2.png")} style={{width: width / 2, height: 200, justifyContent: "center", objectFit: "contain" }} className='border'/>
-      </View>
-      <View className='justify-center items-center'>
-        <TextInput 
-          label="Email"
-          mode='outlined'
-          value={email}
-          onChangeText={text => setEmail(text)}
-          outlineStyle={{width: 200}}
-        />  
-        
-        <TextInput 
-          label="Password"
-          mode='outlined'
-          secureTextEntry
-          right={<TextInput.Icon icon="eye" />}
-          value={password}
-          onChangeText={text => setPassword(text)}
-          outlineStyle={{width: 200}}
-        />  
-
-        <Button onPress={signUpWithEmail} disabled={loading}>Sign Up</Button>
+    <View className='border w-full h-full bg-white'>
+      <Stack.Screen options={{ headerTransparent : true, headerTitle : '', headerBackTitleVisible : false }}/>
+      <StatusBar barStyle={"dark-content"}/>
+      <View className='h-[25%] justify-end px-8' style={{ borderBottomRightRadius : 40, borderBottomLeftRadius : 40, backgroundColor : 'gray'}}>
+        <View className='pt-8'>
+          <Text className=' text-white italic' style={{ fontSize : 40 }}>Account <Text className='font-bold'>Sign Up</Text></Text>
         </View>
+        <View className='pt-4 p-2 rounded-3xl w-[55%] border-white flex-row justify-between items-center mb-4' style={{ borderWidth : 4}}>
+          <Text className='text-white'>already a member?</Text>
+          <Icon source={'arrow-right-thin'} size={20} color='white'/>
+        </View>
+      </View>
+      <View className=' justify-center items-center bg-white pt-[12%] flex-col flex-2'>
+        <View className='w-[95%]' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
+          <TextInput
+            mode='outlined' 
+            value={email}
+            onChangeText={setEmail}
+            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0 }}
+            theme={{ roundness : 50 }}
+            placeholder={'email'}
+            outlineColor='white'
+            activeOutlineColor='white'
+          />
+        </View>
+        <View className='w-[95%] mt-2' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
+          <TextInput
+            mode='outlined' 
+            value={password}
+            onChangeText={setPassword}
+            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0 }}
+            theme={{ roundness : 50 }}
+            placeholder={'password'}
+            outlineColor='white'
+            activeOutlineColor='white'
+            secureTextEntry
+          />
+        </View>
+        <View className='w-[40%] flex-2 mt-10' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
+          <Button onPress={signUpWithEmail} mode='contained' buttonColor='#57BA47' textColor='white'>Sign Up</Button>
+        </View>
+      </View>
+    
     </View>
   )
 }

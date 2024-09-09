@@ -24,7 +24,7 @@ const Table = ( { prayerData, setTableIndex, tableIndex, index } :  prayerDataPr
     return(
       <View style={ { width : width  } } className='items-center' >
         <View className='items-center justify-center  w-[95%] ' >
-            <View className='flex-row justify-center items-center  p-2 rounded-3xl bg-white' style={{ shadowColor : 'black', shadowOffset : { width : 0,  height : 3}, shadowOpacity : 1, shadowRadius : 4 }}>
+            <View className='flex-row justify-between items-center  p-2 rounded-3xl bg-white h-[60] w-[80%]' style={{ shadowColor : 'black', shadowOffset : { width : 0,  height : 3}, shadowOpacity : 1, shadowRadius : 4 }}>
               <Pressable onPress={backPress}>
                 <Icon source="chevron-left" size={30} color='black' />
               </Pressable>
@@ -38,43 +38,45 @@ const Table = ( { prayerData, setTableIndex, tableIndex, index } :  prayerDataPr
             </View>
           <View className='mt-3 w-[100%]'>
 
-            <DataTable style={ { backgroundColor: 'white', borderRadius: 8, shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 2, width : '100%',} } className=''>
+          <View style={ { backgroundColor: 'white', borderRadius: 8, shadowColor: "black", shadowOffset: {width : 0, height: 0}, shadowOpacity: 1, shadowRadius: 2, width : '100%',} } className='flex-col px-4 py-2'>
 
-            <DataTable.Header style={{ justifyContent : 'space-between', alignItems : 'center'}} className=''>
-              <DataTable.Title textStyle={{fontSize:20, color:"#0D509D", fontWeight: "bold", textAlign : 'right' }} >Salah</DataTable.Title>
-              <DataTable.Title textStyle={{fontSize: 20,  color:"#0D509D", fontWeight: 700}} >Athan</DataTable.Title>
-              <DataTable.Title textStyle={{fontSize:20, fontWeight: 700, color:"black", textAlign : 'right'}} numeric>Iqamah</DataTable.Title>
-            </DataTable.Header>
+            <View style={{ }} className=' flex-row items-center w-[100%] h-[35]'>
+              <View className='w-[34%]  h-[100%] '><Text style={{fontSize:20, color:"#0D509D", fontWeight: "bold" }} className='text-left'>Salah</Text></View>
+              <View className=' w-[33%] h-[100%] '><Text style={{fontSize: 20,  color:"#0D509D", fontWeight: 700}} className='text-center'>Athan</Text></View>
+              <View className=' w-[33%] h-[100%] '><Text style={{fontSize:20, fontWeight: 700, color:"black" }} className='text-right'>Iqamah</Text></View>
+            </View>
+         
+            <View style={{borderBottomWidth: 0, backgroundColor : currentPrayer == 'Fajr' && index == 0 ? 'rgba(147, 250, 165, 0.5)' : '', paddingHorizontal : currentPrayer == 'Fajr' && index == 0 ? 8 : 0 , borderRadius : currentPrayer == 'Fajr' && index == 0 ? 20 : 0,}} className=' items-center w-[100%] flex-row h-[35]'>
+              <View className='w-[34%]  h-[100%] items-start justify-center'><AlertBell salah={"Fajr"} /></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  color:"#0D509D" , fontWeight: 700 }} className=' text-center' adjustsFontSizeToFit numberOfLines={1}>{prayerData.athan_fajr}</Text></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  fontWeight: 700, color: 'black' }} className=' text-right' adjustsFontSizeToFit numberOfLines={1}>{prayerData.iqa_fajr}</Text></View>
+            </View>
 
-            <DataTable.Row style={{borderBottomWidth: 0, justifyContent : 'space-between', backgroundColor : currentPrayer == 'Fajr' ? 'rgba(147, 250, 165, 0.5)' : ''}}>
-              <DataTable.Cell><AlertBell salah={"Fajr"}/></DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, color:"#0D509D" , fontWeight: 700}}>{prayerData.athan_fajr}</DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, fontWeight: 700, color: 'black' }} numeric>{prayerData.iqa_fajr}</DataTable.Cell>
-            </DataTable.Row>
+            <View style={{borderBottomWidth: 0, backgroundColor : currentPrayer == 'Dhuhr' && index == 0 ? 'rgba(147, 250, 165, 0.5)' : '', paddingHorizontal : currentPrayer == 'Dhuhr' && index == 0 ? 8 : 0 , borderRadius : currentPrayer == 'Dhuhr' && index == 0 ? 20 : 0,}} className=' items-center w-[100%] flex-row h-[35]'>
+              <View className='w-[34%]  h-[100%] items-start justify-center'><AlertBell salah={"Dhuhr"} /></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  color:"#0D509D" , fontWeight: 700 }} className=' text-center' adjustsFontSizeToFit numberOfLines={1}>{prayerData.athan_zuhr}</Text></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  fontWeight: 700, color: 'black' }} className=' text-right' adjustsFontSizeToFit numberOfLines={1}>{prayerData.iqa_zuhr}</Text></View>
+            </View>
 
-            <DataTable.Row style={{borderBottomWidth: 0, justifyContent : 'space-between', backgroundColor : currentPrayer == 'Dhuhr' ? 'rgba(147, 250, 165, 0.5)' : ''}}>
-              <DataTable.Cell><AlertBell salah={"Dhuhr"}/> </DataTable.Cell>
-              <DataTable.Cell textStyle={{ fontSize: 17, color:"#0D509D",fontWeight: 700 }}>{prayerData.athan_zuhr}</DataTable.Cell>
-              <DataTable.Cell textStyle={{ fontSize: 17, fontWeight: 700, color: 'black' }} numeric>{prayerData.iqa_zuhr}</DataTable.Cell>
-            </DataTable.Row>
+            <View style={{borderBottomWidth: 0, backgroundColor : currentPrayer == 'Asr' && index == 0 ? 'rgba(147, 250, 165, 0.5)' : '', paddingHorizontal : currentPrayer == 'Asr'  && index == 0 ? 8 : 0 , borderRadius : currentPrayer == 'Asr' && index == 0? 20 : 0, }} className=' items-center w-[100%] flex-row h-[35]'>
+              <View className='w-[34%]  h-[100%] items-start justify-center'><AlertBell salah={"Asr"} /></View>
+              <View className=' w-[33%] h-[100%] items-center justify-center'><Text style={{  color:"#0D509D" , fontWeight: 700 }} className=' text-center' adjustsFontSizeToFit numberOfLines={1}>{prayerData.athan_asr}</Text></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  fontWeight: 700, color: 'black' }} className=' text-right' adjustsFontSizeToFit numberOfLines={1}>{prayerData.iqa_asr}</Text></View>
+            </View>
 
-            <DataTable.Row style={{borderBottomWidth: 0, justifyContent : 'space-between', backgroundColor : currentPrayer == 'Asr' ? 'rgba(147, 250, 165, 0.5)' : ''}}>
-              <DataTable.Cell><AlertBell salah={"Asr"}/></DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, color:"#0D509D", fontWeight: 700 }}>{prayerData.athan_asr}</DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, fontWeight: 700, color: 'black' }} numeric>{prayerData.iqa_asr}</DataTable.Cell>
-            </DataTable.Row>
+            <View style={{borderBottomWidth: 0, backgroundColor : currentPrayer == 'Maghrib' && index == 0 ? 'rgba(147, 250, 165, 0.5)' : '', paddingHorizontal : currentPrayer == 'Maghrib' && index == 0 ? 8 : 0 , borderRadius : currentPrayer == 'Maghrib' && index == 0  ? 20 : 0,}} className=' items-center w-[100%] flex-row h-[35] justify-center'>
+              <View className='w-[34%]  h-[100%] items-start justify-center'><AlertBell salah={"Maghrib"} /></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  color:"#0D509D" , fontWeight: 700 }} className=' text-center' adjustsFontSizeToFit numberOfLines={1}>{prayerData.athan_maghrib}</Text></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  fontWeight: 700, color: 'black' }} className=' text-right' adjustsFontSizeToFit numberOfLines={1}>{prayerData.iqa_maghrib}</Text></View>
+            </View>
 
-            <DataTable.Row style={{borderBottomWidth: 0, justifyContent : 'space-between', backgroundColor : currentPrayer == 'Maghrib' ? 'rgba(147, 250, 165, 0.5)' : ''}}>
-              <DataTable.Cell><AlertBell salah={"Maghrib"}/></DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, color:"#0D509D" , fontWeight: 700}}>{prayerData.athan_maghrib}</DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, fontWeight: 700, color: 'black' }} numeric>{prayerData.iqa_maghrib}</DataTable.Cell>
-            </DataTable.Row>
-            <DataTable.Row style={{borderBottomWidth: 0, justifyContent : 'space-between', backgroundColor : currentPrayer == 'Isha' ? 'rgba(147, 250, 165, 0.5)' : ''}}>
-              <DataTable.Cell><AlertBell salah={"Isha"}/></DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, color:"#0D509D", fontWeight: 700}}>{prayerData.athan_isha}</DataTable.Cell>
-              <DataTable.Cell textStyle={{  fontSize: 17, fontWeight: 700, color: 'black'}} numeric>{prayerData.iqa_isha}</DataTable.Cell>
-            </DataTable.Row>
-        </DataTable>
+            <View style={{borderBottomWidth: 0, backgroundColor : currentPrayer == 'Isha' && index == 0 ? 'rgba(147, 250, 165, 0.5)' : '', paddingHorizontal : currentPrayer == 'Isha' && index == 0 ? 8 : 0 , borderRadius : currentPrayer == 'Isha' && index == 0 ? 20 : 0,}} className=' items-center w-[100%] flex-row h-[35]'>
+              <View className='w-[34%]  h-[100%] items-start justify-center'><AlertBell salah={"Isha"} /></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  color:"#0D509D" , fontWeight: 700 }} className=' text-center' adjustsFontSizeToFit numberOfLines={1}>{prayerData.athan_isha}</Text></View>
+              <View className=' w-[33%] h-[100%] justify-center'><Text style={{  fontWeight: 700, color: 'black' }} className=' text-right' adjustsFontSizeToFit numberOfLines={1}>{prayerData.iqa_isha}</Text></View>
+            </View>
+            
+          </View>
       </View>
       </View>
     </View>

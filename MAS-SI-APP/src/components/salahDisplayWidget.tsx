@@ -108,6 +108,9 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
         const duration = moment.duration(time2.diff(time1))
         const hours = Math.floor(duration.asHours());
         const minutes = duration.minutes();
+        if( hours == 0 && minutes == 0){
+            return 'Now'
+        }
         if (hours == 0){
             return `${minutes} mins`
         }
@@ -161,7 +164,7 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
             style={{height: "100%", width: "100%" }}
         >
         <View className='flex-row mt-4 items-center w-[100%]'>
-            <Text className='text-white px-5 font-bold text-lg w-[50%]' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>{prayer.hijri_month} {prayer.hijri_date}</Text>
+            <Text className='text-white px-5 font-bold text-lg w-[50%]' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }} numberOfLines={1} adjustsFontSizeToFit>{prayer.hijri_month} {prayer.hijri_date}</Text>
             <Text className='text-gray-100 ml-[23%] font-bold text-lg w-[50%]' style={{textShadowColor: "#000", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 1 }}>Athan</Text>
         </View>
         <View className='flex-row mt-9 w-[100%]'>

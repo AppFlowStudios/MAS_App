@@ -4,20 +4,41 @@ import ProgramsScreen from './allPrograms';
 import Event from './events/Event';
 import Pace from './pace/Pace';
 import UpcomingEvents from './upcomingEvents/UpcomingEvents';
-import { View, TouchableOpacity, StyleSheet, Text, SafeAreaView, StatusBar, Pressable, ScrollView } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, SafeAreaView, StatusBar, Pressable, ScrollView, useWindowDimensions } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, interpolate, withSpring } from 'react-native-reanimated';
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { TabArrayType } from '@/src/types'
 import { withLayoutContext } from 'expo-router';
 import { NavigationContainer } from '@react-navigation/native';
-import programsData from '@/assets/data/programsData';
 import * as Animatable from 'react-native-animatable';
 import { TabBar, TabBarIndicator, TabBarIndicatorProps, TabBarProps } from 'react-native-tab-view';
+import { TabView, SceneMap } from 'react-native-tab-view';
 import Kids from './kids/Kids';
 
 const TAB_BAR_ITEM_PADDING = 10;
 
 const Tabs  = createMaterialTopTabNavigator();
+const FirstRoute = () => (
+  <UpcomingEvents />
+);
+
+const SecondRoute = () => (
+  <Kids />
+);
+
+const ThirdRoute = () => (
+  <ProgramsScreen />
+)
+const FourthRoute = () => (
+  <Event />
+)
+const renderScene = SceneMap({
+  first: FirstRoute,
+  second: SecondRoute,
+  third : ThirdRoute,
+  fourth : FourthRoute
+});
+
 
 const ProgramsAndEventsScreen = () => {
   function MyTabBar({ state, descriptors, navigation, position } : MaterialTopTabBarProps) {
@@ -99,29 +120,37 @@ const ProgramsAndEventsScreen = () => {
   function TabBarIndicator({ position, style, layout, jumpTo, width, getTabWidth } : any ){
     return <></>
   }
+  const layout = useWindowDimensions();
 
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'first', title: 'Upcoming' },
+    { key: 'second', title: 'Kids'},
+    { key: 'third', title : 'Programs & Tarbiya'},
+    { key: 'fourth', title : 'Events'}
+  ]);
+  const renderTabBar = (props : any) => (
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor : "#57BA47", position: "absolute", zIndex : -1, bottom : "5%", height: "45%", width : "20%", left : "2.5%", borderRadius : 20  }}
+      style={{ backgroundColor: '#0D509D', width : "100%", alignSelf : "center", paddingTop : '15%'}}
+      labelStyle={{ color : "white", fontWeight : "bold", textAlign :'center' }}
+      scrollEnabled
+
+    />
+  );
   return (
-        <>
-        <StatusBar barStyle={"light-content"}/>
-        <Tabs.Navigator 
-          screenOptions={{ 
-          tabBarStyle : {paddingTop : "16%",backgroundColor: "#0D509D", },
-          tabBarIndicatorStyle: {backgroundColor : "#57BA47", position: "absolute", zIndex : -1, bottom : "10%", height: "30%", width : "15%", left : "3.6%", borderRadius : 20 },
-          tabBarLabelStyle : {color: "white", fontWeight: "bold" },
-          tabBarContentContainerStyle : {paddingHorizontal : 10},
-          tabBarScrollEnabled: true,
-          tabBarItemStyle : { width : 150 },
-          tabBarBounces : true
-          }}
-        >
-          <Tabs.Screen name='Upcoming' component={UpcomingEvents} />
-          <Tabs.Screen name='Kids' component={Kids} />
-          <Tabs.Screen name="Programs & Tarbiya"  component={ProgramsScreen} />
-          <Tabs.Screen name="Events" component={Event} />
-          <Tabs.Screen name="P.A.C.E" component={Pace} />
-        </Tabs.Navigator>
-        </>
-  )
+    <>
+      <StatusBar barStyle={"light-content"}/>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        renderTabBar={renderTabBar}
+      />
+     </>
+  );
 }
 
 {/*  screenOptions={{
@@ -140,6 +169,30 @@ const ProgramsAndEventsScreen = () => {
             
             tabBarScrollEnabled : true
             */
+}
+
+
+{
+  /*
+  <Tabs.Navigator 
+          screenOptions={{ 
+          tabBarStyle : {paddingTop : "16%",backgroundColor: "#0D509D", },
+          tabBarIndicatorStyle: {backgroundColor : "#57BA47", position: "absolute", zIndex : -1, bottom : "10%", height: "30%", width : "15%", left : "3.6%", borderRadius : 20 },
+          tabBarLabelStyle : {color: "white", fontWeight: "bold" },
+          tabBarContentContainerStyle : {paddingHorizontal : 10},
+          tabBarScrollEnabled: true,
+          tabBarItemStyle : { width : 150 },
+          tabBarBounces : true
+          }}
+        >
+          <Tabs.Screen name='Upcoming' component={UpcomingEvents} />
+          <Tabs.Screen name='Kids' component={Kids} />
+          <Tabs.Screen name="Programs & Tarbiya"  component={ProgramsScreen} />
+          <Tabs.Screen name="Events" component={Event} />
+          <Tabs.Screen name="P.A.C.E" component={Pace} />
+        </Tabs.Navigator>
+      */
+  
 }
 const styles = StyleSheet.create({
   container: {

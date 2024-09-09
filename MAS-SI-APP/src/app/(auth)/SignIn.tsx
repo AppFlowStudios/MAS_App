@@ -15,7 +15,7 @@ const SignIn = () => {
     const logoMountAnimeStyle = useAnimatedStyle(() => {
      return {
        opacity : logoAnime.value,
-        transform: [{translateY : logoBounce.value}]
+       transform: [{translateY : logoBounce.value}]
      }
     })
 
@@ -51,80 +51,56 @@ const SignIn = () => {
     }, [])
   return (
     <View className='bg-white h-[100%]'>
-      <Stack.Screen options={{ headerShown : false}} />
+      <Stack.Screen options={{ headerTransparent : true, headerTitle : '', headerBackTitleVisible : false }} />
       <StatusBar barStyle={"dark-content"}/>
-      <Animated.View className='w-[100%] h-[200] justify-center, items-center  mt-[5%]' style={logoMountAnimeStyle}>
-        <Image source={require("@/assets/images/massiLogo.png")} style={{width: "90%", height: "100%", objectFit: "contain"}}/>
-      </Animated.View>
-
-      <View className=' justify-center items-center bg-white'>
-        <View className='w-[85%]  items-center h-[550]  bg-white' style={{shadowColor: "black", shadowOffset: {width: 0, height: 0}, shadowOpacity: 3, shadowRadius: 3, borderRadius: 8}}>
-          <Text className='font-bold text-[#0D509D] text-3xl mt-[10%]'>LOGIN</Text>
-
-        <View className='mt-2 items-center w-[100%]'>
-          <TextInput
-            mode='outlined'
-            theme={{ roundness : 50 }}
-            style={{ width: 300, backgroundColor: "#e8e8e8", height: 45 }}
-            activeOutlineColor='#0D509D'
-            value={email}
-            onChangeText={setEmail}
-            left={<TextInput.Icon icon="email-outline" color="#b7b7b7"/>}
-            placeholder="Email"
-            textColor='black'
-          />
-
-          <View className='h-[20]'/>
-    
-          <TextInput
-            mode='outlined'
-            theme={{ roundness : 50 }}
-            style={{ width: 300, backgroundColor: "#e8e8e8", height: 45}}
-            activeOutlineColor='#0D509D'
-            value={password}
-            onChangeText={setPassword}
-            left={<TextInput.Icon icon="key-outline" color="#b7b7b7"/>}
-            placeholder="Password"
-            secureTextEntry
-            textColor='black'
-          />
-    
-          <View className=' flex-row mt-2 items-center'>
-                <Divider className=' w-[100]' bold/>
-                <Text className='font-semi text-black text-lg' > OR </Text>
-                <Divider className=' w-[100]' bold/>
-
-          </View>
-
-
-          <View className='flex-col mt-4 justify-center items-center px-3'>
-          <Image source={require("@/assets/images/googlelog2.png")} style={{ width : 250, height: 55, objectFit: 'fill'}} className='mb-1'/>
-            <Image source={require("@/assets/images/apple-signinbutton-560.png")} style={{ width : 300, height: 50, objectFit: 'cover'}} className='mb-1'/>
-          </View>
-
+      <View className='h-[25%] bg-gray-300 justify-end px-8' style={{ borderBottomRightRadius : 40, borderBottomLeftRadius : 40}}>
+        <View className='pt-8'>
+          <Text className=' text-white italic' style={{ fontSize : 45 }}>Account <Text className='font-bold'>Login</Text></Text>
         </View>
-        <View className='mt-5'/>
-          <Button  mode='contained' onPress={signInWithEmail} disabled={loading} buttonColor='#57BA47' textColor='white' className='w-[150]'>LOGIN</Button>
-
-          <Link href="/SignUp" asChild>
-            <Pressable className='flex-row justify-center mt-[8%]'>
-              <Text>Don't have an account?  </Text>
-              
-              <Text className='text-[#0D509D]'>Sign Up</Text>
-            </Pressable>
-          </Link>
-
-            <Pressable className='flex-row justify-center mt-[5%]' onPress={guestSignIn}>
-              <Text>Sign in as </Text>
-              
-              <Text className='text-[#0D509D]'>Guest</Text>
-            </Pressable>
+        <View className='pt-4 p-2 rounded-3xl w-[55%] border-white flex-row justify-between items-center mb-4' style={{ borderWidth : 4}}>
+          <Text className='text-white'>new member?</Text>
+          <Icon source={'arrow-right-thin'} size={20} color='white'/>
         </View>
       </View>
-      
-
-      
-  </View>
+      <View className=' justify-center items-center bg-white pt-[12%] flex-col flex-2'>
+        <View className='w-[95%]' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
+          <TextInput
+            mode='outlined' 
+            value={email}
+            onChangeText={setEmail}
+            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0 }}
+            theme={{ roundness : 50 }}
+            placeholder={'email'}
+            outlineColor='white'
+            activeOutlineColor='white'
+          />
+        </View>
+        <View className='w-[95%] mt-2' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
+          <TextInput
+            mode='outlined' 
+            value={password}
+            onChangeText={setPassword}
+            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0 }}
+            theme={{ roundness : 50 }}
+            placeholder={'password'}
+            outlineColor='white'
+            activeOutlineColor='white'
+            secureTextEntry
+          />
+        </View>
+        <View className='w-[90%] mt-2'>
+          <Text className='text-[#007AFF] text-left'>Forgot Your Password?</Text>
+        </View>
+        <View className='w-[40%] flex-2 mt-10' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
+          <Button onPress={signInWithEmail} mode='contained' buttonColor='#57BA47' textColor='white'>login</Button>
+        </View>
+      </View>
+      <View className='flex-row w-[90%] items-center justify-center self-center mt-10'>
+        <Divider className='w-[40%] border-2 border-gray-200 rounded-xl'/>
+        <Text className='px-2'>or login with</Text> 
+        <Divider className='w-[40%] border-2 border-gray-200 rounded-xl'/>
+      </View>
+    </View>
   )
 }
 

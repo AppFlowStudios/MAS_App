@@ -1,5 +1,4 @@
 import { Text, View, Pressable, Image, Alert, Button, StyleSheet, Share} from 'react-native'
-import programsData from '@/assets/data/programsData'
 import {Program} from "../types"
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, router } from 'expo-router';
@@ -11,7 +10,6 @@ export const defaultProgramImage = "https://ugc.production.linktr.ee/e3KxJRUJTu2
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../providers/AuthProvider'; 
 import * as Haptics from "expo-haptics"
-import { SharedElement } from "react-navigation-shared-element"
 import Animated, { Easing, withSequence, withSpring, withTiming } from 'react-native-reanimated';
 import { SharedTransition } from 'react-native-reanimated';
 import { useNavigation, } from '@react-navigation/native';
@@ -139,15 +137,16 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     
     return(
         <View style={{ width: "100%", height: 120, marginHorizontal: 5}}>
-            <Link  href={`/menu/program/${program.program_id}`} asChild >
+            <Link  href={{pathname : `/menu/program/[programId]`,
+                params : {programId : [`${program.program_id}`]}
+            }} asChild >
                 <TouchableOpacity>
                     <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
-
-                        <Animated.View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}} >
-                                <Animated.Image 
-                                    source={{ uri: program.program_img || defaultProgramImage }}
-                                    style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}                                    
-                                />
+                        <Animated.View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}}>
+                            <Animated.Image 
+                                source={{ uri: program.program_img || defaultProgramImage }}
+                                style={{width: 130, height: 100, objectFit: "cover", borderRadius: 15}}                                    
+                            />
                         </Animated.View>
                         <View>
                             <Swipeable

@@ -7,6 +7,7 @@ import { Program } from "@/src/types"
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
+
 export default function ProgramsScreen(){
   const { session } = useAuth()
   const [ loading, setLoading ] = useState(false)
