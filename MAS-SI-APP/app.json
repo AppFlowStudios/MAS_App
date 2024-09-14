@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": ".com.MAS-SI-APP"
+      "bundleIdentifier": "com.MAS-SI-APP"
     },
     "android": {
       "adaptiveIcon": {
