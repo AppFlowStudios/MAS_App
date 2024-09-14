@@ -155,11 +155,11 @@ const programLectures = () => {
             <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program?.program_speaker}</Text>
               <View className='ml-3'>
                 {
-                  lectures ? lectures.map((item, index) => {
+                  lectures && lectures?.length > 0  ? lectures.map((item, index) => {
                     return(
                       <View key={index}>
-                      <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation} setLectureInfoAnimation={setLectureInfoAnimation} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
-                      <Divider style={{width: "95%", marginLeft: 8}}/>
+                        <RenderMyLibraryProgramLectures  lecture={item} index={index} speaker={program?.program_speaker} setPlayAnimation={setPlayAnimation} setLectureInfoAnimation={setLectureInfoAnimation} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
+                        <Divider style={{width: "95%", marginLeft: 8}}/>
                       </View>
                     )
                   }) 

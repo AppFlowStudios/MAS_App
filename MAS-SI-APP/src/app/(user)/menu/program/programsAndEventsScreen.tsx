@@ -19,7 +19,7 @@ const TAB_BAR_ITEM_PADDING = 10;
 
 const Tabs  = createMaterialTopTabNavigator();
 const FirstRoute = () => (
-  <UpcomingEvents />
+  <UpcomingEvents navigationState/>
 );
 
 const SecondRoute = () => (
@@ -136,9 +136,9 @@ const ProgramsAndEventsScreen = () => {
       style={{ backgroundColor: '#0D509D', width : "100%", alignSelf : "center", paddingTop : '15%'}}
       labelStyle={{ color : "white", fontWeight : "bold", textAlign :'center' }}
       scrollEnabled
-
     />
   );
+
   return (
     <>
       <StatusBar barStyle={"light-content"}/>

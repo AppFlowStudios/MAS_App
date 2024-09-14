@@ -76,12 +76,12 @@ const Cart = () => {
         {
             cartContent && cartContent.length > 0 ? cartContent.map(( item, index ) => {
               if( item.program_id ){
-                return <CartProgramItems program_id={item.program_id} product_quantity={item.product_quantity}/>
+                return <CartProgramItems program_id={item.program_id} product_quantity={item.product_quantity} key={index}/>
               }
               else if( item.event_id) {
-                return  <CartEventItems event_id={item.event_id} product_quantity={item.product_quantity}/>
+                return  <CartEventItems event_id={item.event_id} product_quantity={item.product_quantity} key={index}/>
               }
-            }) : <View><Text> Your Cart Is Empty! </Text></View>
+            }) : <View className='flex-1 items-center justify-center'><Text className='text-2xl font-bold'>Your Cart Is Empty! </Text></View>
         }
     </ScrollView>
     <View className='self-center mb-3'>

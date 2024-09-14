@@ -12,6 +12,8 @@ import LectureKeyNotesCard from '@/src/components/LectureKeyNotesCard';
 import { FlatList } from 'react-native';
 import { Divider } from 'react-native-paper';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming, Easing } from 'react-native-reanimated';
+import LottieView from 'lottie-react-native';
 export default function LecturesData() {
   const { session } = useAuth()
   const [ playing, setPlaying ] = useState(false)
@@ -118,6 +120,24 @@ export default function LecturesData() {
     />
   );
 
+  const [loading, setLoading] = useState(true);
+  const opacity = useSharedValue(1);
+
+  const playMASAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
+
+  const handleAnimationEnd = () => {
+    setLoading(false);
+  };
+
+  const fadeOutAnimation = () => {
+    opacity.value = withTiming(0, { duration: 1000, easing: Easing.out(Easing.quad) }, () => {
+      runOnJS(handleAnimationEnd)();
+    });
+  }
 
   return(
     <>
@@ -131,6 +151,22 @@ export default function LecturesData() {
           onChangeState={onStateChange}
         />
         <View className='mt-[5]'/>
+        { loading && (
+          <Animated.View style={[{ zIndex: 1, position: 'absolute', width: '100%', height: '64%', justifyContent : 'center', top : '37%', backgroundColor : '#ededed', alignItems : 'center' }, playMASAnimation]}>
+            <LottieView
+              autoPlay
+              loop={false}
+              style={{
+                width: '70%',
+                height: '70%',
+              }}
+              source={require('@/assets/lottie/ChatGPT.json')}
+              onAnimationFinish={() => {
+                fadeOutAnimation();
+              }}
+            />
+          </Animated.View>
+        ) }
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}

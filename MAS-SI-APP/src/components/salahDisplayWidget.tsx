@@ -136,7 +136,6 @@ export default function SalahDisplayWidget ( {prayer, nextPrayer} : salahDisplay
         const time2 = moment(currentSalah.iqamah, "HH:mm A")
         if (salahIndex == 6) {
             time2.add(1, "days")
-            
         }
         
         if ( time1.isAfter(time2) && salahIndex > 6){

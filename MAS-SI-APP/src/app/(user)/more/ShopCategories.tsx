@@ -1,4 +1,4 @@
-import { View, Text, useWindowDimensions, Image } from 'react-native'
+import { View, Text, useWindowDimensions, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { Icon } from 'react-native-paper';
@@ -21,15 +21,17 @@ const SportsPaid = () => {
         getAllPaid()
     }, [])
     return(
-        <View style={{ width : width, flexWrap : "wrap", flexDirection : 'row' }}>
+        <ScrollView style={{ width : width }} contentContainerStyle={{  flexWrap : "wrap", flexDirection : 'row'  }}>
             {
                 paidPrograms ? paidPrograms.map((item, index) => {
                     return(
-                        <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} key={index}/>
+                        <View className='flex-row justify-center items-center' style={{ width: width / 2}} key={index}>
+                            <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} />
+                        </View>
                     )
                 }) : <></>
             }
-        </View>
+        </ScrollView>
     )
 }
 
@@ -48,16 +50,17 @@ const KidsPaid = () => {
     }, [])
 
     return(
-        <View style={{ width : width, flexWrap : "wrap", flexDirection : 'row' }}>
+        <ScrollView style={{ width : width}} contentContainerStyle={{  flexWrap : "wrap", flexDirection : 'row'  }}>
             {
-                kidsPrograms ? kidsPrograms.map((item, index) => {
-                  
+                kidsPrograms && kidsPrograms?.length > 0 && kidsPrograms.map((item, index) => {
                     return(
-                        <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} key={index}/>
+                        <View className='flex-row justify-center items-center' style={{ width: width / 2}} key={index}>
+                            <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img}/>
+                        </View>
                     )
-                }) : <></>
+                }) 
             }
-        </View>
+        </ScrollView>
     )
 }
 
@@ -75,15 +78,17 @@ const EducationPaid = () => {
         getEducationPrograms()
     })
     return(
-        <View style={{ width : width, flexWrap : "wrap", flexDirection : 'row' }}>
+        <ScrollView style={{ width : width }}  contentContainerStyle={{  flexWrap : "wrap", flexDirection : 'row'  }}>
             {
                 educationProgram ? educationProgram.map((item, index) => {
                     return(
-                        <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} key={index}/>
+                        <View className='flex-row justify-center items-center' style={{ width: width / 2}} key={index}>
+                            <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} />
+                        </View>
                     )
                 }) : <></>
             }
-        </View>
+        </ScrollView>
     )
 }
 
@@ -101,15 +106,17 @@ const TeenPaid = () => {
         getTeensProgram()
     })
     return(
-        <View style={{ width : width, flexWrap : "wrap", flexDirection : 'row' }}>
+        <ScrollView style={{ width : width}}  contentContainerStyle={{  flexWrap : "wrap", flexDirection : 'row'  }}>
             {
                 teensProgram ? teensProgram.map((item, index) => {
                     return(
-                        <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} key={index}/>
+                        <View className='flex-row justify-center items-center' style={{ width: width / 2}} key={index}>
+                            <ShopProgramFliers width={width} program_id={item.program_id} img={item.program_img} />
+                        </View>
                     )
                 }) : <></>
             }
-        </View>
+        </ScrollView>
     )
 }
 const ShopCategories = () => {
@@ -125,11 +132,10 @@ const ShopCategories = () => {
         }
     })
     const getTabBarIcon = (props : any) => {
-        const {route} = props
+        const { route } = props
         const { focused } = props
           if (route.key === 'first') {
             if( focused ){
-                spin.value = spin.value ? 0 : 1
                 return (
                     <Animated.Image 
                         source={require('@/assets/images/MasShopCategorie/sports.png')}
@@ -146,7 +152,6 @@ const ShopCategories = () => {
             }
           } else if( route.key === 'second') {
             if( focused ){
-                spin.value = spin.value ? 0 : 1
                 return (
                     <Animated.Image 
                         source={require('@/assets/images/MasShopCategorie/kids.png')}
@@ -163,7 +168,6 @@ const ShopCategories = () => {
             }
           }else if( route.key == "third") {
             if( focused ){
-                spin.value = spin.value ? 0 : 1
                 return (
                     <Animated.Image 
                         source={require('@/assets/images/MasShopCategorie/education.png')}
@@ -181,7 +185,6 @@ const ShopCategories = () => {
           }
           else{
             if( focused ){
-                spin.value = spin.value ? 0 : 1
                 return (
                     <Animated.Image 
                         source={require('@/assets/images/MasShopCategorie/16+.png')}
@@ -201,6 +204,10 @@ const ShopCategories = () => {
 
     const layout  = useWindowDimensions().width
     const [index, setIndex] = useState(0)
+    const onIndexChange = ( index : number ) => {
+        setIndex(index)
+        spin.value = spin.value ? 0 : 1
+    }
     const renderScene = SceneMap({
         first: SportsPaid,
         second: KidsPaid,
@@ -219,14 +226,13 @@ const ShopCategories = () => {
         
         <TabBar
           {...props}
-          style={{ alignSelf : "center", width : layout , backgroundColor: 'rgba(0 ,0, 0, 0)' }}
+          style={{ alignSelf : "center", width : layout  , backgroundColor: 'rgba(0 ,0, 0, 0)' }}
           labelStyle={{ color : "black", fontWeight : "bold" , alignItems : "center", justifyContent  : 'center', paddingTop : 3 }}
           renderIcon={(props) => getTabBarIcon(props)}
-          tabStyle={{ flexDirection : 'col', alignItems : 'center', backgroundColor : "white" }}
+          tabStyle={{ flexDirection : 'col', alignItems : 'center', backgroundColor : "white", width : layout / 3.5  }}
           indicatorStyle={{ backgroundColor: 'rgba(0 ,0, 0, 0)' }}
           activeColor='#57BA47'
           scrollEnabled={true}
-          gap={0}
           bounces
         />
       );
@@ -235,7 +241,7 @@ const ShopCategories = () => {
     <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
-        onIndexChange={setIndex}
+        onIndexChange={(index) => onIndexChange(index)}
         initialLayout={{ width: layout }}
         renderTabBar={renderTabBar}
         swipeEnabled={false}

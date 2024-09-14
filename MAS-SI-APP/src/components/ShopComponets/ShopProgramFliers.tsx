@@ -11,7 +11,7 @@ const ShopProgramFliers = ({ width, program_id, img } : ShopProgramFliersProp) =
   
   return (
     <Link href={`more/ProgramsPage/${program_id}`} asChild>
-        <Pressable style={{ width : width / 2, height : 130, alignItems : "center", marginTop : 15 }}>
+        <Pressable style={{ width : 170, height : 150, alignItems : "center", marginTop : 12 }} className=''>
             <Image
             source={{ uri : img || defaultProgramImage }}
             style={{ width : 170, height : 150, objectFit: "fill", borderRadius: 15 }}

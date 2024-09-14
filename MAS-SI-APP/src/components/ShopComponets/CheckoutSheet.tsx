@@ -17,7 +17,7 @@ const CheckoutSheet = forwardRef<Ref, CheckoutSheetProp>(({promo}, ref) => {
     const getTotal = async() => {
         const { data : cart, error } = await supabase.from('user_cart').select('*').eq('user_id', session?.user.id)
         
-        if( cart ){
+        if( cart && cart.length >= 1 ){
             const totals = cart.map((item) => item.product_price)
             const sumTotals = totals.reduce((acc, item) => acc + item)
             setSubTotal(sumTotals)

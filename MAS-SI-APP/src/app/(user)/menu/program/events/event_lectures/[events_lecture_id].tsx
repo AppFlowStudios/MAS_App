@@ -10,6 +10,8 @@ import { supabase } from '@/src/lib/supabase';
 import { setDate } from 'date-fns';
 import LectureKeyNotesCard from '@/src/components/LectureKeyNotesCard';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming, Easing } from 'react-native-reanimated';
+import LottieView from 'lottie-react-native';
 const EventsLectureID = () => {
     const { session } = useAuth()
     const [ playing, setPlaying ] = useState(false)
@@ -135,20 +137,54 @@ const EventsLectureID = () => {
       labelStyle={{ color : "white", fontWeight : "bold" }}
       />
     );
+    const [loading, setLoading] = useState(true);
+    const opacity = useSharedValue(1);
   
+    const playMASAnimation = useAnimatedStyle(() => {
+      return {
+        opacity: opacity.value,
+      };
+    });
+  
+    const handleAnimationEnd = () => {
+      setLoading(false);
+    };
+  
+    const fadeOutAnimation = () => {
+      opacity.value = withTiming(0, { duration: 1000, easing: Easing.out(Easing.quad) }, () => {
+        runOnJS(handleAnimationEnd)();
+      });
+    }
   
     return(
       <>
-      <Stack.Screen options={{ title : "" }} />
-        <YoutubePlayer 
-          height={layoutHeight / 4}
-          width={layout * 0.98}
-          webViewStyle={{ borderRadius : 20, marginLeft : '2%', marginTop : 8, backgroundColor : "#fafafa" }}
-          play={playing}
-          videoId={currentLecture?.event_lecture_link}
-          onChangeState={onStateChange}
-        />
-       <View className='mt-[5]'/>
+          <Stack.Screen options={{ title : currentLecture?.event_lecture_name}} />
+          <YoutubePlayer 
+            height={layoutHeight / 4}
+            width={layout * 0.98}
+            webViewStyle={{ borderRadius : 20, marginLeft : '2%', marginTop : 8, backgroundColor : "#ededed" }}
+            play={playing}
+            videoId={currentLecture?.event_lecture_link}
+            onChangeState={onStateChange}
+          />
+          <View className='mt-[5]'/>
+          { loading && (
+            <Animated.View style={[{ zIndex: 1, position: 'absolute', width: '100%', height: '100%', justifyContent : 'flex-end' }, playMASAnimation]}>
+              <LottieView
+                autoPlay
+                loop={false}
+                style={{
+                  width: '100%',
+                  height: '75%',
+                  backgroundColor: 'white',
+                }}
+                source={require('@/assets/lottie/ChatGPT.json')}
+                onAnimationFinish={() => {
+                  fadeOutAnimation();
+                }}
+              />
+            </Animated.View>
+          ) }
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}

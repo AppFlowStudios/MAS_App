@@ -14,6 +14,7 @@ import AddToCartProgramSheet from '@/src/components/ShopComponets/AddToCartSheet
 import { BottomSheetModal } from '@gorhom/bottom-sheet';
 import TextInputForm from '@/src/components/ShopComponets/TextInputForm';
 import RadioButtonForm from '@/src/components/ShopComponets/RadioButtonForm';
+import CartButton from '@/src/components/ShopComponets/CartButton';
 const ProgramInfo = () => {
     const { program_id } = useLocalSearchParams()
     const { session } = useAuth()
@@ -83,15 +84,8 @@ const ProgramInfo = () => {
     }, [isReady])
   return (
     <View className='flex-1 bg-white pt-[15%]' style={{flexGrow: 1}}>
-    <Stack.Screen options={ { title : "Details", headerTransparent: true, headerRight : () => (
-        <Link href={`more/UserCart/${session?.user.id}`} asChild>
-            <Pressable className='border items-center p-2 ' style={{ borderWidth : 2 , borderRadius : 50 }}>
-                    <Icon source={"cart-outline"} size={25}/> 
-            </Pressable>
-        </Link>
-        ), headerBackTitleVisible : false }} />
-     <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "14%" }} showsVerticalScrollIndicator={false} >
-         
+    <Stack.Screen options={ { title : "Details", headerTransparent: true, headerBackTitleVisible : false, headerRight: () => <View className='mt-1'><CartButton /></View> }} />
+     <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "15%" }} showsVerticalScrollIndicator={false} >
          <Animated.Image 
            source={ { uri: program?.program_img || defaultProgramImage } }
            style={ [{width: width / 2, height: 200, borderRadius: 8 }, imageAnimatedStyle] }

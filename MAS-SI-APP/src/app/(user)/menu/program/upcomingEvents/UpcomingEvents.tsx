@@ -10,6 +10,7 @@ import { Icon, Searchbar } from 'react-native-paper'
 import RenderEvents from '@/src/components/EventsComponets/RenderEvents'
 import UpcomingProgramFliers, { UpcomingKidsFliers } from '@/src/components/UpcomingFliers'
 import { UpcomingEventFliers } from '@/src/components/UpcomingFliers'
+import { TabActions } from '@react-navigation/native'
 const UpcomingEvents = ({  navigation } : any) => {
   const [ eventsUpcoming, setEventsUpcoming ] = useState<EventsType[] | null>()
   const [ programsUpcoming, setProgramsUpcoming ]= useState<Program[] | null>()
@@ -88,9 +89,9 @@ const UpcomingEvents = ({  navigation } : any) => {
         <Text className='text-center font-bold text-[#b7b7b7] text-lg'>Stay up to date with your Community</Text>
       </View>
       <View className='flex-col'>
-      { kidsUpcoming && kidsUpcoming.length > 1 ? 
-          <View>
-            <Pressable onPress={() => navigation.jumpTo("Kids")} className='flex-row items-center justify-between'><Text className='text-3xl font-bold text-black'> Upcoming Kids Programs</Text><Icon source={"chevron-right"} color='gray' size={25}/><View className=''/></Pressable>
+      { kidsUpcoming && kidsUpcoming.length > 0 ? 
+          <View className='w-[100%]'>
+            <Pressable onPress={() => navigation.jumpTo("second")} className='flex-row items-center justify-between '><Text className='text-2xl font-bold text-black'> Upcoming Kids Programs</Text><Icon source={"chevron-right"} color='gray' size={25}/><View className=''/></Pressable>
             <FlatList 
               data={kidsUpcoming}
               renderItem={( {item} ) => <View className='px-3'><UpcomingKidsFliers kids={item}/></View>}

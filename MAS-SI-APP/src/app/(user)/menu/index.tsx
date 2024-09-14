@@ -60,7 +60,6 @@ export default function homeScreen() {
     }
     const { width } = Dimensions.get("window")
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
-    const opacity = useSharedValue(1)
     const scrollOffset = useSharedValue(0)
     const scrollHandler = useAnimatedScrollHandler(event => {
       scrollOffset.value = event.contentOffset.y;
@@ -177,14 +176,15 @@ export default function homeScreen() {
             <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderEndStartRadius: 30 ,borderEndEndRadius: 30}} className=''>
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
             </View>
-              <View className='pt-7 flex-row justify-between w-[100%] px-3'>
-                <Text className='font-bold text-2xl text-[#0D509D]' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>
-                <View className='flex-row items-center'>
-                  <Text className='text-gray-300'>View All</Text>
-                  <Icon source={'chevron-right'} size={20}/>
-                </View>
-              </View>
-
+          <Link href={'/menu/program'} asChild>
+                <Pressable className='pt-7 flex-row justify-between w-[100%] px-3'>
+                  <Text className='font-bold text-2xl text-[#0D509D]' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>
+                  <View className='flex-row items-center'>
+                    <Text className='text-gray-300'>View All</Text>
+                    <Icon source={'chevron-right'} size={20}/>
+                  </View>
+                </Pressable>
+          </Link>
               <View className='pt-3' style={{height: 250}}>
                 <ProgramsCircularCarousel />
               </View>

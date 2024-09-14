@@ -246,7 +246,6 @@ async function getUserPlaylists(){
               style={ [{width: width / 1.2, height: 300, borderRadius: 8 }, imageAnimatedStyle] }
               resizeMode='stretch'
             />
-
           </View>
        
           <View className='bg-white w-[100%]' style={{paddingBottom : Tab * 3}}>
@@ -254,11 +253,11 @@ async function getUserPlaylists(){
             <Text className='text-center mt-2  text-[#0D509D]' onPress={showModal}>{program?.program_speaker}</Text>
               <View>
                 {
-                  lectures && lectures?.length > 1 ? lectures.map((item, index) => {
+                  lectures && lectures?.length >= 1 ? lectures.map((item, index) => {
                     return(
                       <Animated.View key={index} entering={FadeInLeft.duration(400).delay(100)}>
-                      <LecturesListLecture  lecture={item} index={index} speaker={program?.program_speaker} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
-                      <Divider style={{width: "95%", marginLeft: 8}}/>
+                        <LecturesListLecture  lecture={item} index={index} speaker={program?.program_speaker} setAddToPlaylistVisible={setAddToPlaylistVisible} setLectureToBeAddedToPlaylist={setLectureToBeAddedToPlaylist}/>
+                        <Divider style={{width: "95%", marginLeft: 8}}/>
                       </Animated.View>
                     )
                   }) : (
