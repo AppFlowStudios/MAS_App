@@ -75,9 +75,9 @@ const CartButton = () => {
     <Animated.View style={checkOutAnimatedStyle}>
         <Link href={`more/UserCart/${session?.user.id}`} asChild>
           <Pressable className='flex-row relative w-[100%] px-3 bg-white items-center' style={{ borderRadius : 50, shadowColor : '#D3D3D3', shadowOffset : { width  : 0, height : 6 }, shadowOpacity : 2, shadowRadius : 1, justifyContent : cartChanged ? 'space-between': 'flex-start' }}>
-              <Icon source={"cart-outline"} size={25} /> 
+              <Icon source={"cart-outline"} size={25} color='black'/> 
               <Badge 
-              style={{ position: 'absolute', top: -9, right: -2 }} 
+              style={{ position: 'absolute', top: -9, right: -2, color : 'white', backgroundColor : 'red' }} 
               size={18}
               visible={badgeVisible}
               >

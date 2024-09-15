@@ -1,4 +1,4 @@
-import { View, Text, useWindowDimensions, ScrollView } from 'react-native';
+import { View, Text, useWindowDimensions, ScrollView, StatusBar } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useProgram } from '@/src/providers/programProvider';
@@ -140,8 +140,9 @@ export default function LecturesData() {
   }
 
   return(
-    <>
-        <Stack.Screen options={{ title : currentLecture?.lecture_name}} />
+    <View className='flex-1 bg-[#ededed]'>
+        <Stack.Screen options={{ title : currentLecture?.lecture_name, headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',}}} />
+        <StatusBar barStyle={'dark-content'} />
         <YoutubePlayer 
           height={layoutHeight / 4}
           width={layout * 0.98}
@@ -176,7 +177,7 @@ export default function LecturesData() {
           style={{ backgroundColor : "#ededed"}}
         />
       
-    </>
+    </View>
   )
 }
 

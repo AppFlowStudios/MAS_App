@@ -30,7 +30,6 @@ const Kids = () => {
   return (
     <View className='bg-[#0D509D] flex-1'>
     <View className='bg-white pt-2 mt-1 flex-1'style={{borderTopLeftRadius: 40, borderTopRightRadius: 40, paddingBottom: tabBarHeight }}>
-    <Searchbar placeholder='Search...' onChangeText={filterTestFunc} value={searchBarInput} className='mt-2 w-[95%] mb-2' style={{alignSelf : "center", justifyContent: "center"}} elevation={1}/>
     <View className='mb-5'/>
     <FlatList 
         data={kidsPrograms}

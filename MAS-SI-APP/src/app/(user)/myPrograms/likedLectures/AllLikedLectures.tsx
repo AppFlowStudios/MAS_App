@@ -159,6 +159,8 @@ const AllLikedLectures = () => {
   );
 
   return (
+    <>
+    <Stack.Screen options={{ title : 'Liked Lectures', headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',}}}/>
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}
@@ -166,6 +168,7 @@ const AllLikedLectures = () => {
       initialLayout={{ width: layout.width }}
       renderTabBar={renderTabBar}
     />
+    </>
   )
 }
 export default AllLikedLectures

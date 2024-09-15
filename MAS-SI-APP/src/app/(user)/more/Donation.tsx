@@ -65,7 +65,7 @@ const Donation = () => {
   const perctangeToGoal = ((currTotalAmount / 13000000 ) * 100).toFixed(1)
   return (
     <ScrollView style={{ width : layout, height : layoutHeight, backgroundColor : "white" }} contentContainerStyle={{ paddingBottom : tabBarHeight }}> 
-        <Stack.Screen options={{ headerBackTitleVisible : false }}/>
+        <Stack.Screen options={{ headerBackTitleVisible : false,  headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',} }}/>
         <View className='items-center flex-row'  style={{ backgroundColor : "#0D509D", width : '90%', alignSelf : 'center', marginTop : 2, borderTopLeftRadius : 20, borderTopRightRadius : 20, paddingHorizontal : 8, paddingVertical : 8}}>
             <Image  source={{ uri : defaultProgramImage || undefined}} style={{ backgroundColor : 'white', borderRadius : 50, width : 50, height : 50}}/>
             <Text className='text-white text-2xl font-bold ml-4'>MAS Staten Island</Text>

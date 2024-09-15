@@ -160,20 +160,10 @@ async function getUserPlaylists(){
       topOffset : 50,
     })
   }
-
-  const removedFromNoti = () => {
-    Toast.show({
-      type : 'programRemovedFromNotifications',
-      props : { props : program },
-      position : 'top',
-      topOffset : 50,
-    })
-  }
    const handlePress = async () => {
     if( programInNotfications ) {
       const { error } = await supabase.from("added_notifications_programs").delete().eq("user_id" , session?.user.id).eq("program_id", programId)
       setProgramInNotifications(false)
-      removedFromNoti()
     }
     else{
       const { error } = await supabase.from("added_notifications_programs").insert({user_id :session?.user.id, program_id : programId})

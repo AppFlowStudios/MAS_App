@@ -84,7 +84,7 @@ const ProgramInfo = () => {
     }, [isReady])
   return (
     <View className='flex-1 bg-white pt-[15%]' style={{flexGrow: 1}}>
-    <Stack.Screen options={ { title : "Details", headerTransparent: true, headerBackTitleVisible : false, headerRight: () => <View className='mt-1'><CartButton /></View> }} />
+    <Stack.Screen options={ { title : "Details", headerTransparent: true, headerBackTitleVisible : false, headerRight: () => <View className='mt-1'><CartButton /></View>, headerTitleStyle: { color : 'black'} }}/>
      <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "15%" }} showsVerticalScrollIndicator={false} >
          <Animated.Image 
            source={ { uri: program?.program_img || defaultProgramImage } }

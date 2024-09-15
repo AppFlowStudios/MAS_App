@@ -1,0 +1,6 @@
+module Pods_MASSIAPP {
+  umbrella header "Pods-MASSIAPP-umbrella.h"
+
+  export *
+  module * { export * }
+}

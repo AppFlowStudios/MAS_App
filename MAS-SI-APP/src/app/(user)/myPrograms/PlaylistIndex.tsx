@@ -44,13 +44,13 @@ const PlaylistIndex = () => {
 
   return (
     <ScrollView className=' bg-white flex-1'>
-          <Stack.Screen options={{ title : '', headerBackTitleVisible : false}}/>
+          <Stack.Screen options={{ title : '', headerBackTitleVisible : false, headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',}}}/>
             <Pressable className='flex-row items-center ml-2' onPress={handlePresentModalPress}>
                 <Icon source={"plus-box-outline"} size={40} color='red'/>
                 <Text className='text-xl font-bold px-[13]'>Create New Playlist...</Text>
             </Pressable>
             <View className='flex-row items-center'>
-              <Link href={"/myPrograms/likedLectures"} asChild>
+              <Link href={"/myPrograms/likedLectures/AllLikedLectures"} asChild>
                 <Pressable className='flex-row items-center ml-2'>
                   <Icon source={"heart-box-outline"} color='red' size={40}/>
                   <Text className='text-xl font-bold px-[13]'>Favorite Lectures</Text>

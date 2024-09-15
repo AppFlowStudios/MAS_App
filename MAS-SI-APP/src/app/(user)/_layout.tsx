@@ -1,10 +1,9 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Tabs, Redirect, Link } from "expo-router";
+import { Tabs, Redirect } from "expo-router";
 import * as Animatable from 'react-native-animatable';
 import { Pressable, TouchableOpacity } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import TabArray from './tabArray';
-import { addProgramToNotificationsToastProp, Program, TabArrayType } from '@/src/types';
+import { TabArrayType } from '@/src/types';
 import { Icon } from "react-native-paper";
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { useAuth } from "@/src/providers/AuthProvider";
@@ -14,8 +13,7 @@ import Toast from 'react-native-toast-message'
 import { View, Text, Image } from 'react-native'
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram';
 import { BlurView } from 'expo-blur';
-import { supabase } from '@/src/lib/supabase';
-
+import * as Haptics from 'expo-haptics'
 const toastConfig = {
   addProgramToNotificationsToast : ( {props} : any ) => (
     <Pressable className='rounded-xl overflow-hidden ' onPress={props.onPress}>
@@ -54,9 +52,6 @@ const toastConfig = {
       </Pressable>
   )
 }
-const animate1 = { 0: { scale: 0.5, translateY: 0 }, 1: { scale: 1.2, translateY: -5 } };
-const animate2 = { 0: { scale: 1.2, translateY: 0 }, 1: { scale: 1, translateY: 20 } };
-
 type TabButtonProps = {
   props: BottomTabBarButtonProps,
   items: TabArrayType
@@ -65,12 +60,14 @@ type TabButtonProps = {
 const TabButton = ({ props, items }: TabButtonProps) => {
   const { onPress, accessibilityState } = props;
   const focused = accessibilityState?.selected;
-  const viewRef = useRef<any>(null);
   const textRef = useRef<any>(null);
 
   useEffect(() => {
     if (focused) {
       textRef.current?.transitionTo({ scale: 1 });
+      Haptics.notificationAsync (
+        Haptics.NotificationFeedbackType.Success
+      )
     } else {
       textRef.current?.transitionTo({ scale: 0 });
     }

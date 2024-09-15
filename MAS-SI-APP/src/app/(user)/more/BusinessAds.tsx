@@ -11,7 +11,7 @@ import { decode } from 'base64-arraybuffer';
 import { useAuth } from '@/src/providers/AuthProvider'
 import { supabase } from '@/src/lib/supabase'
 import { BlurView } from 'expo-blur'
-import { useRouter } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { useRoute } from '@react-navigation/native'
 const BusinessAdsDurationInfoTooltip = () => {
     return(
@@ -140,6 +140,7 @@ const BusinessAds = () => {
 
   return (
     <ScrollView className='flex-1 bg-white' contentContainerStyle={{ paddingBottom : tabBarHeight, flexGrow: 1 }}>
+      <Stack.Screen options={{ title : 'Business Application', headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',} }}/>
       <View className='w-[100%] bg-[#0D509D] h-[15%] flex-row items-center justify-evenly'>
         { stageInfo.map((item, index) => {
             return(

@@ -34,15 +34,15 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
           <View className=' flex-row'>
             <Image source={{uri : speakerData?.speaker_img || defaultProgramImage}} style={{width: 110, height: 110, borderRadius: 50}} resizeMode='contain'/>
             <View className='flex-col px-5'>
-              <Text className='text-xl font-bold'>Name: </Text>
-              <Text className='pt-2 font-semibold'> {speakerData?.speaker_name} </Text>
+              <Text className='text-xl font-bold text-black'>Name: </Text>
+              <Text className='pt-2 font-semibold text-black'> {speakerData?.speaker_name} </Text>
             </View>
           </View>
     
           <ScrollView className='flex-col py-3' contentContainerStyle={{ flex : 1 }}>
-            { speakerData?.speaker_name == "MAS" ? <Text className='font-bold'>Impact </Text> :  <Text className='font-bold'>Credentials: </Text> } 
+            { speakerData?.speaker_name == "MAS" ? <Text className='font-bold text-black'>Impact </Text> :  <Text className='font-bold text-black'>Credentials: </Text> } 
             { speakerData?.speaker_creds.map( (cred, i) => {
-              return <Text key={i}> <Icon source="cards-diamond-outline"  size={15}/> {cred} {'\n'}</Text>
+              return <Text key={i} className='text-black'> <Icon source="cards-diamond-outline"  size={15}/> {cred} {'\n'}</Text>
             })}
           </ScrollView>
         </View>
@@ -55,7 +55,7 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
   return (
     <BottomSheetModal
         ref={ref}
-        index={0}
+        index={1}
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         backgroundStyle={{backgroundColor: "#0D509D"}}
@@ -65,8 +65,8 @@ export const JummahBottomSheet = forwardRef<Ref, JummahBottomSheetProp>(({jummah
       <Text variant="headlineMedium" style={{marginLeft: 5, color : "white", fontWeight : "bold"}}>{jummahNum} Prayer</Text>
       <View className=' bg-white h-full mt-1 pt-2' style={{borderRadius: 40}}>
         <View className='flex-row w-[100%] justify-between px-5 items-center'>
-          <Text className='font-bold text-3xl'>Topic:</Text>
-          <Text className='text-3xl font-semibold'>{jummahTopic}</Text>
+          <Text className='font-bold text-3xl text-black'>Topic:</Text>
+          <Text className='text-3xl font-semibold text-black'>{jummahTopic}</Text>
         </View>
         <Divider style={{width : "90%", alignSelf: "center"}}/>
         <View className='flex-row items-center justify-between px-1'>

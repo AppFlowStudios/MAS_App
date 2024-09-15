@@ -5,6 +5,7 @@ import { Link, Stack } from 'expo-router'
 import { Gesture, GestureDetector } from 'react-native-gesture-handler'
 import { Icon } from 'react-native-paper'
 import { supabase } from '@/src/lib/supabase'
+
 const BlinkingIcon = () => {
   const blink = useSharedValue(0.4)
   const blinkAnimation = useAnimatedStyle(() => ({
@@ -25,21 +26,22 @@ const BlinkingIcon = () => {
  )
 
 }
+
 const GreetingScreen = () => {
     const { height, width } = Dimensions.get('window')
     const logoAnime = useSharedValue(0)
     const logoBounce = useSharedValue(-200)
     const guestSwipeTranslateX = useSharedValue(0)
-    const leftBorderWidth = useSharedValue(20)
+    const leftBorderWidth = useSharedValue(1)
     const prevTranslationX = useSharedValue(0)
+    const prevLeftBorderWidth = useSharedValue(0)
     const maxTranslateX = (width * .7) - 80 
     const swipedToEnd = useSharedValue<boolean>(false)
     const guestSwipeAnimation = useAnimatedStyle(() => {
         return{
         transform: [
             { translateX: guestSwipeTranslateX.value },
-          ],
-         borderLeftWidth : leftBorderWidth.value
+          ]
         }
     })
     const setGuestSwipeBack = () => {
@@ -47,6 +49,12 @@ const GreetingScreen = () => {
         guestSwipeTranslateX.value = withTiming(minTranslate, { duration : 800 })
         leftBorderWidth.value = 0
     }
+    const coverText = useAnimatedStyle(() => {
+      return{
+        opacity : leftBorderWidth.value
+      }
+    })
+
     const pan = Gesture.Pan()
     .minDistance(1)
     .onStart(() => {
@@ -62,6 +70,7 @@ const GreetingScreen = () => {
     })
     .onEnd(() => onSwipe())
     .runOnJS(true)
+
     const logoMountAnimeStyle = useAnimatedStyle(() => {
         return {
         opacity : logoAnime.value,
@@ -83,7 +92,7 @@ const GreetingScreen = () => {
           console.log( error )
         }
     }
-      const onFrameCallback = useFrameCallback((frameInfo) => {
+    const onFrameCallback = useFrameCallback((frameInfo) => {
         if( guestSwipeTranslateX.value == maxTranslateX ){
             swipedToEnd.value = true
         }
@@ -112,14 +121,14 @@ const GreetingScreen = () => {
             </View>
             <View className='bg-white p-2 flex-row items-center justify-between mt-2 h-[10%]' style={{ width : width * .95, opacity : 0.95, borderRadius : 30 }}>
                 <GestureDetector gesture={pan} >
-                    <Animated.View style={[guestSwipeAnimation, {backgroundColor : 'gray', alignItems : 'center', borderRadius : 40, height : '90%', justifyContent : 'center', borderColor : 'white', padding : 1, borderStyle : 'solid'  }]} className='border'>
-                        <BlinkingIcon />
+                    <Animated.View  style={[guestSwipeAnimation,{backgroundColor : 'gray', alignItems : 'center', borderRadius : 40, height : '90%', justifyContent : 'center', padding : 1}]}>
+                      <BlinkingIcon />
                     </Animated.View>
                 </GestureDetector>
-                <View className='z-[-1]'>
+                <Animated.View className='z-[-1]'>
                     <Text className='text-center text-gray-400'>swipe for guest access</Text>
-                </View>
-                <Pressable style={{backgroundColor : 'gray', height: '90%', width : 80, alignItems : 'center', borderRadius : 40, justifyContent : 'center' }} className=''>
+                </Animated.View>
+                <Pressable style={{backgroundColor : 'gray', height: '90%', width : 80, alignItems : 'center', borderRadius : 40, justifyContent : 'center' }} className='z-[2]'>
                     <Icon source={'arrow-right-top'} size={20}/>
                 </Pressable>
             </View>

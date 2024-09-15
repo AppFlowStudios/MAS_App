@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, useWindowDimensions, Image, Pressable } from 'react-native'
+import { View, Text, ScrollView, useWindowDimensions, Image, Pressable, StatusBar } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import LottieView from 'lottie-react-native'
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram'
@@ -59,6 +59,7 @@ const Index = () => {
   }, [session])
   return (
     <ScrollView className='bg-white pt-[18%] h-[100%]'>
+      <StatusBar barStyle={'dark-content'}/>
       <View className='w-[100%] items-center justify-center' style={{ height : height / 3 }}>
         <Pressable className='w-[100%] px-10' onPress={async () =>  await supabase.auth.signOut()}>
           <Text className='text-right text-gray-400'>Logout</Text>

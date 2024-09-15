@@ -183,8 +183,8 @@ const renderScene = ({ route } : any) => {
 
   return (
     <>
-    <Stack.Screen options={{ title : "Notification Center", headerBackTitleVisible : false}}/>
-    <View className='mt-2'/>
+    <Stack.Screen options={{ title : "Notification Center", headerBackTitleVisible : false, headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',}}}/>
+    <View className='pt-2 bg-[#ededed]'/>
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}

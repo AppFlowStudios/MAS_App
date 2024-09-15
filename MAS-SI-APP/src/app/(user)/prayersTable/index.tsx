@@ -31,7 +31,7 @@ export default function Index() {
   }, [tableIndex])
   return (
     <View className='h-full  bg-white'>
-          <StatusBar barStyle={"light-content"} />
+          <StatusBar barStyle={"dark-content"} />
           <View className='items-center justify-center '>
           <ImageBackground
             source={require('@/assets/images/PrayerTimesHeader.jpg')}

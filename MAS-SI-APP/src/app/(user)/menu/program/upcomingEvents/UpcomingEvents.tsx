@@ -83,15 +83,14 @@ const UpcomingEvents = ({  navigation } : any) => {
   return (
     <View className=' bg-[#0D509D] flex-1' >
     <View  className='bg-white pt-2 mt-1 flex-1'style={{borderTopLeftRadius: 40, borderTopRightRadius: 40, paddingBottom: tabBarHeight }}>
-    <Searchbar placeholder='Search...' onChangeText={setSearchBarInput} value={searchBarInput} className='mt-2 w-[95%] mb-2' style={{alignSelf : "center", justifyContent: "center"}} elevation={1}/>
     <ScrollView>
-      <View>
+      <View className='py-2'>
         <Text className='text-center font-bold text-[#b7b7b7] text-lg'>Stay up to date with your Community</Text>
       </View>
       <View className='flex-col'>
       { kidsUpcoming && kidsUpcoming.length > 0 ? 
           <View className='w-[100%]'>
-            <Pressable onPress={() => navigation.jumpTo("second")} className='flex-row items-center justify-between '><Text className='text-2xl font-bold text-black'> Upcoming Kids Programs</Text><Icon source={"chevron-right"} color='gray' size={25}/><View className=''/></Pressable>
+            <Pressable className='flex-row items-center justify-between px-2'><Text className='text-2xl font-bold text-black'>Upcoming Kids Programs</Text></Pressable>
             <FlatList 
               data={kidsUpcoming}
               renderItem={( {item} ) => <View className='px-3'><UpcomingKidsFliers kids={item}/></View>}
@@ -105,7 +104,7 @@ const UpcomingEvents = ({  navigation } : any) => {
 
         { eventsUpcoming && eventsUpcoming.length > 1 ? 
           <View>
-            <Pressable onPress={() => navigation.jumpTo("Events")} className='flex-row items-center justify-between'><Text className='text-3xl font-bold text-black'> Upcoming Events</Text><Icon source={"chevron-right"} color='gray' size={25}/><View className=''/></Pressable>
+            <Pressable className='flex-row items-center justify-between px-2'><Text className='text-2xl font-bold text-black'> Upcoming Events</Text></Pressable>
             <FlatList 
               data={eventsUpcoming}
               renderItem={( {item} ) => <View className=' px-3'><UpcomingEventFliers event={item}/></View>}
@@ -120,7 +119,7 @@ const UpcomingEvents = ({  navigation } : any) => {
 
         {programsUpcoming &&  programsUpcoming.length > 1 ? 
             <View> 
-            <Pressable onPress={() => navigation.jumpTo("Programs & Tarbiya")} className='flex-row items-center justify-between'><Text className='text-3xl font-bold text-black'> Upcoming Programs</Text><Icon source={"chevron-right"} color='gray' size={25}/><View className=''/></Pressable>
+            <Pressable className='flex-row items-center justify-between px-2'><Text className='text-2xl font-bold text-black'> Upcoming Programs</Text></Pressable>
             <View className='mt-2'/>
               <FlatList 
               data={programsUpcoming}

@@ -13,7 +13,6 @@ import LottieView from 'lottie-react-native';
 import { defaultProgramImage } from '@/src/components/ProgramsListProgram';
 import { EventsType } from '@/src/types';
 import SignInAnonModal from '@/src/components/SignInAnonModal';
-import { Blur } from '@shopify/react-native-skia';
 import { BlurView } from 'expo-blur';
 export default function userPrograms() {
   const { session } = useAuth()
@@ -119,6 +118,7 @@ export default function userPrograms() {
 
   return (
     <ScrollView className='bg-white flex-1 w-[100%]' >
+     <StatusBar barStyle={"dark-content"}/>
       { anonStatus &&( 
         <BlurView style={{ height : height, zIndex : 1, position : 'absolute', width : width, justifyContent : 'center', alignItems : 'center' }} intensity={50} className=''>
         <View className=' justify-center items-center flex-2 mt-5'>
@@ -180,7 +180,6 @@ export default function userPrograms() {
         </View>
         </View>
         </BlurView>)}
-      <StatusBar barStyle={"dark-content"}/>
       <View className='ml-2 mt-[15%]'>
         <Text className='text-3xl font-bold'>My Library</Text>
       </View>

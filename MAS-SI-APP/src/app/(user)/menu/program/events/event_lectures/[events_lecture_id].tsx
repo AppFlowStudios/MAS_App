@@ -158,7 +158,7 @@ const EventsLectureID = () => {
   
     return(
       <>
-          <Stack.Screen options={{ title : currentLecture?.event_lecture_name}} />
+          <Stack.Screen options={{ title : currentLecture?.event_lecture_name, headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white'} }} />
           <YoutubePlayer 
             height={layoutHeight / 4}
             width={layout * 0.98}

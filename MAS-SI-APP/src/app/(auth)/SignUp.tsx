@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, StatusBar } from 'react-native'
+import { View, Text, Image, Dimensions, StatusBar, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { Button, Divider, Icon, TextInput } from 'react-native-paper'
 import { Link, Stack } from "expo-router"
@@ -32,11 +32,13 @@ const SignUp = () => {
         <View className='pt-8'>
           <Text className=' text-white italic' style={{ fontSize : 40 }}>Account <Text className='font-bold'>Sign Up</Text></Text>
         </View>
-        <View className='pt-4 p-2 rounded-3xl w-[55%] border-white flex-row justify-between items-center mb-4' style={{ borderWidth : 4}}>
-          <Text className='text-white'>already a member?</Text>
-          <Icon source={'arrow-right-thin'} size={20} color='white'/>
-        </View>
-      </View>
+        <Link href={'/SignIn'} asChild>
+          <Pressable className='pt-4 p-2 rounded-3xl w-[55%] border-white flex-row justify-between items-center mb-4' style={{ borderWidth : 4}}>
+            <Text className='text-white'>already a member?</Text>
+            <Icon source={'arrow-right-thin'} size={20} color='white'/>
+          </Pressable>
+        </Link>
+          </View>
       <View className=' justify-center items-center bg-white pt-[12%] flex-col flex-2'>
         <View className='w-[95%]' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
           <TextInput
@@ -48,6 +50,7 @@ const SignUp = () => {
             placeholder={'email'}
             outlineColor='white'
             activeOutlineColor='white'
+            textColor='black'
           />
         </View>
         <View className='w-[95%] mt-2' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
@@ -61,6 +64,7 @@ const SignUp = () => {
             outlineColor='white'
             activeOutlineColor='white'
             secureTextEntry
+            textColor='black'
           />
         </View>
         <View className='w-[40%] flex-2 mt-10' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>

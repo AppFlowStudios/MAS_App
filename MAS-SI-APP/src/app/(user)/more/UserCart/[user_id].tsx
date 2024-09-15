@@ -71,7 +71,7 @@ const Cart = () => {
   }
   return (
     <View className='flex-1 bg-white' style={{ paddingBottom : tabBarHeight }}>
-      <Stack.Screen options={{ title : "My Cart", headerBackTitleVisible : false }}/>
+      <Stack.Screen options={{ title : "My Cart", headerBackTitleVisible : false, headerStyle : {backgroundColor : 'white',}, headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'} }}/>
     <ScrollView className='bg-white flex-1'>
         {
             cartContent && cartContent.length > 0 ? cartContent.map(( item, index ) => {
