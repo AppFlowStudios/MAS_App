@@ -7,12 +7,16 @@
 
 import ExpoModulesCore
 import ExpoAdapterGoogleSignIn
+import ExpoAppleAuthentication
+import EXApplication
 import ExpoAsset
 import ExpoBlur
 import EXConstants
+import ExpoDevice
 import ExpoFileSystem
 import ExpoFont
 import ExpoHaptics
+import ExpoImagePicker
 import ExpoKeepAwake
 import ExpoLinearGradient
 import ExpoHead
@@ -26,12 +30,16 @@ import ReactNativeIosUtilities
 public class ExpoModulesProvider: ModulesProvider {
   public override func getModuleClasses() -> [AnyModule.Type] {
     return [
+      AppleAuthenticationModule.self,
+      ApplicationModule.self,
       AssetModule.self,
       BlurViewModule.self,
       ConstantsModule.self,
+      DeviceModule.self,
       FileSystemModule.self,
       FontLoaderModule.self,
       HapticsModule.self,
+      ImagePickerModule.self,
       KeepAwakeModule.self,
       LinearGradientModule.self,
       ExpoHeadModule.self,

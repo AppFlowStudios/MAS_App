@@ -34,6 +34,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>EXApplication-ExpoApplication_privacy.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EXApplication.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>EXConstants-EXConstants.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -45,6 +55,21 @@
 			<false/>
 		</dict>
 		<key>EXConstants.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EXImageLoader.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EXNotifications-ExpoNotifications_privacy.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>EXNotifications.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -64,12 +89,27 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>ExpoAppleAuthentication.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>ExpoAsset.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>ExpoBlur.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ExpoDevice-ExpoDevice_privacy.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ExpoDevice.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -95,6 +135,11 @@
 			<false/>
 		</dict>
 		<key>ExpoHead.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ExpoImagePicker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -225,6 +270,11 @@
 			<false/>
 		</dict>
 		<key>RNScreens.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>RNSharedElement.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -464,6 +514,86 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Stripe-StripeBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Stripe.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeApplePay.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeCore-StripeCoreBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeCore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeFinancialConnections-StripeFinancialConnectionsBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeFinancialConnections.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePaymentSheet-StripePaymentSheetBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePaymentSheet.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePayments-Stripe3DS2.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePayments-StripePaymentsBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePayments.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePaymentsUI-StripePaymentsUIBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripePaymentsUI.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeUICore-StripeUICoreBundle.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>StripeUICore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Yoga.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -489,6 +619,26 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>lottie-ios-LottiePrivacyInfo.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>lottie-ios.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>lottie-react-native-Lottie_React_Native_Privacy.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>lottie-react-native.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>react-native-context-menu-view.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -509,7 +659,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>react-native-skia.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>react-native-webview.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>stripe-react-native.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

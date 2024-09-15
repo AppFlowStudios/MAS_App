@@ -47,4 +47,4 @@ with_node \
   generate-modules-provider  \
   --target "/Users/temursayfutdinov/Documents/MAS-SI/MAS-SI-APP/ios/Pods/Target Support Files/Pods-MASSIAPP/ExpoModulesProvider.swift" \
   --platform "apple" \
-  --packages "@react-native-google-signin/google-signin" "expo-asset" "expo-blur" "expo-constants" "expo-file-system" "expo-font" "expo-haptics" "expo-keep-awake" "expo-linear-gradient" "expo-router" "expo-system-ui" "expo-video" "expo-web-browser" "react-native-ios-context-menu" "react-native-ios-utilities"
+  --packages "@react-native-google-signin/google-signin" "expo-apple-authentication" "expo-application" "expo-asset" "expo-blur" "expo-constants" "expo-device" "expo-file-system" "expo-font" "expo-haptics" "expo-image-picker" "expo-keep-awake" "expo-linear-gradient" "expo-router" "expo-system-ui" "expo-video" "expo-web-browser" "react-native-ios-context-menu" "react-native-ios-utilities"
