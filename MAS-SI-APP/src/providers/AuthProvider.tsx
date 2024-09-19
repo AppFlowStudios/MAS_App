@@ -1,5 +1,5 @@
 import { supabase } from '@/src/lib/supabase';
-import { Session } from '@supabase/supabase-js';
+import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import {
   PropsWithChildren,
   createContext,
@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type AuthData = {
     session: Session | null;
@@ -25,7 +25,7 @@ type AuthData = {
     const [session, setSession] = useState<Session | null>(null);
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
-  
+    
     useEffect(() => {
       const fetchSession = async () => {
         const {
@@ -38,7 +38,7 @@ type AuthData = {
       };
   
       fetchSession();
-      supabase.auth.onAuthStateChange((_event, session) => {
+      supabase.auth.onAuthStateChange((event, session) => {
         fetchSession()
       });
     }, []);

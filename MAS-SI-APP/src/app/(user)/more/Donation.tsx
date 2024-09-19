@@ -85,7 +85,7 @@ const Donation = () => {
         </View> 
         <View style={{ width : layout, height : layoutHeight / 5, backgroundColor : 'white', flexWrap : "wrap", flexDirection : 'row', columnGap : 5, justifyContent : 'center', marginTop : "10%", rowGap : 5 }}>
             {DonationButtonBoxs.map((item, index) => (
-                  <Pressable style={{ width : layout / 2.2, height : 50 }} onPress={ () =>  callForDonationAmount(DonationButtonBoxs[index])}>
+                  <Pressable style={{ width : layout / 2.2, height : 50 }} onPress={ () =>  callForDonationAmount(DonationButtonBoxs[index])} key={index}>
                       <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center"}}>
                           <Text className='text-white text-xl font-bold text-center'>${item}</Text>
                       </LinearGradient>

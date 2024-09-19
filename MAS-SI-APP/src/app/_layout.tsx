@@ -6,8 +6,6 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import PrayerTimesProvider from '../providers/prayerTimesProvider';
 import { useColorScheme } from '../../hooks/useColorScheme';
-import ProgramProvider from '../providers/programProvider';
-import AddProgramProvider from '../providers/addingProgramProvider';
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';

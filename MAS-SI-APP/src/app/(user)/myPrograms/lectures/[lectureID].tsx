@@ -139,7 +139,6 @@ export default function LecturesData() {
           renderTabBar={renderTabBar}
           style={{ backgroundColor : "#ededed"}}
         />
-      
     </>
   )
 }

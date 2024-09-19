@@ -82,7 +82,8 @@
     "zeego": "^1.10.0",
     "expo-notifications": "~0.28.16",
     "expo-device": "~6.0.2",
-    "expo-dev-client": "~4.0.26"
+    "expo-dev-client": "~4.0.26",
+    "expo-updates": "~0.25.24"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

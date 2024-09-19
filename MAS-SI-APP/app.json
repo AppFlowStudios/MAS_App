@@ -14,7 +14,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.MAS-SI-APP"
+      "bundleIdentifier": "com.MAS-SI-APP",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -44,6 +45,10 @@
       "eas": {
         "projectId": "23272993-d42e-4c74-b945-556f2c9c4700"
       }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/23272993-d42e-4c74-b945-556f2c9c4700"
     }
   }
 }

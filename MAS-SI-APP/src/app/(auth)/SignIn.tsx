@@ -41,16 +41,6 @@ const SignIn = () => {
       if (error) alert(error.message);
       setLoading(false);
     }  
-
-    const guestSignIn = async () => {
-      const { data, error } = await supabase.auth.signInAnonymously()
-      if( error ){
-        console.log( error )
-      }
-    }
-    useEffect(() => {
-      logoMountAnimeFunc()
-    }, [])
   return (
     <View className='bg-white h-[100%]'>
       <Stack.Screen options={{ headerTransparent : true, headerTitle : '', headerBackTitleVisible : false }} />

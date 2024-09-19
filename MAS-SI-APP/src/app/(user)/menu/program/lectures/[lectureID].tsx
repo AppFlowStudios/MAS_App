@@ -158,10 +158,10 @@ export default function LecturesData() {
               autoPlay
               loop={false}
               style={{
-                width: '70%',
-                height: '70%',
+                width: '100%',
+                height: '100%',
               }}
-              source={require('@/assets/lottie/ChatGPT.json')}
+              source={require('@/assets/lottie/checker.json')}
               onAnimationFinish={() => {
                 fadeOutAnimation();
               }}
