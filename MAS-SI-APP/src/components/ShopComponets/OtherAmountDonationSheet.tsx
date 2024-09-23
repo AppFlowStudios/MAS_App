@@ -7,7 +7,7 @@ import { useAuth } from '@/src/providers/AuthProvider';
 import { initializePaymentSheet, openPaymentSheet } from '@/src/lib/stripe';
 type Ref = BottomSheetModal
 const OtherAmountDonationSheet = forwardRef<Ref, {}>(({}, ref) => {
-    const snapPoints = useMemo(() => ["20%"], []);
+    const snapPoints = useMemo(() => ["40%"], []);
     const { session } = useAuth()
     const [ amount, setAmount ] = useState('')
     const renderBackDrop = useCallback( (props : any ) => <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props}/> , [])
@@ -35,22 +35,25 @@ const OtherAmountDonationSheet = forwardRef<Ref, {}>(({}, ref) => {
         handleIndicatorStyle={{backgroundColor: "gray"}}
         backdropComponent={renderBackDrop}
         >
-            <View className='h-[100%] w-[90%] bg-white border flex-col self-center'>
+            <View className='h-[100%] w-[90%] bg-white flex-col self-center'>
                 <View className='w-[100%]'>
                     <Text className='text-left font-bold text-3xl'>Input Amount</Text>
                 </View>
-                <View>
+                <Pressable className='flex-row w-[100%] mt-3' style={{padding: 12,borderRadius: 12, backgroundColor: "grey", }}>
+                    <Text className='font-bold text-white'>$</Text>
                     <BottomSheetTextInput 
-                        className='border'
+                        className='border w-[100%]'
                         keyboardType='numeric'
                         value={amount}
                         onChangeText={handleAmountChange}
-                        
+                        style={{ textAlign: "center", color : 'white', paddingLeft : 5 }}
+                        placeholder='Amount'
+                        selectionColor={'white'}
                     />
-                    <Divider />
-                </View>
+                    <Divider className=' mt-3 '/>
+                </Pressable>
                 <View>
-                     <Button icon={"account-heart"} mode='contained' style={{width: 150, alignItems: "center", backgroundColor: "#57BA47", marginTop: 30}} onPress={() => callForDonationAmount(Number(amount))}>Donate Now</Button>
+                     <Button icon={"account-heart"} mode='contained' style={{width: 150, alignItems: "center", backgroundColor: "#57BA47", marginTop: 30}} onPress={() => callForDonationAmount(Number(amount.replaceAll(',', '')))}>Donate Now</Button>
                 </View>
             </View>
         </BottomSheetModal>

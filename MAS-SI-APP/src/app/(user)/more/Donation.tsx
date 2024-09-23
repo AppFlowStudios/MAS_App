@@ -23,6 +23,7 @@ const Donation = () => {
   const layout = useWindowDimensions().width
   const layoutHeight = useWindowDimensions().height
   const [ playing, setPlaying ] = useState(false)
+  const [ buttonOn, setButtonOn ] = useState(true)
   const layoutMargin = 40
   const [ selectedDate, setSelectedDate ] = useState('Total')
   const onStateChange = useCallback((state : any) => {
@@ -37,8 +38,10 @@ const Donation = () => {
   const bottomSheetRef = useRef<BottomSheetModal>(null)
   const handlePresentModalPress = () => bottomSheetRef.current?.present();
   const callForDonationAmount = async (amount : number) => {
+    setButtonOn(false)
     await initializePaymentSheet(Math.floor(amount * 100))
     await openPaymentSheet()
+    setButtonOn(true)
   }
   const selectedValue = useSharedValue(0)
   const DONATIONGOAL : DonationGoalType[] = [
@@ -85,13 +88,13 @@ const Donation = () => {
         </View> 
         <View style={{ width : layout, height : layoutHeight / 5, backgroundColor : 'white', flexWrap : "wrap", flexDirection : 'row', columnGap : 5, justifyContent : 'center', marginTop : "10%", rowGap : 5 }}>
             {DonationButtonBoxs.map((item, index) => (
-                  <Pressable style={{ width : layout / 2.2, height : 50 }} onPress={ () =>  callForDonationAmount(DonationButtonBoxs[index])} key={index}>
-                      <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center"}}>
+                  <Pressable style={{ width : layout / 2.2, height : 50, shadowColor : 'black', shadowOffset : { width : 0, height : 2}, shadowOpacity : 1, shadowRadius : 3 }} onPress={ () =>  callForDonationAmount(DonationButtonBoxs[index]) } key={index} disabled={!buttonOn}>
+                      <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center" }}>
                           <Text className='text-white text-xl font-bold text-center'>${item}</Text>
                       </LinearGradient>
                   </Pressable>
             ))}
-             <Pressable style={{ width : layout / 2.2, height : 50 }} onPress={handlePresentModalPress}>
+             <Pressable style={{ width : layout / 2.2, height : 50, shadowColor : 'black', shadowOffset : { width : 0, height : 2}, shadowOpacity : 1, shadowRadius : 3  }} onPress={handlePresentModalPress} disabled={!buttonOn}>
                  <LinearGradient colors={['#0D509D', '#57BA47']} style={{ width : '100%', height : '100%', opacity : 0.8, borderRadius  : 20, justifyContent : "center"}}>
                      <Text className='text-white text-xl font-bold text-center'>Other Amount...</Text>
                  </LinearGradient>

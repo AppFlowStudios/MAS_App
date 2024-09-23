@@ -109,11 +109,10 @@ Deno.serve(async (req) => {
 
                   <div class="info">
                       <h3>Flyer Details:</h3>
-                      <p><strong>Location:</strong> ${submission.business_flyer_location}</p>
                       <p><strong>Duration:</strong> ${submission.business_flyer_duration}</p>
                   </div>
                   
-                  <img src="${submission.business_flyer_img}" alt="Business Flyer Image" width="42" height="42">
+                  <img src="${submission.business_flyer_img}" alt="Business Flyer Image" width="500" height="500">
               </div>
               <div class="footer">
                   <p>&copy; 2024 MAS Staten Island</p>

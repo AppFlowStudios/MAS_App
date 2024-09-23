@@ -11,9 +11,6 @@ const Event = () => {
   const tabBarHeight = useBottomTabBarHeight() + 35
   const [ eventsData, setEventsData ] = useState<EventsType[]>()
   const [ searchBarInput, setSearchBarInput ] = useState("")
-  const filterTestFunc = () => {
-
-  }
   const  fetchEventsData =  async () => {
     const { data, error } = await supabase.from("events").select("*").eq("has_lecture", true)
     if( error ) {

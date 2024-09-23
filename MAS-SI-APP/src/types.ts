@@ -24,6 +24,8 @@ export type Program = {
     is_kids : boolean
     is_fourteen_plus : boolean
     is_education : boolean
+    program_start_date : string
+    program_end_date : string
 }
 
 export type salahData = {

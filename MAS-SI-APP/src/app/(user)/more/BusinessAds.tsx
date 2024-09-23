@@ -1,7 +1,7 @@
-import { View, Text, ScrollView, Pressable, Dimensions, Image } from 'react-native'
+import { View, Text, ScrollView, Pressable, Dimensions, Image, Alert, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
-import { Button, Divider, Icon, TextInput } from 'react-native-paper'
+import { Button, Divider, Icon, TextInput, HelperText } from 'react-native-paper'
 import BusinessAdsDurationCard from '@/src/components/BusinessAdsComponets/BusinessAdsDurationCard'
 import BusinessAdsLocationCard from '@/src/components/BusinessAdsComponets/BusinessAdsLocationCard'
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
@@ -13,6 +13,9 @@ import { supabase } from '@/src/lib/supabase'
 import { BlurView } from 'expo-blur'
 import { Stack, useRouter } from 'expo-router'
 import { useRoute } from '@react-navigation/native'
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmissionFormSchema, submissionFormSchema, businessInfoSubmissions, BusinessInfoSchema } from '@/src/components/forms/Personal-Info'
 const BusinessAdsDurationInfoTooltip = () => {
     return(
         <Menu>
@@ -27,19 +30,13 @@ const BusinessAdsDurationInfoTooltip = () => {
         </Menu>
     )
 }
-const BusinessAdsLocationInfoToolTip = () => {
-    return(
-        <Menu>
-            <MenuTrigger>
-                <Icon source={'information-outline'} size={20}/>
-            </MenuTrigger>
-            <MenuOptions customStyles={{optionsContainer: {width: 150, borderRadius: 8, marginTop: 20, padding: 8}}}>
-                <MenuOption>
-                    <Text>Where would you like your business to be shown?</Text>
-                </MenuOption>
-            </MenuOptions>
-        </Menu>
-    )
+type BusinessSchemaId = {
+    schemaId :  "businessName" | "businessPhoneNumber" | "businessEmail" | "city" | "state" | "address",
+    label : string
+}
+type PersonalSchemaId = {
+    schemaId :  "name" | "phoneNumber" | "email",
+    label : string
 }
 const BusinessAds = () => {
   const { session } = useAuth()
@@ -47,50 +44,34 @@ const BusinessAds = () => {
   const tabBarHeight = useBottomTabBarHeight() * 3.7
   const { height, width } = Dimensions.get('screen')
   const [ currentStage, setCurrentStage ] = useState(0)
-  const [ personalFullName, setPersonalFullName ] = useState('')
-  const [ personalPhoneNumber, setPersonalPhoneNumber ] = useState('')
-  const [ personalEmail, setPersonalEmail ] = useState('')
-  const [ finishedPersonalPage, setFinishedPersonalPage ] = useState(false)
-  const [ businessName, setBusinessName ]= useState('')
-  const [ businessAddress, setBusinessAddress ] = useState('')
-  const [ businessCity, setBusinessCity ] = useState('')
-  const [ businessState, setBusinessState ] = useState('')
-  const [ businessPhoneNumber, setBusinessPhoneNumber ] = useState('')
-  const [ businessEmail, setBusinessEmail ] = useState('')
-  const [ finishedBusinessPage, setFinishedBusinessPage ] = useState(false)
+
+  const methods = useForm<SubmissionFormSchema>({
+    resolver: zodResolver(submissionFormSchema),
+    mode: 'onBlur',
+  });
+
+  const businessMethods = useForm<BusinessInfoSchema>({
+    resolver: zodResolver(businessInfoSubmissions),
+    mode: 'onBlur',
+  })
+
   const [ selectedDuration, setSelectedDuration ] = useState([''])
-  const [ selectedLocation, setSelectedLoction ] = useState([''])
   const [ finishedSelectedChoices, setFinishedSelectedChoices ] = useState(false)
   const [ businessFlyer, setBusinessFlyer ] = useState<ImagePicker.ImagePickerAsset>()
-  useEffect(() => {
-    if(  personalFullName &&  personalPhoneNumber && personalEmail ){
-        setFinishedPersonalPage(true)
-    }else{
-        setFinishedPersonalPage(false)
-    }
-  }, [ personalFullName, personalPhoneNumber, personalEmail])
+
 
   useEffect(() => {
-    if ( businessName && businessAddress &&  businessCity &&  businessState && businessPhoneNumber &&  businessEmail ){
-        setFinishedBusinessPage(true)
-    }else{
-        setFinishedBusinessPage(false)
-    }
-  }, [ businessName, businessAddress, businessCity, businessState, businessPhoneNumber, businessEmail])
-  useEffect(() => {
-    if( selectedDuration.length > 0 && selectedLocation.length > 0 && businessFlyer ){
+    if( selectedDuration.length > 0 && businessFlyer ){
         setFinishedSelectedChoices(true)
     }
     else{
         setFinishedSelectedChoices(false)
     }
-  }, [ selectedDuration, selectedLocation, businessFlyer])
+  }, [ selectedDuration, businessFlyer])
 
   const ADDURATIONOPTIONS = ['1 Month', '3 Months', '1 Year']
-  const LOCATIONOPTIONS = ['On App', "Center Tv's", 'Both']
   const stageInfo = ['Personal Info', 'Business Info', 'Ad details']
-  const personalStageQuestions = ['Full Name', 'Phone Number', 'Email']
-  const personalStageStates = [{ get : personalFullName, set : setPersonalFullName}, {get : personalPhoneNumber, set : setPersonalPhoneNumber }, { get : personalEmail, set : setPersonalEmail }]
+  const personalStageQuestions : PersonalSchemaId[] = [{ schemaId : 'name' ,label : 'Full Name'}, { schemaId : 'phoneNumber' ,label : 'Phone Number'}, { schemaId : 'email', label : 'Email'}]
   const onFinished = () => {
     setCurrentStage(currentStage + 1)
   }
@@ -98,8 +79,7 @@ const BusinessAds = () => {
   const onGoBack = () => {
     setCurrentStage(currentStage - 1)
   }
-  const businessStageQuestions = ['Business Name', 'Address', 'City', 'State', 'Phone Number', 'Email']
-  const businessStageStates = [{ get : businessName, set : setBusinessName}, {get : businessAddress, set : setBusinessAddress }, { get : businessCity, set : setBusinessCity }, {get : businessState, set : setBusinessState} ,{ get : businessPhoneNumber, set : setBusinessPhoneNumber}, { get : businessEmail, set : setBusinessEmail}]
+  const businessStageQuestions : BusinessSchemaId[] = [{ schemaId : 'businessName', label: 'Business Name'}, { schemaId : 'address', label : 'Address'}, { schemaId : 'city', label: 'City'},{schemaId : 'state', label : 'State'}, { schemaId : 'businessPhoneNumber', label : 'Phone Number' }, { schemaId : 'businessEmail', label : 'Email' }]
 
   const onSelectImage = async () => {
     const options : ImagePicker.ImagePickerOptions = {
@@ -124,12 +104,14 @@ const BusinessAds = () => {
         console.log(image_upload_error)
         if( image ){
             const { data : business_flyer_url } = await supabase.storage.from('business_flyers').getPublicUrl(image?.path)
+            const personalInfo = methods.getValues()
+            const businessInfo = businessMethods.getValues()
             if( business_flyer_url ) {
-                const { data, error } = await supabase.from('business_ads_submissions').insert({'personal_full_name' : personalFullName, 'personal_phone_number' : personalPhoneNumber, 'personal_email' : personalEmail, 'business_name': businessName, 'business_address' : businessAddress, 'business_phone_number': businessPhoneNumber, 'business_email' : businessEmail, 'business_flyer_location' : selectedLocation[0], 'business_flyer_duration' : selectedDuration[0], 'business_flyer_img' : business_flyer_url.publicUrl, user_id : session?.user.id })
+                const { data, error } = await supabase.from('business_ads_submissions').insert({'personal_full_name' : personalInfo.name, 'personal_phone_number' : personalInfo.phoneNumber, 'personal_email' : personalInfo.email, 'business_name': businessInfo.businessName, 'business_address' : businessInfo.address, 'business_phone_number': businessInfo.businessPhoneNumber, 'business_email' : businessInfo.businessEmail,  'business_flyer_duration' : selectedDuration[0], 'business_flyer_img' : business_flyer_url.publicUrl, user_id : session?.user.id })
                 if( error ){
                     console.log(error)
                 }else{
-                     await supabase.functions.invoke('resend', { body : {submission : { personal_full_name : personalFullName, personal_phone_number : personalPhoneNumber, personal_email : personalEmail,  business_name: businessName, business_address : businessAddress,  business_phone_number : businessPhoneNumber,  business_email  : businessEmail,  business_flyer_location  : selectedLocation[0],  business_flyer_duration : selectedDuration[0],  business_flyer_img : business_flyer_url.publicUrl } }})
+                     await supabase.functions.invoke('resend', { body : {submission : { personal_full_name : personalInfo.name, personal_phone_number : personalInfo.phoneNumber, personal_email : personalInfo.email,  business_name: businessInfo.businessName, business_address : businessInfo.address,  business_phone_number :  businessInfo.businessPhoneNumber,  business_email  : businessInfo.businessEmail,  business_flyer_duration : selectedDuration[0],  business_flyer_img : business_flyer_url.publicUrl } }})
                 }
                 router.back()
             }
@@ -137,131 +119,196 @@ const BusinessAds = () => {
     }
 
 }
-
+  const personalSubmit: SubmitHandler<SubmissionFormSchema> = (data) => {
+    console.log(JSON.stringify(data));
+  };
+  
   return (
-    <ScrollView className='flex-1 bg-white' contentContainerStyle={{ paddingBottom : tabBarHeight, flexGrow: 1 }}>
-      <Stack.Screen options={{ title : 'Business Application', headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',} }}/>
-      <View className='w-[100%] bg-[#0D509D] h-[15%] flex-row items-center justify-evenly'>
-        { stageInfo.map((item, index) => {
-            return(
-                <View key={index} style={{ width : '25%', height : 65 }} className='items-center justify-center flex-col'> 
-                    <View style={[{ backgroundColor : currentStage == index ? 'white' : currentStage < index ?  'gray' : 'green'}, {borderRadius : 50, width : '48%', height : '70%', alignItems : 'center' }]}>
-                        {currentStage > index ? <Icon source={'check-bold'} color='white' size={40}/> : <></>}
+        <ScrollView className='flex-1 bg-white' contentContainerStyle={{ paddingBottom : tabBarHeight }}>
+        <Stack.Screen options={{ title : 'Business Application', headerTintColor : '#007AFF' , headerTitleStyle: { color : 'black'}, headerStyle : {backgroundColor : 'white',} }}/>
+        <View className='w-[100%] bg-[#0D509D] h-[15%] flex-row items-center justify-evenly'>
+            { stageInfo.map((item, index) => {
+                return(
+                    <View key={index} style={{ width : '25%', height : 65 }} className='items-center justify-center flex-col'> 
+                        <View style={[{ backgroundColor : currentStage == index ? 'white' : currentStage < index ?  'gray' : 'green'}, {borderRadius : 50, width : '48%', height : '70%', alignItems : 'center' }]}>
+                            {currentStage > index ? <Icon source={'check-bold'} color='white' size={40}/> : <></>}
+                        </View>
+                        <Text className='text-center text-white'>{item}</Text>
                     </View>
-                    <Text className='text-center text-white'>{item}</Text>
-                </View>
-            )
-            })
-        }
-      </View>
-     <View className='flex-1 bg-white' style={{ }}>
-        <View className='flex-2 pt-2'>
-           { currentStage == 0 && <Text className='text-3xl font-bold pl-2'>Personal Information</Text>}
-           { currentStage == 1 && <Text className='text-3xl font-bold pl-2'>Business Information</Text>}
-           { currentStage == 2 && <Text className='text-3xl font-bold pl-2'>Advertisment Details</Text>}
-            <Divider style={{ backgroundColor : 'black'}}/>     
+                )
+                })
+            }
         </View>
-        {
-            currentStage == 0 ? (
-                <View className='flex-1 flex-col gap-y-8 mt-5'> 
-                    {personalStageQuestions.map((item, index) => {
-                        return(
-                            <View className='w-[90%] self-center flex-2'>
-                                <TextInput 
-                                    mode='outlined'
-                                    label={personalStageQuestions[index]}
-                                    value={personalStageStates[index].get}
-                                    onChangeText={personalStageStates[index].set}
-                                    style={{ backgroundColor : 'white'}}
-                                />
-                            </View>
-                        )
-                    })}
-                    <View className='flex-row items-center w-[100%] justify-end flex-2 px-5' > 
-                        <Button className='bg-[#57BA47] ' mode='contained' theme={{ roundness : 1 }} disabled={!finishedPersonalPage} onPress={onFinished}>
-                            <Text>Next</Text>
-                        </Button>
-                    </View>
-                </View>
-            ) : currentStage == 1 ? (
-                <View className='flex-1 flex-col gap-y-3 mt-5'> 
-                    {businessStageQuestions.map((item, index) => {
-                        return(
-                            <View className='w-[90%] self-center flex-2' key={index}>
-                                <TextInput 
-                                    mode='outlined'
-                                    label={businessStageQuestions[index]}
-                                    value={businessStageStates[index].get}
-                                    onChangeText={businessStageStates[index].set}
-                                    style={{ backgroundColor : 'white'}}
-                                />
-                            </View>
-                        )
-                    })}
-                    <View className='flex-row items-center w-[100%] justify-between flex-2 px-5' > 
-                         <Button className=' bg-gray-500 ' mode='contained' theme={{ roundness : 1 }} onPress={onGoBack}>
-                            <Text>Back</Text>
-                        </Button>
-                        <Button className='bg-[#57BA47] ' mode='contained' theme={{ roundness : 1 }} disabled={!finishedBusinessPage} onPress={onFinished}>
-                            <Text>Next</Text>
-                        </Button>
-                    </View>
-                </View>
-            ) : currentStage == 2 ? (
-                <View className='flex-col'>
-                    <View className='flex-row justify-between items-center px-2'> 
-                        <Text className='text-gray-400 text-xl'>Duration</Text>
-                        <BusinessAdsDurationInfoTooltip />
-                    </View>
-                    <View className='items-center flex-col gap-y-2'>
-                        {
-                            ADDURATIONOPTIONS.map((item, index) => (
-                                <View key={index}>
-                                    <BusinessAdsDurationCard height={height / 15} width={width * .8} selectedDuration={selectedDuration} setDuration={setSelectedDuration} duration={item} index={index} />
+        <View className='flex-1 bg-white'>
+            <View className='flex-2 pt-2'>
+            { currentStage == 0 && <Text className='text-3xl font-bold pl-2'>Personal Information</Text>}
+            { currentStage == 1 && <Text className='text-3xl font-bold pl-2'>Business Information</Text>}
+            { currentStage == 2 && <Text className='text-3xl font-bold pl-2'>Advertisment Details</Text>}
+                <Divider style={{ backgroundColor : 'black'}}/>     
+            </View>
+            { currentStage == 0 && (
+                    <View className='flex-1 flex-col gap-y-8 mt-5' > 
+                        {personalStageQuestions.map((item, index) => {
+                            return(
+                                <View className='w-[90%] self-center flex-2' key={index}>
+                                    <Controller
+                                        control={methods.control}
+                                        name={item.schemaId}
+                                        render={({
+                                            field: { onChange, onBlur, value },
+                                            fieldState: { error },
+                                        }) => {
+                                            return (
+                                            <>
+                                                <TextInput 
+                                                mode='outlined'
+                                                label={item.label}
+                                                onBlur={onBlur}
+                                                value={value}
+                                                onChangeText={onChange}
+                                                style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0, paddingLeft : 10 }}
+                                                outlineColor='blue'
+                                                activeOutlineColor='blue'
+                                                textColor='black'
+                                                contentStyle={{ paddingLeft  : 3 }}
+                                                selectionColor='black'
+                                                keyboardType={item.schemaId == 'phoneNumber' ? 'number-pad' : item.schemaId == 'email' ? 'email-address' : 'default'}
+                                                />
+                                                <HelperText type="error" visible={error ? true : false} className='text-red-500 font-bold'>
+                                                    {error?.message}
+                                                </HelperText>
+                                            </>
+                                            );
+                                        }}
+                                    />
                                 </View>
-                            ))
-                        }
+                            )
+                        })}
+                        <View className='flex-row items-center w-[100%] justify-end flex-2 px-5' > 
+                            <Button className='bg-[#57BA47] ' mode='contained' theme={{ roundness : 1 }} textColor='white' onPress={() => {
+                                    // get current form values
+                                    const currFormValues = methods.getValues();
+
+                                    // Prevalidate using zod's safeParse
+                                    const result = submissionFormSchema.safeParse(currFormValues);
+
+                                    // If prevalidation is failed, display the error
+                                    if (!result.success) {
+                                        Alert.alert('Fill out all questions please')
+                                    } else {
+                                    // If prevalidation is successful, notify the user
+                                    console.log(methods.getValues())
+                                    onFinished()
+                                    }
+                                }}>
+                                <Text>Next</Text>
+                            </Button>
+                        </View>
                     </View>
-                    <View className='flex-row justify-between items-center px-2'> 
-                        <Text className='text-gray-400 text-xl'>Location</Text>
-                        <BusinessAdsLocationInfoToolTip />
-                    </View>
-                    <View className='items-center flex-col gap-y-2'>
-                        {
-                            LOCATIONOPTIONS.map((item, index) => (
-                                <View key={index}>
-                                    <BusinessAdsLocationCard height={height / 15} width={width * .8} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLoction} location={item} index={index} />
+                )} 
+                { currentStage == 1 ? (
+                    <View className='flex-1 flex-col gap-y-3 mt-5'> 
+                        {businessStageQuestions.map((item, index) => {
+                            return(
+                                <View className='w-[90%] self-center flex-2' key={index}>
+                                <Controller
+                                        control={businessMethods.control}
+                                        name={item.schemaId}
+                                        render={({
+                                            field: { onChange , onBlur, value },
+                                            fieldState: { error },
+                                        }) => {
+                                            return (
+                                            <>
+                                                <TextInput 
+                                                mode='outlined'
+                                                label={item.label}
+                                                onBlur={onBlur}
+                                                value={value}
+                                                onChangeText={onChange}
+                                                style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0, paddingLeft : 10 }}
+                                                outlineColor='blue'
+                                                activeOutlineColor='blue'
+                                                textColor='black'
+                                                contentStyle={{ paddingLeft  : 3 }}
+                                                selectionColor='black'
+                                                />
+                                                <HelperText type="error" visible={error ? true : false} className='text-red-500 font-bold'>
+                                                    {error?.message}
+                                                </HelperText>
+                                            </>
+                                            );
+                                        }}
+                                    />
                                 </View>
-                            ))
-                        }
+                            )
+                        })}
+                        <View className='flex-row items-center w-[100%] justify-between flex-2 px-5' > 
+                            <Button className=' bg-gray-500 ' mode='contained' theme={{ roundness : 1 }} textColor='white' onPress={onGoBack}>
+                                <Text>Back</Text>
+                            </Button>
+                            <Button className='bg-[#57BA47] ' mode='contained' theme={{ roundness : 1 }} textColor='white' onPress={() => {
+                                // get current form values
+                                const currFormValues = businessMethods.getValues();
+
+                                // Prevalidate using zod's safeParse
+                                const result = businessInfoSubmissions.safeParse(currFormValues);
+
+                                // If prevalidation is failed, display the error
+                                if (!result.success) {
+                                    Alert.alert('Fill out all questions please')
+                                } else {
+                                // If prevalidation is successful, notify the user
+                                console.log(businessMethods.getValues())
+                                onFinished()
+                                }
+                            }}>
+                                <Text>Next</Text>
+                            </Button>
+                        </View>
                     </View>
-                    <View className='flex-row justify-between items-center px-2'> 
-                        <Text className='text-gray-400 text-xl'>Upload Flyer</Text>
-                    </View>
-                    <Pressable className='h-[200] w-[250] items-center justify-center bg-white self-center mt-2' onPress={onSelectImage} style={{ borderRadius : 20 }}>
-                        {businessFlyer ? <Image source={{ uri : businessFlyer.uri || undefined}} style={{width: "100%", height:"100%", objectFit: "contain"}} /> : (
-                            <View className=' overflow-hidden w-[100%] h-[100%]' style={{ borderRadius : 20 }}>
-                                <BlurView intensity={10} style={{ height : '100%', width : '100%', borderRadius : 20, alignItems : 'center', justifyContent : 'center'}} >
-                                    <View className='p-2 rounded-full bg-gray-50' >
-                                        <Icon source={"camera"} size={60} color='#007AFF'/>
+                ) : currentStage == 2 ? (
+                    <View className='flex-col'>
+                        <View className='flex-row justify-between items-center px-2'> 
+                            <Text className='text-gray-400 text-xl'>Duration</Text>
+                            <BusinessAdsDurationInfoTooltip />
+                        </View>
+                        <View className='items-center flex-col gap-y-2'>
+                            {
+                                ADDURATIONOPTIONS.map((item, index) => (
+                                    <View key={index}>
+                                        <BusinessAdsDurationCard height={height / 15} width={width * .8} selectedDuration={selectedDuration} setDuration={setSelectedDuration} duration={item} index={index} />
                                     </View>
-                                </BlurView>
-                            </View>
-                        )}
-                    </Pressable>
-                    <View className='flex-row items-center w-[100%] justify-between  px-5' > 
-                         <Button className=' bg-gray-500 ' mode='contained' theme={{ roundness : 1 }} onPress={onGoBack}>
-                            <Text>Back</Text>
-                        </Button>
-                        <Button className='bg-[#57BA47] ' mode='contained' theme={{ roundness : 1 }} disabled={!finishedSelectedChoices} onPress={onSubmit}>
-                            <Text>Submit</Text>
-                        </Button>
+                                ))
+                            }
+                        </View>
+                        <View className='flex-row justify-between items-center px-2 mt-4'> 
+                            <Text className='text-gray-400 text-xl'>Upload Flyer</Text>
+                        </View>
+                        <Pressable className='h-[200] w-[250] items-center justify-center bg-white self-center mt-2' onPress={onSelectImage} style={{ borderRadius : 20 }}>
+                            {businessFlyer ? <Image source={{ uri : businessFlyer.uri || undefined}} style={{width: "100%", height:"100%", objectFit: "contain"}} /> : (
+                                <View className=' overflow-hidden w-[100%] h-[100%]' style={{ borderRadius : 20 }}>
+                                    <BlurView intensity={10} style={{ height : '100%', width : '100%', borderRadius : 20, alignItems : 'center', justifyContent : 'center'}} >
+                                        <View className='p-2 rounded-full bg-gray-50' >
+                                            <Icon source={"camera"} size={60} color='#007AFF'/>
+                                        </View>
+                                    </BlurView>
+                                </View>
+                            )}
+                        </Pressable>
+                        <View className='flex-row items-center w-[100%] justify-between  px-5 mt-3' > 
+                            <Button className=' bg-gray-500 ' mode='contained' theme={{ roundness : 1 }} onPress={onGoBack} textColor='white'>
+                                <Text>Back</Text>
+                            </Button>
+                            <Button className='bg-[#57BA47] ' mode='contained' theme={{ roundness : 1 }} disabled={!finishedSelectedChoices} onPress={onSubmit} textColor='white'>
+                                <Text>Submit</Text>
+                            </Button>
+                        </View>
                     </View>
-                </View>
-            ) : <></>
-        }
-     </View>
-    </ScrollView>
+                ) : <></>
+            }
+        </View>
+        </ScrollView>
   )
 }
 

@@ -62,12 +62,14 @@ const SignIn = () => {
             mode='outlined' 
             value={email}
             onChangeText={setEmail}
-            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0 }}
+            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0, paddingLeft : 10 }}
             theme={{ roundness : 50 }}
             placeholder={'email'}
             outlineColor='white'
             activeOutlineColor='white'
             textColor='black'
+            contentStyle={{ paddingLeft  : 3 }}
+            selectionColor='black'
           />
         </View>
         <View className='w-[95%] mt-2' style={{ shadowColor : 'black', shadowOffset : { width : 0, height : 2 }, shadowOpacity : 0.5, shadowRadius : 1 }}>
@@ -75,13 +77,15 @@ const SignIn = () => {
             mode='outlined' 
             value={password}
             onChangeText={setPassword}
-            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0 }}
+            style={{ backgroundColor : 'white', borderBottomWidth : 0, borderWidth : 0, paddingLeft : 10 }}
             theme={{ roundness : 50 }}
             placeholder={'password'}
             outlineColor='white'
             activeOutlineColor='white'
             secureTextEntry
             textColor='black'
+            contentStyle={{ paddingLeft  : 3 }}
+            selectionColor='black'
           />
         </View>
         <View className='w-[90%] mt-2'>

@@ -8,6 +8,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../providers/AuthProvider';
 import SignInAnonModal from './SignInAnonModal';
+import moment from 'moment';
 type ProgramsCircularProp = {
   sideCardLength : number,
   spaceing : number,
@@ -29,7 +30,9 @@ export default function ProgramsCircularCarousel(  ) {
 
 
     const fetchProgramsData = async () => {
-      const { data, error } = await supabase.from("programs").select("*").range(0, 7)
+      const currDate = new Date().toISOString()
+      
+      const { data, error } = await supabase.from("programs").select("*").range(0, 7).gte('program_end_date', currDate)
       if( error ){
         console.log(error)
       }

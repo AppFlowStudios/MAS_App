@@ -2,17 +2,13 @@ import { Text, View, Pressable, Image, Alert, Button, StyleSheet, Share} from 'r
 import {Program} from "../types"
 import React, { useState, useRef, useEffect } from 'react'
 import { Link, router } from 'expo-router';
-import { useProgram } from '../providers/programProvider';
 import  Swipeable, { SwipeableProps }  from 'react-native-gesture-handler/Swipeable';
-import { useAddProgram } from '../providers/addingProgramProvider';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 export const defaultProgramImage = "https://ugc.production.linktr.ee/e3KxJRUJTu2zELiw7FCf_hH45sO9R0guiKEY2?io=true&size=avatar-v3_0"
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../providers/AuthProvider'; 
 import * as Haptics from "expo-haptics"
 import Animated, { Easing, withSequence, withSpring, withTiming } from 'react-native-reanimated';
-import { SharedTransition } from 'react-native-reanimated';
-import { useNavigation, } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 type ProgramsListProgramProps = {
     program : Program,
@@ -22,7 +18,6 @@ type ProgramsListProgramProps = {
 export default function ProgramsListProgram( {program} : ProgramsListProgramProps){
     const { session } = useAuth()
     const [ programImg, setProgramImg ] = useState('')
-    const [ isSwiped, setIsSwiped ] = useState(false);
     const swipeableRef = useRef<Swipeable>(null);
    
     const closeSwipeable = () => {
@@ -98,26 +93,6 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
         }
         
     }
-
-    const transition = SharedTransition.custom(values => {
-        'worklet';
-      
-        return {
-          height: withTiming(values.targetHeight, {duration: 300}),
-          width: withTiming(values.targetWidth, {duration: 300}),
-          originX: withTiming(values.targetOriginX, {duration: 300}),
-          originY: withSequence(
-            withTiming(values.currentOriginY + 50, {
-              duration: 300,
-              easing: Easing.linear,
-            }),
-            withTiming(values.targetOriginY, {
-              duration: 500,
-              easing: Easing.linear,
-            }),
-          ),
-        };
-      });
       const getData = async (key : string) => {
         try {
           const value = await AsyncStorage.getItem(key);
@@ -137,9 +112,8 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
     
     return(
         <View style={{ width: "100%", height: 120, marginHorizontal: 5}}>
-            <Link  href={{pathname : `/menu/program/[programId]`,
-                params : {programId : [`${program.program_id}`]}
-            }} asChild >
+            <Link  href={ `/menu/program/${program.program_id}`}
+                asChild >
                 <TouchableOpacity>
                     <View style={{flexDirection: "row",alignItems: "center", justifyContent: "center"}}>
                         <Animated.View style={{justifyContent: "center", alignItems: "center", backgroundColor: "white", borderRadius: 15}}>
@@ -149,22 +123,10 @@ export default function ProgramsListProgram( {program} : ProgramsListProgramProp
                             />
                         </Animated.View>
                         <View>
-                            <Swipeable
-                                ref={swipeableRef}
-                                renderRightActions={rightSideButton}
-                                containerStyle={{flexDirection:"row"}}
-                                onSwipeableOpen={() => setIsSwiped(true)}
-                                onSwipeableClose={() => setIsSwiped(false)}
-                            >
-                                <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
-                                    <Text style={{textAlign: "center", fontWeight: "bold"}}>{program.program_name}</Text>
-                                    <Text style={{textAlign: "center"}}>By: {program.program_speaker}</Text>
-                                </View>
-                            </Swipeable>
-                            <View className='flex-row justify-center top-0'>
-                                <View style={[styles.dot, !isSwiped ? styles.activeDot : null]} />
-                                <View style={[styles.dot, isSwiped ? styles.activeDot : null]} />
-                        </View>
+                            <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
+                                <Text style={{textAlign: "center", fontWeight: "bold"}}>{program.program_name}</Text>
+                                <Text style={{textAlign: "center"}}>By: {program.program_speaker}</Text>
+                            </View>
                         </View>
                     </View>
                 </TouchableOpacity>

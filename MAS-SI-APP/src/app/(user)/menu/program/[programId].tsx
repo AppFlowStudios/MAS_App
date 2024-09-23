@@ -19,6 +19,7 @@ import CreatePlaylistBottomSheet from '@/src/components/UserProgramComponets/Cre
 import * as Haptics from "expo-haptics"
 import LottieView from 'lottie-react-native';
 import Toast from 'react-native-toast-message';
+import { isBefore } from 'date-fns';
 
 const ProgramLectures = () => {
   const { session } = useAuth()
@@ -148,7 +149,6 @@ async function getUserPlaylists(){
   } 
 
   const NotificationBell = () => {
-  const notificationAnimation = useRef<LottieView>(null)
   const addedToNoti = () => {
     const goToProgram = () => {
       navigation.navigate('myPrograms', { screen : 'notifications/ClassesAndLectures/[program_id]', params : { program_id : programId}, initial: false  })
@@ -223,10 +223,10 @@ async function getUserPlaylists(){
     onDonePress()
     setAddToPlaylistVisible(false)
   }, [playlistAddingTo.length > 0])
-
+  const currDate = new Date().toISOString()
   return (
     <View className='flex-1 bg-white' style={{flexGrow: 1}}>
-     <Stack.Screen options={ { title: "" , headerBackTitleVisible : false, headerRight : NotificationBell, headerStyle : {backgroundColor : "white"} } } />
+     <Stack.Screen options={ { title: "" , headerBackTitleVisible : false, headerRight : () => { if(isBefore(currDate, program?.program_end_date!)){ return ( <NotificationBell /> )}}, headerStyle : {backgroundColor : "white"} } } />
      <StatusBar barStyle={"dark-content"}/>
       <Animated.ScrollView ref={scrollRef}  scrollEventThrottle={16} contentContainerStyle={{justifyContent: "center", alignItems: "center", marginTop: "2%" }} >
           

@@ -13,7 +13,8 @@ const Kids = () => {
   const [ kidsPrograms, setKidsPrograms ] = useState<Program[]>()
   const [ searchBarInput, setSearchBarInput ] = useState("")
   const getKidsPrograms = async () => {
-    const { data, error } = await supabase.from("programs").select("*").eq("is_kids", true)
+    const currDate = new Date().toISOString()
+    const { data, error } = await supabase.from("programs").select("*").eq("is_kids", true).gte("program_end_date", currDate)
     if( error ){
         console.log( error )
     }
@@ -23,7 +24,6 @@ const Kids = () => {
   }
 
   const tabBarHeight = useBottomTabBarHeight()
-  const filterTestFunc = () => {}
   useEffect(() => {
     getKidsPrograms()
   }, [])

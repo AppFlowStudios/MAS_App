@@ -10,15 +10,10 @@ import RenderAddedPrograms from '@/src/components/UserProgramComponets/RenderAdd
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { Icon } from 'react-native-paper'
-import LottieView from "lottie-react-native"
 const NotificationPaidScreen = () => {
-  const animation = useRef<LottieView>(null)
-  useEffect(() => {
-    animation.current?.play()
-  })
   return(
     <ScrollView>
-      <View>
+      <View className='px-7'>
         <View className='items-center'>
           <Text className='font-bold text-2xl text-center'>Start adding flyers to make your notifications list</Text>
           <Icon source={"bell"} color="#007AFF" size={40}/>
@@ -40,7 +35,7 @@ const NotificationEventsScreen = ( { addedEvents, layout } : NotificationEventsS
   return(
     <ScrollView className='w-[100%]' contentContainerStyle={{ flexDirection : "row", flexWrap : "wrap" }}>
         {
-          addedEvents ? addedEvents.map((item, index) => {
+          addedEvents && addedEvents.length > 0? addedEvents.map((item, index) => {
             return (
             <View key={index} style={{ width : layout / 2, justifyContent : "center", alignItems : "center", paddingTop : 10}}>
               <RenderAddedEvents event_id={item.event_id}/>
@@ -48,7 +43,7 @@ const NotificationEventsScreen = ( { addedEvents, layout } : NotificationEventsS
           )
           }) :  
           ( 
-            <View>
+            <View className='px-7'>
             <View className='items-center'>
               <Text className='font-bold text-2xl text-center'>Start adding flyers to make your notifications list</Text>
               <Icon source={"bell"} color="#007AFF" size={40}/>
@@ -74,13 +69,13 @@ const ClassesAndLecturesScreen = ( { addedPrograms, layout } : ClassesAndLecture
         {
           addedPrograms && addedPrograms.length > 0 ? addedPrograms.map(( item ) => {
             return(
-              <View style={{ width : layout / 2, justifyContent : "center", alignItems : "center", paddingTop : 10}}>
+              <View style={{ width : layout / 2, justifyContent : "center", alignItems : "center", paddingTop : 10 }}>
                 <RenderAddedPrograms program_id={item.program_id}/>
               </View>
             )
           }) : 
           ( 
-          <View>
+          <View className='px-7'>
             <View className='items-center'>
               <Text className='font-bold text-2xl text-center'>Start adding flyers to make your notifications list</Text>
               <Icon source={"bell"} color="#007AFF" size={40}/>
@@ -115,6 +110,7 @@ const NotificationEvents = () => {
   }
 
   const getAddedProgram = async () => {
+    const currDate = new Date().toISOString()
     const { data, error } = await supabase.from("added_notifications_programs").select("*").eq("user_id", session?.user.id).order("created_at", { ascending : false })
     if( error ){
       console.log( error )
@@ -158,7 +154,7 @@ const NotificationEvents = () => {
 const renderScene = ({ route } : any) => {
   switch( route.key ){
     case "first":
-      return <NotificationPaidScreen  />
+      return <NotificationPaidScreen />
     case "second" :
       return <ClassesAndLecturesScreen addedPrograms={addedPrograms} layout={layout} />
     case "third" :

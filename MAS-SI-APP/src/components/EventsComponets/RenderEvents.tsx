@@ -49,23 +49,11 @@ const RenderEvents = ( {event} : RenderEventsProp ) => {
                                     
                                 />
                     </View>
-
-                    <View >
-                        <Swipeable
-                            ref={swipeableRef}
-                            renderRightActions={rightSideButton}
-                            onSwipeableOpen={() => setIsSwiped(true)}
-                            onSwipeableClose={() => setIsSwiped(false)}
-                        >
-                            <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
-                                <Text style={{textAlign: "center", fontWeight: "bold"}}>{event.event_name}</Text>
-                                <Text style={{textAlign: "center"}}>By: {event.event_speaker}</Text>
-                            </View>
-                        </Swipeable>
-                        <View className='flex-row justify-center top-0'>
-                                <View style={[styles.dot, !isSwiped ? styles.activeDot : null]} />
-                                <View style={[styles.dot, isSwiped ? styles.activeDot : null]} />
-                        </View>
+                    <View>
+                      <View className='mt-2 items-center justify-center bg-white' style={{height: "80%", borderRadius: 20, marginLeft: "10%", width: 200}}>
+                          <Text style={{textAlign: "center", fontWeight: "bold"}}>{event.event_name}</Text>
+                          <Text style={{textAlign: "center"}}>By: {event.event_speaker}</Text>
+                      </View>
                     </View>
                 </View>
             </TouchableOpacity>

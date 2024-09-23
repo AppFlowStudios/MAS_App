@@ -19,7 +19,8 @@ const UpcomingEvents = ({  navigation } : any) => {
   const tabBarHeight = useBottomTabBarHeight()
   
   const getUpcomingKids = async () => {
-    const { data, error } = await supabase.from("programs").select("*").eq("is_kids", true)
+    const currDate = new Date().toISOString()
+    const { data, error } = await supabase.from("programs").select("*").eq("is_kids", true).gte("program_end_date", currDate)
     if ( error ){
       console.log( error )
     }
@@ -29,7 +30,6 @@ const UpcomingEvents = ({  navigation } : any) => {
   }
   const getUpcomingEvent =  async () => {
     const currDate = new Date().toISOString()
-    console.log(currDate)
     const { data, error } = await supabase.from("events").select("*").gte("event_start_date", currDate)
     if( error ){
       console.log(error)

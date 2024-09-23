@@ -13,16 +13,14 @@ import LinkToVolunteersModal from '@/src/components/linkToVolunteersModal';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Animated,{ interpolate, useAnimatedRef, useAnimatedStyle, useScrollViewOffset, useSharedValue, useAnimatedScrollHandler, withTiming, Easing } from 'react-native-reanimated';
 import { Button, TextInput, Portal, Modal, Icon  } from 'react-native-paper';
-import { Link, useNavigation } from 'expo-router';
+import { Link } from 'expo-router';
 import LinkToDonationModal from '@/src/components/LinkToDonationModal';
 import LottieView from 'lottie-react-native';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
-import Toast from 'react-native-toast-message';
 export default function homeScreen() {
   const { onSetPrayerTimesWeek } = usePrayer()
   const { session } = useAuth()
-  const navigation = useNavigation<any>()
   const [ profile, setProfile ] = useState<Profile>()
   const [ profileFirstName , setProfileFirstName ] = useState('')
   const [ profileLastName , setProfileLastName ] = useState('')
@@ -95,7 +93,7 @@ export default function homeScreen() {
     }
     const onConfirmButton = async () => {
       console.log(profileFirstName, profileLastName, profileEmail)
-      const { data, error } = await supabase.from('profiles').upsert({first_name : profileFirstName, last_name : profileLastName, profile_email : profileEmail, id : session?.user.id}).eq('id' , session?.user.id).select()
+      const { data, error } = await supabase.from('profiles').update({ id : session?.user.id, first_name : profileFirstName, last_name : profileLastName, profile_email : profileEmail,})
       if( data ){
         console.log(data)
       }

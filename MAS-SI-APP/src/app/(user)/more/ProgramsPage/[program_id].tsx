@@ -114,10 +114,10 @@ const ProgramInfo = () => {
             <ScrollView className='pt-5 w-[100%]  bg-white flex-col gap-y-2' contentContainerStyle={{ alignItems : 'center' , paddingBottom : Tab }} bounces={false}>
                   { programForm ? programForm.map((item, index) => {
                     if( item.question_type == 'text_input' ) {
-                      return <View className='w-[95%]'><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
+                      return <View className='w-[95%]' key={index}><TextInputForm item={item} setIsReady={setIsReady} isReady={isReady} index={index}/></View>
                     }
                     else if( item.question_type == 'radio_button'){
-                      return <View className='w-[95%]'><RadioButtonForm item={item} isReady={isReady} setIsReady={setIsReady} index={index}/></View>
+                      return <View className='w-[95%]' key={index}><RadioButtonForm item={item} isReady={isReady} setIsReady={setIsReady} index={index}/></View>
                     }
                   }) : <></>}
                   <View className='px-3 w-[100%] pt-3'>
