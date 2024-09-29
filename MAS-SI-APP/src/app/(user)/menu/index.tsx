@@ -19,22 +19,13 @@ import LottieView from 'lottie-react-native';
 import { supabase } from '@/src/lib/supabase';
 import { useAuth } from '@/src/providers/AuthProvider';
 export default function homeScreen() {
-  const { onSetPrayerTimesWeek } = usePrayer()
+  const { onSetPrayerTimesWeek, prayerTimesWeek } = usePrayer()
   const { session } = useAuth()
   const [ profile, setProfile ] = useState<Profile>()
   const [ profileFirstName , setProfileFirstName ] = useState('')
   const [ profileLastName , setProfileLastName ] = useState('')
   const [ profileEmail, setProfileEmail ] = useState('')
   const [ confirmProfile, setConfirmProfile ] = useState(false)
-  const [prayerTimes, setPrayerTimes] = useState<prayerTimesType>(
-    {"status" : "fail",
-    "data" : {
-      "salah" : [],
-      "iqamah": []
-    },
-    "message" : ""
-     } )
-    
     const [loading, setLoading] = useState(true)
     const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
@@ -42,20 +33,6 @@ export default function homeScreen() {
     const tabBarHeight = useBottomTabBarHeight();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const animation = useRef<LottieView>(null);
-    const getCurrDate = new Date();
-    const getWeekDate = new Date();
-    const currDate = format(getCurrDate, "yyyy-MM-dd");
-    getWeekDate.setDate(getCurrDate.getDate() + 6)
-    const weekDate = format(getWeekDate, "yyyy-MM-dd");
-    const masjidalAPIURL = `https://masjidal.com/api/v1/time/range?masjid_id=3OA8V3Kp&from_date=${currDate}&to_date=${weekDate}`
-    const getMasjidalApi = () => {
-      fetch(masjidalAPIURL)
-      .then( (response) => response.json() )
-      .then( (json) => setPrayerTimes(json) )
-      .catch( (error) =>  console.error(error))
-      .finally( () => setLoading(false) )
-      console.log("getPrayer Called")
-    }
     const { width } = Dimensions.get("window")
     const scrollRef = useAnimatedRef<Animated.ScrollView>()
     const scrollOffset = useSharedValue(0)
@@ -104,19 +81,17 @@ export default function homeScreen() {
       setVisible(false)
       }
     }
+    const getPrayer = async () => {
+      const prayerTimesInfo = await supabase.from('prayers').select('*').eq('id', 1).single()
+        const prayerTimes = prayerTimesInfo.data
+        const weekInfo  : gettingPrayerData[] = ThePrayerData({prayerTimes})
+        onSetPrayerTimesWeek(weekInfo)
+        setLoading(false)
+    }
     useEffect( () => {
       getProfile();
-      getMasjidalApi();
+      getPrayer()
     }, [])
-
-    const prayer : gettingPrayerData[] = ThePrayerData({prayerTimes});
-
-  
-    useEffect( () => {
-      onSetPrayerTimesWeek(prayer)
-      
-    }, [prayerTimes])
-
     useEffect(() => {
       if( profileFirstName && profileLastName && profileEmail ){
         setConfirmProfile(true)
@@ -132,7 +107,7 @@ export default function homeScreen() {
         </View>
       )
     }
-   
+   const prayer = prayerTimesWeek
     const jummahData : JummahBottomSheetProp[] = [
       {
         jummahSpeaker : "Sh.Abdelrahman Badawy",
@@ -162,8 +137,7 @@ export default function homeScreen() {
         jummahNum: "3:40PM",
         jummahDesc: "How to increase your iman and stand for Palestine"
       }
-  ]
-  
+    ]
     return (
       <Animated.ScrollView ref={scrollRef} className="bg-white h-full flex-1" onScroll={scrollHandler}>
             <StatusBar barStyle={"dark-content"}/>
@@ -173,7 +147,8 @@ export default function homeScreen() {
 
             <View style={{height: 250, overflow: "hidden", justifyContent:"center", borderEndStartRadius: 30 ,borderEndEndRadius: 30}} className=''>
               <SalahDisplayWidget prayer={prayer[0]} nextPrayer={prayer[1]}/>
-            </View>
+            </View>  
+
           <Link href={'/menu/program'} asChild>
                 <Pressable className='pt-7 flex-row justify-between w-[100%] px-3'>
                   <Text className='font-bold text-2xl text-[#0D509D]' style={{textShadowColor: "light-gray", textShadowOffset: { width: 0.5, height: 3 }, textShadowRadius: 0.6}} >Weekly Programs</Text>

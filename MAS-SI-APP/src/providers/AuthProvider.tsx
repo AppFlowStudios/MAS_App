@@ -31,7 +31,7 @@ type AuthData = {
         const {
           data: { session },
         } = await supabase.auth.getSession();
-  
+
         setSession(session);
   
         setLoading(false);
@@ -39,7 +39,7 @@ type AuthData = {
   
       fetchSession();
       supabase.auth.onAuthStateChange((event, session) => {
-        fetchSession()
+        setSession(session);
       });
     }, []);
   

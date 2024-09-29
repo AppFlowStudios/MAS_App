@@ -57,9 +57,8 @@ export type prayerTimeData = {
     iqamah: iqamahData[]
 }
 export type prayerTimesType = {
-    status: string,
-    data: prayerTimeData,
-    message: string
+    prayerData : salahData[]
+    iqamahData : iqamahData[]
 }
 
 export type gettingPrayerData = {
